@@ -1,0 +1,316 @@
+﻿<UserControl x:Class="TypeVisualiser.UI.Views.ShellTabControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             mc:Ignorable="d"
+             xmlns:Assets="clr-namespace:TypeVisualiser.UI.Assets"
+             xmlns:Converters="clr-namespace:TypeVisualiser.UI.Converters"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:Model="clr-namespace:TypeVisualiser.Model"
+             xmlns:Persistence="clr-namespace:TypeVisualiser.Model.Persistence"
+             xmlns:UI="clr-namespace:TypeVisualiser.UI"
+             xmlns:Utils="clr-namespace:TypeVisualiser.UI.WpfUtilities"
+             xmlns:Views="clr-namespace:TypeVisualiser.UI.Views"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             DataContextChanged="OnDataContextChanged"
+             Loaded="OnLoaded"
+             MouseRightButtonDown="OnRightMouseButtonDown"
+             SnapsToDevicePixels="True"
+             Unloaded="OnUnloaded">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <Converters:NotBooleanToVisibilityConverter x:Key="NotBoolToVisConverter" />
+            <Converters:StringToStyleConverter x:Key="StyleConverter" />
+            <Converters:RelativeConnectionLineConverter x:Key="RelativeConnectionLineConverter" />
+            <RoutedCommand x:Key="ZoomToFitRoutedCommand" />
+            <!-- 
+                Override the style of the ListBox to remove the ScrollViewer.
+                All we want is ListBox logic but based on a Canvas.
+            -->
+
+            <Style x:Key="noScrollViewerListBoxStyle"
+                   TargetType="{x:Type ListBox}">
+                <Setter Property="SnapsToDevicePixels"
+                        Value="True" />
+                <Setter Property="OverridesDefaultStyle"
+                        Value="True" />
+                <Setter Property="Template">
+                    <Setter.Value>
+
+                        <ControlTemplate TargetType="{x:Type ListBox}">
+                            <Canvas Background="{TemplateBinding Background}"
+                                    IsItemsHost="True" />
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <!-- 
+                Override the style of each ListBoxItem to bind Canvas.Left, Canvas.Top and IsSelected.
+                Binds to DiagramElement
+            -->
+
+            <Style x:Key="listBoxItemStyle"
+                   TargetType="ListBoxItem">
+                <Style.Resources>
+                    <!-- Background of selected item when focussed -->
+                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}"
+                                     Color="Transparent" />
+                    <!-- Background of selected item when not focussed -->
+                    <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}"
+                                     Color="Transparent" />
+                </Style.Resources>
+                <Setter Property="Canvas.Left"
+                        Value="{Binding TopLeft.X}" />
+                <Setter Property="Canvas.Top"
+                        Value="{Binding TopLeft.Y}" />
+                <Setter Property="IsSelected"
+                        Value="False" />
+                <Setter Property="Canvas.ZIndex"
+                        Value="{Binding ZOrder}" />
+                <Setter Property="Template">
+                    <Setter.Value>
+
+                        <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                            <ContentPresenter />
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsEnabled"
+                                         Value="false">
+                                    <Setter Property="Foreground"
+                                            Value="#888888" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <DataTemplate DataType="{x:Type Model:DiagramElement}">
+                <!-- This template contains common properties for width and height and movement. -->
+                <Grid MouseDown="OnDiagramElementMouseDown"
+                      MouseMove="OnDiagramElementMouseMove"
+                      MouseUp="OnDiagramElementMouseUp"
+                      SizeChanged="OnDiagramElementSizeChanged">
+                    <ContentPresenter Content="{Binding DiagramContent}" />
+                    <Button Width="8"
+                            Height="8"
+                            VerticalAlignment="Top"
+                            HorizontalAlignment="Left"
+                            Background="White"
+                            Visibility="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.DebugMode, Converter={StaticResource BoolToVisConverter}}"
+                            ToolTip="Debug info"
+                            Click="OnMoreInfoClicked">
+                    </Button>
+                    
+                </Grid>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type Model:Association}">
+                <Grid Cursor="Hand">
+                    <Grid.CommandBindings>
+                        <!-- Need to use routed commands here due to Context menus not being able to bind easily to the controller of the parent's (data template) templated parent's controller. -->
+                        <CommandBinding CanExecute="OnNavigateToTypeCanExecute"
+                                        Command="{x:Static UI:ContextMenuCommands.NavigateToTypeCommand}"
+                                        Executed="OnNavigateToTypeExecuted" />
+                        <CommandBinding CanExecute="OnTemporarilyHideCanExecute"
+                                        Command="{x:Static UI:ContextMenuCommands.TemporarilyHideCommand}"
+                                        Executed="OnTemporarilyHideExecuted" />
+                        <CommandBinding CanExecute="OnShowAllCanExecute"
+                                        Command="{x:Static UI:ContextMenuCommands.ShowAllCommand}"
+                                        Executed="OnShowAllExecuted" />
+                        <CommandBinding CanExecute="OnAddToTrivialListCanExecute"
+                                        Command="{x:Static UI:ContextMenuCommands.AddToTrivialListCommand}"
+                                        Executed="OnAddToTrivialListExecuted" />
+                    </Grid.CommandBindings>
+                    <Grid.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Command="{x:Static UI:ContextMenuCommands.NavigateToTypeCommand}"
+                                      CommandParameter="{Binding .}"
+                                      CommandTarget="{Binding Path=PlacementTarget, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}">
+                                <MenuItem.Header>
+                                    <TextBlock FontFamily="Tahoma"
+                                               Text="Navigate to this type" />
+                                </MenuItem.Header>
+                            </MenuItem>
+                            <Separator />
+                            <MenuItem Command="{x:Static UI:ContextMenuCommands.TemporarilyHideCommand}"
+                                      CommandParameter="{Binding .}"
+                                      CommandTarget="{Binding Path=PlacementTarget, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}">
+                                <MenuItem.Header>
+                                    <TextBlock FontFamily="Tahoma"
+                                               Text="Temporarily Hide" />
+                                </MenuItem.Header>
+                            </MenuItem>
+                            <MenuItem Command="{x:Static UI:ContextMenuCommands.ShowAllCommand}"
+                                      CommandParameter="{Binding .}"
+                                      CommandTarget="{Binding Path=PlacementTarget, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}">
+                                <MenuItem.Header>
+                                    <TextBlock FontFamily="Tahoma"
+                                               Text="Show all" />
+                                </MenuItem.Header>
+                            </MenuItem>
+                            <Separator />
+                            <MenuItem Command="{x:Static UI:ContextMenuCommands.AddToTrivialListCommand}"
+                                      CommandParameter="{Binding .}"
+                                      CommandTarget="{Binding Path=PlacementTarget, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}">
+                                <MenuItem.Header>
+                                    <TextBlock FontFamily="Tahoma"
+                                               Text="Add to Trivial List" />
+                                </MenuItem.Header>
+                            </MenuItem>
+                        </ContextMenu>
+                    </Grid.ContextMenu>
+                    <Views:VisualisedTypeControl Utils:VisualStateHelper.VisualStateName="{Binding DataContext.Show, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Grid,AncestorLevel=2}, Converter={StaticResource BoolToStringConverter}}"
+                                                 DataContext="{Binding AssociatedTo}" />
+                </Grid>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type Model:AssociationArrowHead}">
+                <Assets:AssociationHead Visibility="{Binding DataContext.Show, Converter={StaticResource BoolToVisConverter}, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Grid}}"
+                                        MouseLeftButtonUp="OnLineClicked"/>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type Model:InheritanceArrowHead}">
+                <Assets:InheritanceHead  Visibility="{Binding DataContext.Show, Converter={StaticResource BoolToVisConverter}, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Grid}}"/>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type Model:ConnectionLine}">
+                <Line IsHitTestVisible="True"
+                      MouseLeftButtonUp="OnLineClicked"
+                      StrokeThickness="{Binding Thickness}"
+                      Style="{Binding Style, Converter={StaticResource StyleConverter}}"
+                      ToolTip="{Binding ToolTip}"
+                      Visibility="{Binding DataContext.Show, Converter={StaticResource BoolToVisConverter}, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Grid}}"
+                      X1="0"
+                      Y1="0">
+                    <Line.X2>
+                        <MultiBinding Converter="{StaticResource RelativeConnectionLineConverter}">
+                            <Binding Path="From.X" />
+                            <Binding Path="ToLineEnd.X" />
+                        </MultiBinding>
+                    </Line.X2>
+                    <Line.Y2>
+                        <MultiBinding Converter="{StaticResource RelativeConnectionLineConverter}">
+                            <Binding Path="From.Y" />
+                            <Binding Path="ToLineEnd.Y" />
+                        </MultiBinding>
+                    </Line.Y2>
+                </Line>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type Persistence:AnnotationData}">
+                <Views:Annotation EditRequested="OnAnnotationEditRequested" />
+            </DataTemplate>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <UserControl.CommandBindings>
+        <CommandBinding CanExecute="OnAnnotateCanvasCanExecute"
+                        Command="{x:Static UI:ContextMenuCommands.AnnotateCanvasCommand}"
+                        Executed="OnAnnotateCanvasExecuted" />
+        <CommandBinding Command="{StaticResource ZoomToFitRoutedCommand}"
+                        Executed="OnZoomToFitExecuted" />
+    </UserControl.CommandBindings>
+
+    <!-- DataContext is Diagram class -->
+    <DockPanel>
+        <Grid DockPanel.Dock="Bottom">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <TextBlock x:Name="MouseCoordinates"
+                       Foreground="{StaticResource MenuTextBrush}"
+                       Width="100"
+                       Text="0,0" />
+            <Slider Grid.Column="1"
+                    Margin="2"
+                    Maximum="{Binding MaximumScale, Mode=OneTime}"
+                    Minimum="{Binding MinimumScale, Mode=OneTime}"
+                    ToolTip="Zoom the diagram"
+                    Value="{Binding Path=ContentScale, Mode=TwoWay}" />
+            <TextBlock Foreground="{StaticResource MenuTextBrush}"
+                       Grid.Column="2"
+                       Text="{Binding ContentScale, StringFormat=P}"
+                       ToolTip="Current Zoom Factor" />
+            <Button Command="{StaticResource ZoomToFitRoutedCommand}"
+                    Grid.Column="3"
+                    Margin="3">
+                <TextBlock Style="{StaticResource ButtonText}"
+                           Text="Zoom to fit" />
+            </Button>
+        </Grid>
+        <Border BorderBrush="{StaticResource MenuAccentBrush}"
+                BorderThickness="2">
+            <Utils:ZoomAndPanControl x:Name="zoomAndPanControl"
+                                     Background="{StaticResource PortalBackgroundBrush}"
+                                     ContentOffsetX="{Binding Path=ContentOffsetX, Mode=TwoWay}"
+                                     ContentOffsetY="{Binding Path=ContentOffsetY, Mode=TwoWay}"
+                                     ContentScale="{Binding Path=ContentScale, Mode=TwoWay}"
+                                     ContentViewportHeight="{Binding Path=ContentViewportHeight, Mode=OneWayToSource}"
+                                     ContentViewportWidth="{Binding Path=ContentViewportWidth, Mode=OneWayToSource}"
+                                     MouseDoubleClick="OnZoomAndPanControlMouseDoubleClick"
+                                     MouseDown="OnZoomAndPanControlMouseDown"
+                                     MouseMove="OnZoomAndPanControlMouseMove"
+                                     MouseUp="OnZoomAndPanControlMouseUp"
+                                     MouseWheel="OnZoomAndPanControlMouseWheel">
+                <Grid>
+                    <Grid.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Command="{x:Static UI:ContextMenuCommands.AnnotateCanvasCommand}"
+                                      CommandTarget="{Binding Path=PlacementTarget, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}">
+                                <MenuItem.Header>
+                                    <TextBlock FontFamily="Tahoma"
+                                               Text="Annotate here" />
+                                </MenuItem.Header>
+                            </MenuItem>
+                        </ContextMenu>
+                    </Grid.ContextMenu>
+                    <Grid Style="{StaticResource DiagramSpace}"
+                          Visibility="{Binding Controller.HideBackground, Converter={StaticResource NotBoolToVisConverter}}" />
+                    <Grid Visibility="{Binding Controller.HideBackground, Converter={StaticResource NotBoolToVisConverter}}">
+                        <Grid.Background>
+                            <!-- Grid Pattern -->
+                            <DrawingBrush TileMode="Tile"
+                                          Viewport="0,0,100,100"
+                                          ViewportUnits="Absolute">
+                                <DrawingBrush.Drawing>
+                                    <DrawingGroup>
+                                        <GeometryDrawing Brush="#11FFFFFF">
+                                            <GeometryDrawing.Geometry>
+                                                <RectangleGeometry Rect="0,0,100,100" />
+                                            </GeometryDrawing.Geometry>
+                                        </GeometryDrawing>
+                                        <GeometryDrawing Brush="#11000000">
+                                            <GeometryDrawing.Geometry>
+                                                <GeometryGroup>
+                                                    <RectangleGeometry Rect="0,0,50,50" />
+                                                    <RectangleGeometry Rect="50,50,50,50" />
+                                                </GeometryGroup>
+                                            </GeometryDrawing.Geometry>
+                                        </GeometryDrawing>
+                                    </DrawingGroup>
+                                </DrawingBrush.Drawing>
+                            </DrawingBrush>
+                        </Grid.Background>
+                    </Grid>
+                    <!-- 
+                This is the content that is displayed.
+            	This ListBox is the main part of the content that is displayed.
+                The list box contains instances of DiagramElement, the DataTemplate for DiagramElement is in
+                the UserControl.Resources section of this file.
+                -->
+                    <ListBox x:Name="DiagramSpace"
+                             Background="Transparent"
+                             Height="{Binding Path=ContentHeight}"
+                             ItemContainerStyle="{StaticResource listBoxItemStyle}"
+                             ItemsSource="{Binding Path=Controller.DiagramElements}"
+                             Style="{StaticResource noScrollViewerListBoxStyle}"
+                             Width="{Binding Path=ContentWidth}" />
+                </Grid>
+            </Utils:ZoomAndPanControl>
+        </Border>
+    </DockPanel>
+
+</UserControl>

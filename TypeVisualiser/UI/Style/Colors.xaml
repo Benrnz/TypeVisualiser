@@ -1,0 +1,89 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Color x:Key="PortalBackgroundColor">
+        DarkKhaki
+    </Color>
+
+    <Color x:Key="StaticTeal">
+        #FF00A5FF
+    </Color>
+
+    <Color x:Key="AbstractOrange">
+        OrangeRed
+    </Color>
+
+    <Color x:Key="SealedRed">
+        DarkRed
+    </Color>
+
+    <Color x:Key="SystemClassBlue">
+        #FF5555FF
+    </Color>
+
+    <Color x:Key="SubjectGlowColor">
+        Cyan
+    </Color>
+    
+    <Color x:Key="LoadingBackground">
+        #88566D51
+    </Color>
+
+    <Color x:Key="PortalBackgroundHighlight1">
+        GoldenRod
+    </Color>
+
+    <Color x:Key="PortalBackgroundHighlight2">
+        DarkSeaGreen
+    </Color>
+
+    <Color x:Key="MenuBackgroundColor">
+        Black
+    </Color>
+
+    <Color x:Key="MenuAccentColor">
+        DarkSlateGray
+    </Color>
+    
+    <SolidColorBrush x:Key="MenuTextBrush"
+                     Color="DarkSlateGray" />
+
+    <SolidColorBrush x:Key="MenuHighlightBrush"
+                     Color="Silver" />
+
+    <SolidColorBrush x:Key="MenuAccentBrush"
+                     Color="{StaticResource MenuAccentColor}" />
+
+    <SolidColorBrush x:Key="MenuBackgroundBrush"
+                     Color="{StaticResource MenuBackgroundColor}" />
+    
+    <SolidColorBrush x:Key="PortalBackgroundBrush"
+                     Color="{StaticResource PortalBackgroundColor}" />
+
+    <SolidColorBrush x:Key="PortalBackgroundHighlight1Brush"
+                     Color="{StaticResource PortalBackgroundHighlight1}" />
+    <SolidColorBrush x:Key="PortalBackgroundHighlight2Brush"
+                     Color="{StaticResource PortalBackgroundHighlight2}" />
+
+    <SolidColorBrush x:Key="ClassBlueBrush"
+                     Color="#FF0000AA" />
+
+    <SolidColorBrush x:Key="SealedRedBrush"
+                     Color="{StaticResource SealedRed}" />
+
+    <SolidColorBrush x:Key="SystemClassBlueBrush"
+                     Color="{StaticResource SystemClassBlue}"  />
+
+    <SolidColorBrush x:Key="InterfaceGreenBrush"
+                     Color="DarkGreen" />
+
+    <SolidColorBrush x:Key="EnumGoldBrush"
+                     Color="DarkGoldenrod" />
+
+    <SolidColorBrush x:Key="StaticColourBrush"
+                     Color="Orange" />
+
+    <SolidColorBrush x:Key="LoadingBackgroundBrush"
+                     Color="{StaticResource LoadingBackground}" />
+
+</ResourceDictionary>

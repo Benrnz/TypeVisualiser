@@ -1,0 +1,190 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{E2DD3EB3-C416-4485-A79C-85E67839295F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>TypeVisualiserUnitTests</RootNamespace>
+    <AssemblyName>TypeVisualiserUnitTests</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>Rees.Biz.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisLogFile>bin\Debug\TypeVisualiserUnitTests.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <CodeAnalysisLogFile>bin\Release\TypeVisualiserUnitTests.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
+    <Prefer32Bit>false</Prefer32Bit>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="FluentAssertions">
+      <HintPath>..\packages\FluentAssertions.1.7.0\Lib\net40\FluentAssertions.dll</HintPath>
+    </Reference>
+    <Reference Include="GalaSoft.MvvmLight.WPF4, Version=3.0.0.19994, Culture=neutral, PublicKeyToken=63eb5c012e0b3c1c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\MvvmLightLibs.3.1.1\lib\net40\GalaSoft.MvvmLight.WPF4.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="Rhino.Mocks">
+      <HintPath>..\ThirdParty\Rhino.Mocks.dll</HintPath>
+    </Reference>
+    <Reference Include="StructureMap, Version=2.6.3.0, Culture=neutral, PublicKeyToken=e60ad81abae3c223, processorArchitecture=MSIL" />
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <CodeAnalysisDependentAssemblyPaths Condition=" '$(VS100COMNTOOLS)' != '' " Include="$(VS100COMNTOOLS)..\IDE\PrivateAssemblies">
+      <Visible>False</Visible>
+    </CodeAnalysisDependentAssemblyPaths>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ChooseTypeControllerTest.cs" />
+    <Compile Include="Controllers\FileManagerTest.cs" />
+    <Compile Include="Controllers\ShellControllerTest.cs" />
+    <Compile Include="Controllers\ShellControllerTestHarness.cs" />
+    <Compile Include="Converters\BooleanToAbstractConverterTest.cs" />
+    <Compile Include="Converters\BooleanToAbstractShadowConverterTest.cs" />
+    <Compile Include="Converters\BooleanToStringConverterTest.cs" />
+    <Compile Include="Converters\TypeKindToVisibilityConverterTest.cs" />
+    <Compile Include="Converters\NullToVisibilityConverterTest.cs" />
+    <Compile Include="Converters\MemberKindToImageConverterTest.cs" />
+    <Compile Include="Converters\TypeToBrushConverterTest.cs" />
+    <Compile Include="Converters\CountToVisibilityConverterTest.cs" />
+    <Compile Include="Converters\NotBooleanToVisibilityConverterTest.cs" />
+    <Compile Include="Converters\SubjectOnlyVisibilityConverterTest.cs" />
+    <Compile Include="DiagramDimensionsTest.cs" />
+    <Compile Include="DispatcherHelper.cs" />
+    <Compile Include="Geometry\AreaTest.cs" />
+    <Compile Include="Geometry\CircleCalculatorTest.cs" />
+    <Compile Include="Geometry\DoubleExtensionTest.cs" />
+    <Compile Include="Geometry\PointExtensionTest.cs" />
+    <Compile Include="ILAnalyser\GlobalsTest.cs" />
+    <Compile Include="ILAnalyser\MethodBodyReaderTest.cs" />
+    <Compile Include="Geometry\AreaCalculateCircumferenceIntersectionPointTest.cs" />
+    <Compile Include="Model\AssociationTestData.cs" />
+    <Compile Include="Model\Persistence\DemoTypeDiagram1_5.cs" />
+    <Compile Include="Model\Persistence\DemoTypeDiagram1_3.cs" />
+    <Compile Include="Model\Persistence\ModelSerialiserTest.cs" />
+    <Compile Include="Model\AssociationTest.cs" />
+    <Compile Include="Model\ConnectionRouteFixedPointTest.cs" />
+    <Compile Include="Model\ConsumeAssociationTest.cs" />
+    <Compile Include="Model\ParentAssociationTest.cs" />
+    <Compile Include="Model\FieldAssociationTest.cs" />
+    <Compile Include="Model\TypeDescriptorHelperTest.cs" />
+    <Compile Include="Model\ModelBuilderTest.cs" />
+    <Compile Include="Model\Persistence\DemoTypeDiagram1_2.cs" />
+    <Compile Include="Model\Persistence\DemoTypeDiagram1_1.cs" />
+    <Compile Include="Model\Persistence\PersistenceDeserialisationTest.cs" />
+    <Compile Include="Model\TestAssociation.cs" />
+    <Compile Include="Model\VisualisableTypeSubjectTests\VisualisableTypeSubjectGenericsTest.cs" />
+    <Compile Include="Model\VisualisableTypeSubjectTests\VisualisableTypeWithAssociationsTestHarness.cs" />
+    <Compile Include="Model\VisualisableTypeTests\VisualisableTypeGenericsTest.cs" />
+    <Compile Include="Model\VisualisableTypeTests\VisualisableTypePropertyTest.cs" />
+    <Compile Include="PrivateAccessor.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TrivialFilterTest.cs" />
+    <Compile Include="Model\VisualisableTypeSubjectTests\VisualisableTypeSubjectPersistenceTest.cs" />
+    <Compile Include="Model\VisualisableTypeSubjectTests\VisualisableTypeSubjectImplementsTest.cs" />
+    <Compile Include="Model\VisualisableTypeSubjectTests\VisualisableTypeSubjectDependecyTest.cs" />
+    <Compile Include="Model\VisualisableTypeSubjectTests\VisualisableTypeSubjectFieldsTest.cs" />
+    <Compile Include="Model\VisualisableTypeSubjectTests\VisualisableTypeSubjectConsumesTest.cs" />
+    <Compile Include="Model\VisualisableTypeTests\VisualisableTypeEqualityOperatorsTest.cs" />
+    <Compile Include="Model\VisualisableTypeTests\VisualisableTypePersistenceTest.cs" />
+    <Compile Include="VisualisableTypeTestData.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TypeVisualiserDemoTypes\TypeVisualiserDemoTypes.csproj">
+      <Project>{6712B601-9567-4CBA-9452-0C0F3FFAFF78}</Project>
+      <Name>TypeVisualiserDemoTypes</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TypeVisualiser\TypeVisualiser.csproj">
+      <Project>{FB347EEE-0099-4B90-BD75-61ED8DA92879}</Project>
+      <Name>TypeVisualiser</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Shadow Include="Test References\TypeVisualiser.accessor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Model\VisualisableTypeSubjectTests\TrivialExcludeList.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+    <None Include="Rees.Biz.snk" />
+    <Resource Include="Test.tvd" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

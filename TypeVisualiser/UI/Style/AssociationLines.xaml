@@ -1,0 +1,85 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Style x:Key="AssociationLineInterface"
+           TargetType="Line">
+        <Setter Property="Stroke"
+                Value="Black" />
+        <Setter Property="StrokeDashArray"
+                Value="4.0,2.0" />
+        <Setter Property="StrokeStartLineCap"
+                Value="Round" />
+        <Setter Property="StrokeEndLineCap"
+                Value="Round" />
+    </Style>
+
+    <Style x:Key="AssociationLineStrong"
+           TargetType="Line">
+        <Setter Property="Stroke"
+                Value="Red" />
+        <Setter Property="StrokeStartLineCap"
+                Value="Round" />
+        <Setter Property="StrokeEndLineCap"
+                Value="Round" />
+    </Style>
+
+    <Style x:Key="AssociationLineTrivial"
+           TargetType="Line">
+        <Setter Property="Stroke"
+                Value="Black" />
+        <Setter Property="StrokeStartLineCap"
+                Value="Round" />
+        <Setter Property="StrokeEndLineCap"
+                Value="Round" />
+    </Style>
+
+    <Style x:Key="InheritanceLine"
+           TargetType="Line">
+        <Setter Property="Stroke"
+                Value="Black" />
+        <Setter Property="StrokeThickness"
+                Value="3.0" />
+        <Setter Property="StrokeStartLineCap"
+                Value="Round" />
+        <Setter Property="StrokeEndLineCap"
+                Value="Round" />
+    </Style>
+
+    <Style x:Key="ImplementsLine"
+           TargetType="Line">
+        <Setter Property="Stroke"
+                Value="Black" />
+        <Setter Property="StrokeThickness"
+                Value="3.0" />
+        <!--<Setter Property="StrokeDashArray"
+                Value="4.0,2.0" />-->
+        <Setter Property="StrokeStartLineCap"
+                Value="Round" />
+        <Setter Property="StrokeEndLineCap"
+                Value="Round" />
+    </Style>
+
+    <Style x:Key="ConsumptionLineTrivial"
+           TargetType="Line">
+        <Setter Property="Stroke"
+                Value="Black" />
+        <Setter Property="StrokeDashArray"
+                Value="6.0,2.0" />
+        <Setter Property="StrokeStartLineCap"
+                Value="Round" />
+        <Setter Property="StrokeEndLineCap"
+                Value="Round" />
+    </Style>
+
+    <Style x:Key="ConsumptionLineStrong"
+           TargetType="Line">
+        <Setter Property="Stroke"
+                Value="Red" />
+        <Setter Property="StrokeDashArray"
+                Value="6.0,2.0" />
+        <Setter Property="StrokeStartLineCap"
+                Value="Round" />
+        <Setter Property="StrokeEndLineCap"
+                Value="Round" />
+    </Style>
+</ResourceDictionary>

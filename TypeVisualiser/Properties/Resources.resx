@@ -1,0 +1,209 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Area_OverlapsWith_Error_in_usage_Attempt_to_find_overlapping_areas_where_the_proposed_area_is_NaN" xml:space="preserve">
+    <value>Error in usage: Attempt to find overlapping areas where the proposed area is NaN.</value>
+  </data>
+  <data name="BooleanToAbstractConverter_Convert_Error_in_usage_given_parameter_values_cannot_have_less_than_2_elements" xml:space="preserve">
+    <value>Error in usage: given parameter values cannot have less than 2 elements.</value>
+  </data>
+  <data name="ChooseTypeController_LoadTypes_Unable_to_load_your_assembly" xml:space="preserve">
+    <value>Unable to load your assembly.  There are some dependencies missing from the folder. Make sure all dependencies are in the same folder then retry.
+</value>
+  </data>
+  <data name="ModelBuilder_BuildType_The_type_name_given_doesnt_load_from_the_assembly_file_name" xml:space="preserve">
+    <value>The type name given doesn't load from the assembly file name given.</value>
+  </data>
+  <data name="ModelBuilder_BuildType_Bad_file_and_or_type_in_Recently_Used_File_List_cannot_load_this_type" xml:space="preserve">
+    <value>Bad file and/or type in Recently Used File List, cannot load this type, most likely due to missing dependent libraries.</value>
+  </data>
+  <data name="ShellController_ComingSoonExecute_Coming_soon_in_a_future_version" xml:space="preserve">
+    <value>Coming soon in a future version...</value>
+  </data>
+  <data name="ShellController_LoadDiagramFromFile_IO_Error_occurred" xml:space="preserve">
+    <value>An error occurred while trying to load the diagram file.
+</value>
+  </data>
+  <data name="ShellController_LoadDiagramFromFile_XML_Deserialisation_error" xml:space="preserve">
+    <value>An error occurred while trying to deserialise the saved diagram. Most likely caused by an unsupported previous version.
+</value>
+  </data>
+  <data name="ShellController_SaveDiagramExecute_IO_Error_Occured" xml:space="preserve">
+    <value>An error occurred while trying to save the diagram.
+</value>
+  </data>
+  <data name="ShellController_SaveDiagramExecute_XML_Serialisation_error" xml:space="preserve">
+    <value>An error occurred while trying to serialise the diagram.
+</value>
+  </data>
+  <data name="ViewportController_OnHide_Unexpected_property_name_given_in_PropertyChangedMessage" xml:space="preserve">
+    <value>Unexpected property name given in PropertyChangedMessage</value>
+  </data>
+  <data name="ViewportController_CalculateDiagramSize_There_are_no_listeners_responding_to_the_GetDiagramSizeMessage" xml:space="preserve">
+    <value>There are no listeners responding to the Get Diagram Size Message.</value>
+  </data>
+  <data name="Globals_LoadOpCodes_Invalid_IL_Op_Code" xml:space="preserve">
+    <value>Invalid IL Op Code.</value>
+  </data>
+  <data name="VisualStateHelper_OnVisualStateNameChanged_This_attached_property_only_supports_types_derived_from_Control" xml:space="preserve">
+    <value>This attached property only supports types derived from Control (ie User Control).</value>
+  </data>
+  <data name="VisualStateHelper_SetVisualStateName_Setting_visual_states_from_within_the_user_control" xml:space="preserve">
+    <value>Setting visual states from within the user control or from binding is not supported. It should be set by the controller</value>
+  </data>
+  <data name="VisualisableTypeSubject_GetPersistentData_The_underlying_data_object_for_this_subject_is_not_of_Visualisable_Type_Subject_Data_class" xml:space="preserve">
+    <value>The underlying data object for this subject is not of Visualisable Type Subject Data class.</value>
+  </data>
+  <data name="ConnectionRoute_SetHeadTranslate_Error_in_usage_angles_other_than_those_divisible_by_90_are_not_supported" xml:space="preserve">
+    <value>Error in usage: angles other than those divisible by 90 are not supported.</value>
+  </data>
+  <data name="ModelBuilder_OnAssemblyResolve_ResolveEventArgs_RequestingAssembly_Location_is_null_or_empty" xml:space="preserve">
+    <value>ResolveEventArgs.RequestingAssembly.Location is null or empty</value>
+  </data>
+  <data name="RecentFilesXml_UnableToLoadRecentFiles" xml:space="preserve">
+    <value>Unable to load the recent files xml.
+</value>
+  </data>
+  <data name="RecentFilesXml_LoadRecentFiles_The_recent_files_list_was_not_in_the_correct_format" xml:space="preserve">
+    <value>The recent files list was not in the correct format.</value>
+  </data>
+  <data name="RecentFilesXml_SaveRecentFile" xml:space="preserve">
+    <value>Unable to save recent files xml file.
+</value>
+  </data>
+  <data name="General_Given_Parameter_Cannot_Be_Null" xml:space="preserve">
+    <value>Error in usage: given parameter {0} cannot be null.</value>
+  </data>
+  <data name="ApplicationName" xml:space="preserve">
+    <value>Type Visualiser</value>
+  </data>
+  <data name="ShellController_LoadDiagramFromFile_Not_Supported" xml:space="preserve">
+    <value>The diagram file is from an old file format version that is no longer supported. The diagram cannot be loaded.</value>
+  </data>
+  <data name="ViewportController_Some_types_are_not_in_assembly_anymore" xml:space="preserve">
+    <value>Some types in the save file are no longer appear in the assembly:
+</value>
+  </data>
+  <data name="ViewportController_Error_in_diagram_file" xml:space="preserve">
+    <value>Error in diagram file</value>
+  </data>
+  <data name="Application_An_Unhandled_Exception_Occurred" xml:space="preserve">
+    <value>An unhandled exception occured:\n{0}</value>
+  </data>
+</root>

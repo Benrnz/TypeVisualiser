@@ -1,0 +1,55 @@
+﻿<WpfUtilities:GlassWindow x:Class="TypeVisualiser.UI.Views.AnnotationInputBox"
+                          xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                          xmlns:WpfUtilities="clr-namespace:TypeVisualiser.UI.WpfUtilities"
+                          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                          Background="Transparent"
+                          GlassThickness="200"
+                          Height="120"
+                          Icon="..\Assets\MainIcon.png"
+                          Loaded="OnWindowLoaded"
+                          ResizeMode="CanResize"
+                          Title="Annotate"
+                          Width="330"
+                          WindowStartupLocation="CenterOwner">
+
+    <WpfUtilities:GlassWindow.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="..\Style\ButtonStyle.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+        </ResourceDictionary>
+    </WpfUtilities:GlassWindow.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <TextBox x:Name="InputTextBox"
+                 AcceptsReturn="True"
+                 Margin="5"
+                 Text="{Binding InputText}"
+                 TextWrapping="Wrap"
+                 VerticalScrollBarVisibility="Visible" />
+        <StackPanel Grid.Row="1"
+                    HorizontalAlignment="Right"
+                    Orientation="Horizontal">
+            <Button Click="OnClearClick"
+                    IsCancel="True"
+                    Margin="5,0,0,0"
+                    Style="{StaticResource ButtonStyle}"
+                    TabIndex="2">
+                <TextBlock Style="{StaticResource ButtonText}"
+                           Text="Clear" />
+            </Button>
+            <Button Click="OnOkClick"
+                    Margin="5,0,0,0"
+                    Style="{StaticResource ButtonStyle}">
+                <TextBlock Style="{StaticResource ButtonText}"
+                           Text="Ok" />
+            </Button>
+        </StackPanel>
+    </Grid>
+
+</WpfUtilities:GlassWindow>

@@ -1,0 +1,116 @@
+<ResourceDictionary 
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!-- Icons -->
+
+    <Style x:Key="SymbolDecorator">
+        <Setter Property="Ellipse.Width" Value="30" />
+        <Setter Property="Ellipse.Height" Value="30" />
+        <Setter Property="Ellipse.Stroke">
+            <Setter.Value>
+                <LinearGradientBrush 
+                    EndPoint="1,1" 
+                    StartPoint="0.5,1">
+                    <LinearGradientBrush.GradientStops>
+                        <GradientStop 
+                            Color="{StaticResource AbstractOrange}" 
+                            Offset="0" />
+                        <GradientStop 
+                            Color="White" 
+                            Offset="1" />
+                    </LinearGradientBrush.GradientStops>
+                </LinearGradientBrush>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Ellipse.Fill">
+            <Setter.Value>
+                <RadialGradientBrush 
+                    GradientOrigin="0.5,1" 
+                    RadiusX="0.7" 
+                    RadiusY="0.5">
+                    <RadialGradientBrush.GradientStops>
+                        <GradientStop 
+                            Color="White" 
+                            Offset="0.1" />
+                        <GradientStop 
+                            Color="{StaticResource AbstractOrange}" 
+                            Offset="0.8" />
+                    </RadialGradientBrush.GradientStops>
+                </RadialGradientBrush>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="SymbolDecoratorSealed">
+        <Setter Property="Ellipse.Width"
+                Value="30" />
+        <Setter Property="Ellipse.Height"
+                Value="30" />
+        <Setter Property="Ellipse.Stroke">
+            <Setter.Value>
+                <LinearGradientBrush EndPoint="1,1"
+                                     StartPoint="0.5,1">
+                    <LinearGradientBrush.GradientStops>
+                        <GradientStop Color="{StaticResource SealedRed}"
+                                      Offset="0" />
+                        <GradientStop Color="White"
+                                      Offset="1" />
+                    </LinearGradientBrush.GradientStops>
+                </LinearGradientBrush>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Ellipse.Fill">
+            <Setter.Value>
+                <RadialGradientBrush GradientOrigin="0.5,1"
+                                     RadiusX="0.7"
+                                     RadiusY="0.5">
+                    <RadialGradientBrush.GradientStops>
+                        <GradientStop Color="White"
+                                      Offset="0.1" />
+                        <GradientStop Color="{StaticResource SealedRed}"
+                                      Offset="0.8" />
+                    </RadialGradientBrush.GradientStops>
+                </RadialGradientBrush>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="SymbolDecoratorStatic">
+        <Setter Property="Ellipse.Width" Value="30" />
+        <Setter Property="Ellipse.Height" Value="30" />
+        <Setter Property="Ellipse.Stroke">
+            <Setter.Value>
+                <LinearGradientBrush 
+                    EndPoint="1,1" 
+                    StartPoint="0.5,1">
+                    <LinearGradientBrush.GradientStops>
+                        <GradientStop 
+                            Color="{StaticResource StaticTeal}" 
+                            Offset="0" />
+                        <GradientStop 
+                            Color="White" 
+                            Offset="1" />
+                    </LinearGradientBrush.GradientStops>
+                </LinearGradientBrush>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Ellipse.Fill">
+            <Setter.Value>
+                <RadialGradientBrush 
+                    GradientOrigin="0.5,1" 
+                    RadiusX="0.7" 
+                    RadiusY="0.5">
+                    <RadialGradientBrush.GradientStops>
+                        <GradientStop 
+                            Color="White" 
+                            Offset="0.1" />
+                        <GradientStop 
+                            Color="{StaticResource StaticTeal}" 
+                            Offset="0.8" />
+                    </RadialGradientBrush.GradientStops>
+                </RadialGradientBrush>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

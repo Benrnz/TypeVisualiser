@@ -1,0 +1,33 @@
+<UserControl 
+    x:Class="TypeVisualiser.UI.Assets.ArrowTail" 
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+    mc:Ignorable="d" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+    SnapsToDevicePixels="True">
+    <!-- DataContext will be ConnectionRoute -->
+
+    <Grid 
+        Height="5" 
+        RenderTransformOrigin="0.5,0.5" 
+        Width="41">
+        <Grid.RenderTransform>
+            <TransformGroup>
+                <RotateTransform Angle="{Binding TailRotation}" />
+                <TranslateTransform 
+                    X="{Binding TailTranslateX}" 
+                    Y="{Binding TailTranslateY}" />
+            </TransformGroup>
+        </Grid.RenderTransform>
+        <Line 
+            Stroke="Black" 
+            StrokeThickness="2" 
+            VerticalAlignment="Center" 
+            X1="0" 
+            X2="40" 
+            Y1="0" 
+            Y2="0" />
+    </Grid>
+
+</UserControl>

@@ -1,0 +1,30 @@
+
+ <Application x:Class="TypeVisualiser.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:Converters="clr-namespace:TypeVisualiser.UI.Converters"
+             StartupUri="UI\Views\Shell.xaml">
+
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="UI/Style/AssociationLines.xaml" />
+                <ResourceDictionary Source="UI/Style/ButtonStyle.xaml" />
+                <ResourceDictionary Source="UI/Style/Colors.xaml" />
+                <ResourceDictionary Source="UI/Style/Icons.xaml" />
+                <ResourceDictionary Source="UI/Style/ScrollbarStyle.xaml" />
+                <ResourceDictionary Source="UI/Style/ScrollViewerStyle.xaml" />
+                <ResourceDictionary Source="UI/Style/ShellStyle.xaml" />
+                <ResourceDictionary Source="UI/Style/SliderStyle.xaml" />
+                <ResourceDictionary Source="UI/Style/TextStyles.xaml" />
+                <ResourceDictionary Source="UI/Style/ViewportStyle.xaml" />
+                <ResourceDictionary Source="UI/Style/ZoomAndPanStyle.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <Converters:BooleanToStringConverter x:Key="BoolToStringConverter" />
+            <BooleanToVisibilityConverter x:Key="BoolToVisConverter" />
+
+        </ResourceDictionary>
+    </Application.Resources>
+
+</Application>

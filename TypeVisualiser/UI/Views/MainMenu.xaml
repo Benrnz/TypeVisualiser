@@ -1,0 +1,117 @@
+<UserControl x:Class="TypeVisualiser.UI.Views.MainMenu"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:RecentFiles="clr-namespace:TypeVisualiser.RecentFiles"
+             xmlns:System="clr-namespace:System;assembly=mscorlib"
+             mc:Ignorable="d">
+
+    <!-- Binds to ShellController -->
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="..\Style\ShellStyle.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Menu Style="{StaticResource MenuStyle}"
+          IsMainMenu="True">
+        <Menu.Resources>
+            <DataTemplate DataType="{x:Type RecentFiles:RecentFile}">
+                <TextBlock Text="{Binding TypeName}" />
+            </DataTemplate>
+        </Menu.Resources>
+        <MenuItem Header="_File">
+            <MenuItem Command="{Binding ChooseTypeCommand}"
+                      Header="Load _Type (Ctrl+O)" />
+            <MenuItem Command="{Binding ShowDemoTypeCommand}"
+                      Header="Load D_emo Type (Ctrl+E)" />
+            <MenuItem Command="{Binding LoadDiagramCommand}"
+                      Header="_Load Diagram (Ctrl+D)" />
+            <MenuItem Command="{Binding SaveDiagramCommand}"
+                      Header="_Save Diagram (Ctrl+S)" />
+            <MenuItem x:Name="RecentlyUsedFiles"
+                      Header="_Recently loaded types"
+                      ItemsSource="{Binding RecentFiles}">
+                <MenuItem.ItemContainerStyle>
+                    <Style TargetType="MenuItem">
+                        <Setter Property="Command"
+                                Value="{Binding Path=DataContext.LoadRecentFileCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" />
+                        <Setter Property="CommandParameter"
+                                Value="{Binding .}" />
+                    </Style>
+                </MenuItem.ItemContainerStyle>
+            </MenuItem>
+            <MenuItem Command="{Binding ExitCommand}"
+                      Header="E_xit" />
+        </MenuItem>
+        <MenuItem Header="_View">
+            <MenuItem Command="{Binding RefreshCommand}"
+                      Header="_Refresh" />
+            <MenuItem Command="{Binding CentreCommand}"
+                      Header="_Centre" />
+            <MenuItem Command="{Binding ZoomToFitCommand}"
+                      Header="Zoom to _fit" />
+            <MenuItem Command="{Binding ZoomCommand}"
+                      Header="Zoom _100%">
+                <MenuItem.CommandParameter>
+                    <System:Double>1</System:Double>
+                </MenuItem.CommandParameter>
+            </MenuItem>
+            <MenuItem Command="{Binding ZoomCommand}"
+                      Header="Zoom _50%">
+                <MenuItem.CommandParameter>
+                    <System:Double>0.5</System:Double>
+                </MenuItem.CommandParameter>
+            </MenuItem>
+            <Separator />
+            <MenuItem IsCheckable="True"
+                      IsChecked="{Binding ConnectorTypeSnap}"
+                      ToolTip="Lines are drawn between types using 8 fixed connector points on each type.">
+                <MenuItem.Header>
+                    <TextBlock Text="Snap to connector points" Style="{StaticResource MenuItemText}"/>
+                </MenuItem.Header>
+            </MenuItem>
+            <MenuItem IsCheckable="True"
+                      IsChecked="{Binding ConnectorTypeDirect}"
+                      ToolTip="Lines are drawn between types to find the most direct shortest line between the two.">
+                <MenuItem.Header>
+                    <TextBlock Text="Direct line connectors"
+                               Style="{StaticResource MenuItemText}" />
+                </MenuItem.Header>
+            </MenuItem>
+            <Separator />
+            <MenuItem IsCheckable="True"
+                      IsChecked="{Binding DebugMode}">
+                <MenuItem.Header>
+                    <TextBlock Text="Debug Mode"
+                               Style="{StaticResource MenuItemText}" />
+                </MenuItem.Header>
+            </MenuItem>
+        </MenuItem>
+        <MenuItem Header="_Hide">
+            <MenuItem Command="{Binding HideSystemTypesCommand}"
+                      Header="Hide _System Types"
+                      IsCheckable="true"
+                      IsChecked="{Binding HideSystemTypes}" />
+            <MenuItem Command="{Binding HideSecondaryAssociationsCommand}"
+                      Header="Hide Secondary _Associations"
+                      IsCheckable="true"
+                      IsChecked="{Binding HideSecondaryAssociations}" />
+            <MenuItem Command="{Binding HideTrivialExcludeCommand}"
+                      Header="Hide _trivial types"
+                      IsCheckable="True"
+                      IsChecked="{Binding HideTrivialTypes}" />
+            <MenuItem Header="Hide _background"
+                      IsCheckable="True"
+                      Command="{Binding HideBackgroundCommand}" />
+            <Separator />
+            <MenuItem Command="{Binding EditTrivialExcludeListCommand}"
+                      Header="_Edit the trivial list" />
+        </MenuItem>
+        <MenuItem Command="{Binding HelpAboutCommand}"
+                  Header="_About" />
+    </Menu>
+</UserControl>

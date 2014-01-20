@@ -1,0 +1,67 @@
+<UserControl x:Class="TypeVisualiser.UI.Assets.AssociationHead"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             mc:Ignorable="d"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             SnapsToDevicePixels="True">
+
+    <!-- DataContext = AssociationArrowHead -->
+
+    <Grid Height="25"
+          Width="41"
+          ToolTip="{Binding ToolTip}">
+        <Grid.RenderTransform>
+            <TransformGroup>
+                <TranslateTransform X="{Binding HeadTranslateX}"
+                                    Y="{Binding HeadTranslateY}" />
+                <RotateTransform Angle="{Binding HeadRotation}"
+                                 CenterX="0.5"
+                                 CenterY="1" />
+            </TransformGroup>
+        </Grid.RenderTransform>
+        <Path Stroke="Black"
+              StrokeThickness="2"
+              StrokeDashCap="Round">
+            <Path.Data>
+                <PathGeometry>
+                    <PathGeometry.Figures>
+                        <PathFigureCollection>
+                            <PathFigure IsClosed="False"
+                                        StartPoint="20,5">
+                                <PathFigure.Segments>
+                                    <PathSegmentCollection>
+                                        <LineSegment Point="41,13" />
+                                        <LineSegment Point="20,20" />
+                                    </PathSegmentCollection>
+                                </PathFigure.Segments>
+                            </PathFigure>
+                        </PathFigureCollection>
+                    </PathGeometry.Figures>
+                </PathGeometry>
+            </Path.Data>
+        </Path>
+        <Path Fill="White"
+              Stroke="Black"
+              StrokeThickness="2"
+              StrokeDashCap="Round">
+            <Path.Data>
+                <PathGeometry>
+                    <PathGeometry.Figures>
+                        <PathFigureCollection>
+                            <PathFigure IsClosed="False"
+                                        StartPoint="0,13">
+                                <PathFigure.Segments>
+                                    <PathSegmentCollection>
+                                        <LineSegment Point="41,13" />
+                                    </PathSegmentCollection>
+                                </PathFigure.Segments>
+                            </PathFigure>
+                        </PathFigureCollection>
+                    </PathGeometry.Figures>
+                </PathGeometry>
+            </Path.Data>
+        </Path>
+    </Grid>
+
+</UserControl>

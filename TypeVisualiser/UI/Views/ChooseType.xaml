@@ -1,0 +1,69 @@
+<WpfUtilities:GlassWindow x:Class="TypeVisualiser.UI.Views.ChooseType"
+                          xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                          mc:Ignorable="d"
+                          xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                          xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                          xmlns:WpfUtilities="clr-namespace:TypeVisualiser.UI.WpfUtilities"
+                          Background="Transparent"
+                          GlassThickness="200"
+                          Icon="..\Assets\MainIcon.png"
+                          DataContextChanged="OnDataContextChanged"
+                          Height="480"
+                          Title="{Binding DialogTitle}">
+    <WpfUtilities:GlassWindow.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="..\Style\ButtonStyle.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <DataTemplate x:Key="TypeTemplate">
+                <StackPanel Margin="1"
+                            Orientation="Horizontal"
+                            TextBlock.FontFamily="Arial">
+                    <Image Source="{Binding ImagePath}" />
+                    <TextBlock Text="{Binding FullName}" />
+                </StackPanel>
+            </DataTemplate>
+        </ResourceDictionary>
+    </WpfUtilities:GlassWindow.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <TextBox Margin="10"
+            Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"/>
+        <ListBox x:Name="TypeListBox"
+                 Background="White"
+                 Grid.Row="1"
+                 ItemsSource="{Binding Types}"
+                 ItemTemplate="{StaticResource TypeTemplate}"
+                 Margin="10"
+                 MouseDoubleClick="OnListBoxMouseDoubleClick"
+                 SelectedItem="{Binding SelectedItem}" />
+        <StackPanel Grid.Row="2"
+                    Orientation="Horizontal">
+            <Button IsCancel="True"
+                    Style="{StaticResource ButtonStyle}">
+                <TextBlock Style="{StaticResource ButtonText}"
+                           Text="Cancel" />
+            </Button>
+            <Button Command="{Binding ChangeAssemblyCommand}"
+                    Style="{StaticResource ButtonStyle}">
+                <TextBlock Style="{StaticResource ButtonText}"
+                           Text="Different Assembly" />
+            </Button>
+            <Button Command="{Binding ChooseCommand}"
+                    CommandParameter="{Binding SelectedItem.FullyQualifiedName}"
+                    IsDefault="True"
+                    Style="{StaticResource ButtonStyle}">
+                <TextBlock Style="{StaticResource ButtonText}"
+                           Text="Select Type" />
+            </Button>
+        </StackPanel>
+    </Grid>
+
+</WpfUtilities:GlassWindow>

@@ -1,0 +1,561 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{FB347EEE-0099-4B90-BD75-61ED8DA92879}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>TypeVisualiser</RootNamespace>
+    <AssemblyName>TypeVisualiser</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x64</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>UI\Assets\MainIcon.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>Rees.Biz.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>TypeVisualiser.App</StartupObject>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
+    <CodeAnalysisLogFile>bin\Debug\TypeVisualiser.exe.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+    <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\Release64\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <CodeAnalysisLogFile>bin\Release\TypeVisualiser.exe.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+    <Prefer32Bit>false</Prefer32Bit>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="GalaSoft.MvvmLight.WPF4, Version=3.0.0.19994, Culture=neutral, PublicKeyToken=63eb5c012e0b3c1c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\MvvmLightLibs.3.1.1\lib\net40\GalaSoft.MvvmLight.WPF4.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="StructureMap">
+      <HintPath>..\packages\structuremap.2.6.3\lib\StructureMap.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="ArgumentNullResourceException.cs" />
+    <Compile Include="Geometry\TrigHelper.cs" />
+    <Compile Include="ILogger.cs" />
+    <Compile Include="IReadOnlyDictionary.cs" />
+    <Compile Include="LimitedConcurrencyLevelTaskScheduler.cs" />
+    <Compile Include="Logger.cs" />
+    <Compile Include="Messaging\CloseDiagramMessage.cs" />
+    <Compile Include="Messaging\DiagramElementChangedMessage.cs" />
+    <Compile Include="Messaging\SingleDiagramOrientedMessage.cs" />
+    <Compile Include="Model\ArrowHead.cs" />
+    <Compile Include="Model\AssociationArrowHead.cs" />
+    <Compile Include="Model\AssociationLoadStatus.cs" />
+    <Compile Include="Model\ConnectionRouteEventArgs.cs" />
+    <Compile Include="Model\Diagram.cs" />
+    <Compile Include="Model\DiagramElement.cs" />
+    <Compile Include="Model\DirectLineConnectorBuilder.cs" />
+    <Compile Include="Model\FixedPointCollectionConnectorBuilder.cs" />
+    <Compile Include="Model\ICalculatedPositionDiagramContent.cs" />
+    <Compile Include="Model\IConnectorBuilder.cs" />
+    <Compile Include="Model\IDiagramCommands.cs" />
+    <Compile Include="Model\IDiagramContent.cs" />
+    <Compile Include="Model\IDiagramController.cs" />
+    <Compile Include="Model\InheritanceArrowHead.cs" />
+    <Compile Include="Model\ParentHasMovedNotificationResult.cs" />
+    <Compile Include="Model\Persistence\IPersistentFileData.cs" />
+    <Compile Include="Model\Persistence\PersistentAttribute.cs" />
+    <Compile Include="Model\Persistence\PropertyInfoComparer.cs" />
+    <Compile Include="Model\Persistence\V102\Adaptor.cs" />
+    <Compile Include="Model\Persistence\AnnotationData.cs" />
+    <Compile Include="Model\Persistence\V102\AssociationData.cs" />
+    <Compile Include="Model\Persistence\V102\CanvasLayoutData.cs" />
+    <Compile Include="Model\Persistence\V102\ConsumeAssociationData.cs" />
+    <Compile Include="Model\Persistence\V102\FieldAssociationData.cs" />
+    <Compile Include="Model\Persistence\V102\ModifiersData.cs" />
+    <Compile Include="Model\Persistence\V102\ParentAssociationData.cs" />
+    <Compile Include="Model\Persistence\V102\StaticAssociationData.cs" />
+    <Compile Include="Model\Persistence\V102\TypeLayoutData.cs" />
+    <Compile Include="Model\Persistence\V102\TypeVisualiserLayoutFile.cs" />
+    <Compile Include="Model\Persistence\V102\ViewPortControllerSaveData.cs" />
+    <Compile Include="Model\Persistence\V102\VisualisableTypeData.cs" />
+    <Compile Include="Model\Persistence\V102\VisualisableTypeSubjectData.cs" />
+    <Compile Include="Model\Persistence\V103\Adaptor.cs" />
+    <Compile Include="Model\Persistence\V103\AnnotationData.cs" />
+    <Compile Include="Model\Persistence\V103\AssociationData.cs" />
+    <Compile Include="Model\Persistence\V103\CanvasLayoutData.cs" />
+    <Compile Include="Model\Persistence\V103\ConsumeAssociationData.cs" />
+    <Compile Include="Model\Persistence\V103\FieldAssociationData.cs" />
+    <Compile Include="Model\Persistence\V103\ModifiersData.cs" />
+    <Compile Include="Model\Persistence\V103\ParentAssociationData.cs" />
+    <Compile Include="Model\Persistence\V103\StaticAssociationData.cs" />
+    <Compile Include="Model\Persistence\V103\TypeLayoutData.cs" />
+    <Compile Include="Model\Persistence\V103\TypeVisualiserLayoutFile.cs" />
+    <Compile Include="Model\Persistence\V103\ViewPortControllerSaveData.cs" />
+    <Compile Include="Model\Persistence\V103\VisualisableTypeData.cs" />
+    <Compile Include="Model\Persistence\V103\VisualisableTypeSubjectData.cs" />
+    <Compile Include="Model\Persistence\V104\Adaptor.cs" />
+    <Compile Include="Model\Persistence\V104\AnnotationData.cs" />
+    <Compile Include="Model\Persistence\V104\AssociationData.cs" />
+    <Compile Include="Model\Persistence\V104\CanvasLayoutData.cs" />
+    <Compile Include="Model\Persistence\V104\ConsumeAssociationData.cs" />
+    <Compile Include="Model\Persistence\V104\FieldAssociationData.cs" />
+    <Compile Include="Model\Persistence\V104\ModifiersData.cs" />
+    <Compile Include="Model\Persistence\V104\ParentAssociationData.cs" />
+    <Compile Include="Model\Persistence\V104\StaticAssociationData.cs" />
+    <Compile Include="Model\Persistence\V104\SubjectAssociationData.cs" />
+    <Compile Include="Model\Persistence\V104\TypeLayoutData.cs" />
+    <Compile Include="Model\Persistence\V104\TypeVisualiserLayoutFile.cs" />
+    <Compile Include="Model\Persistence\V104\ViewPortControllerSaveData.cs" />
+    <Compile Include="Model\Persistence\V104\VisualisableTypeData.cs" />
+    <Compile Include="Model\Persistence\V104\VisualisableTypeSubjectData.cs" />
+    <Compile Include="Model\Persistence\VisualisableTypeWithAssociationsDataAdaptor.cs" />
+    <Compile Include="UI\Assets\AbstractSymbol.xaml.cs">
+      <DependentUpon>AbstractSymbol.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Assets\ArrowTail.xaml.cs">
+      <DependentUpon>ArrowTail.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Assets\AssociationHead.xaml.cs">
+      <DependentUpon>AssociationHead.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Assets\InheritanceHead.xaml.cs">
+      <DependentUpon>InheritanceHead.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Assets\SealedSymbol.xaml.cs">
+      <DependentUpon>SealedSymbol.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Assets\StaticSymbol.xaml.cs">
+      <DependentUpon>StaticSymbol.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\ChooseTypeController.cs" />
+    <Compile Include="UI\ClassDiagramSearchTool.cs" />
+    <Compile Include="UI\ConnectorType.cs" />
+    <Compile Include="UI\ContextMenuCommands.cs" />
+    <Compile Include="UI\Converters\BooleanToStringConverter.cs" />
+    <Compile Include="UI\Converters\CalculatingIntConverter.cs" />
+    <Compile Include="UI\Converters\NullToVisibilityConverter.cs" />
+    <Compile Include="UI\Converters\MemberKindToImageConverter.cs" />
+    <Compile Include="UI\Converters\RelativeConnectionLineConverter.cs" />
+    <Compile Include="UI\Converters\StringToStyleConverter.cs" />
+    <Compile Include="UI\Converters\TypeKindToVisibilityConverter.cs" />
+    <Compile Include="UI\Converters\SubjectOnlyVisibilityConverter.cs" />
+    <Compile Include="DefaultApplicationResources.cs" />
+    <Compile Include="FileManager.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="IApplicationResources.cs" />
+    <Compile Include="IFileManager.cs" />
+    <Compile Include="ILAnalyser\IMethodBodyReader.cs" />
+    <Compile Include="ITrivialFilter.cs" />
+    <Compile Include="Messaging\ChooseAssemblyMessage.cs" />
+    <Compile Include="Messaging\NavigateToDiagramAssociationMessage.cs" />
+    <Compile Include="Messaging\MessageBoxBase.cs" />
+    <Compile Include="Messaging\ShutdownMessage.cs" />
+    <Compile Include="Messaging\IUserPromptOpenFile.cs" />
+    <Compile Include="Messaging\IUserPromptSaveFile.cs" />
+    <Compile Include="Messaging\MessagingGate.cs" />
+    <Compile Include="Messaging\WindowsOpenFileDialog.cs" />
+    <Compile Include="Messaging\WindowsSaveDialog.cs" />
+    <Compile Include="Model\AssociationUsageDescriptor.cs" />
+    <Compile Include="Model\DiagramDimensions.cs" />
+    <Compile Include="Model\TypeDescriptorHelper.cs" />
+    <Compile Include="Model\IDiagramDimensions.cs" />
+    <Compile Include="Model\IModelBuilder.cs" />
+    <Compile Include="Model\IVisualisableType.cs" />
+    <Compile Include="Model\IVisualisableTypeWithAssociations.cs" />
+    <Compile Include="Model\ModelBuilder.cs" />
+    <Compile Include="Model\SelectableType.cs" />
+    <Compile Include="Model\StaticAssociation.cs" />
+    <Compile Include="Model\Persistence\ConsumeAssociationData.cs" />
+    <Compile Include="Model\Persistence\MemberKind.cs" />
+    <Compile Include="Model\Persistence\StaticAssociationData.cs" />
+    <Compile Include="Model\Persistence\FieldAssociationData.cs" />
+    <Compile Include="Model\Persistence\ModelSerialiser.cs" />
+    <Compile Include="Model\Persistence\ParentAssociationData.cs" />
+    <Compile Include="Model\Persistence\SubjectAssociationData.cs" />
+    <Compile Include="UI\Converters\BooleanToAbstractConverter.cs" />
+    <Compile Include="UI\Converters\BooleanToAbstractShadowConverter.cs" />
+    <Compile Include="UI\Converters\CountToVisibilityConverter.cs" />
+    <Compile Include="UI\Converters\DebugConverter.cs" />
+    <Compile Include="UI\Converters\NotBooleanToVisibilityConverter.cs" />
+    <Compile Include="UI\Converters\TypeToBrushConverter.cs" />
+    <Compile Include="Geometry\Area.cs" />
+    <Compile Include="Geometry\CircleCalculator.cs" />
+    <Compile Include="Geometry\Direction.cs" />
+    <Compile Include="Geometry\DoubleExtension.cs" />
+    <Compile Include="Geometry\LayoutConstants.cs" />
+    <Compile Include="Geometry\PointExtension.cs" />
+    <Compile Include="Geometry\Proximity.cs" />
+    <Compile Include="Geometry\ProximityTestResult.cs" />
+    <Compile Include="ILAnalyser\GlobalIntermediateLanguageConstants.cs" />
+    <Compile Include="ILAnalyser\ILInstruction.cs" />
+    <Compile Include="ILAnalyser\MethodBodyReader.cs" />
+    <Compile Include="Messaging\IUserPromptMessage.cs" />
+    <Compile Include="Messaging\RecentFilesRefreshMessage.cs" />
+    <Compile Include="Messaging\DiagramSizeMessage.cs" />
+    <Compile Include="Messaging\GetDiagramSizeMessage.cs" />
+    <Compile Include="Messaging\WindowsMessageBox.cs" />
+    <Compile Include="Model\Association.cs" />
+    <Compile Include="Model\ConnectionLine.cs" />
+    <Compile Include="Model\ConsumeAssociation.cs" />
+    <Compile Include="Model\FieldAssociation.cs" />
+    <Compile Include="Model\ParentAssociation.cs" />
+    <Compile Include="Model\SubjectAssociation.cs" />
+    <Compile Include="Model\SubjectOrAssociate.cs" />
+    <Compile Include="Model\VisualisableType.cs" />
+    <Compile Include="Model\VisualisableTypeWithAssociations.cs" />
+    <Compile Include="Messaging\RecentFileDeleteMessage.cs" />
+    <Compile Include="Model\Persistence\AssociationData.cs" />
+    <Compile Include="Model\Persistence\CanvasLayoutData.cs" />
+    <Compile Include="Model\Persistence\ModifiersData.cs" />
+    <Compile Include="Model\Persistence\TypeKind.cs" />
+    <Compile Include="Model\Persistence\TypeVisualiserLayoutFile.cs" />
+    <Compile Include="Model\Persistence\TypeLayoutData.cs" />
+    <Compile Include="Model\Persistence\VisualisableTypeData.cs" />
+    <Compile Include="Model\Persistence\VisualisableTypeSubjectData.cs" />
+    <Compile Include="ReadonlyDictionary.cs" />
+    <Compile Include="RecentFiles\IRecentFiles.cs" />
+    <Compile Include="RecentFiles\RecentFile.cs" />
+    <Compile Include="RecentFiles\RecentFilesRegistry.cs" />
+    <Compile Include="RecentFiles\RecentFilesXml.cs" />
+    <Compile Include="Startup\IoC.cs" />
+    <Compile Include="TrivialFilter.cs" />
+    <Compile Include="TrivialType.cs" />
+    <Compile Include="UI\MouseDragMode.cs" />
+    <Compile Include="UI\ShellController.cs" />
+    <Compile Include="UI\ClassUmlDrawingEngine.cs" />
+    <Compile Include="UI\UsageDialogController.cs" />
+    <Compile Include="UI\ViewportController.cs" />
+    <Compile Include="UI\ViewportControllerFilter.cs" />
+    <Compile Include="UI\ViewportDiagnostics.cs" />
+    <Compile Include="UI\Views\Annotation.xaml.cs">
+      <DependentUpon>Annotation.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Views\CachedTabControl.cs" />
+    <Compile Include="UI\Views\ChooseType.xaml.cs">
+      <DependentUpon>ChooseType.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Views\GlassDialog.xaml.cs">
+      <DependentUpon>GlassDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Views\GlassMessageBox.cs" />
+    <Compile Include="UI\Views\AnnotationInputBox.xaml.cs">
+      <DependentUpon>AnnotationInputBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Views\ShellTabControl.xaml.cs">
+      <DependentUpon>ShellTabControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Views\UsageDialog.xaml.cs">
+      <DependentUpon>UsageDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Views\MainMenu.xaml.cs">
+      <DependentUpon>MainMenu.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Views\Shell.xaml.cs">
+      <DependentUpon>Shell.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Views\VisualisedTypeControl.xaml.cs">
+      <DependentUpon>VisualisedTypeControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\WpfUtilities\AnimationHelper.cs" />
+    <Compile Include="UI\WpfUtilities\ZoomAndPanControl.cs" />
+    <Compile Include="UI\WpfUtilities\DesktopWindowManagerApi.cs" />
+    <Compile Include="UI\WpfUtilities\DesktopWindowManagerNotEnabledException.cs" />
+    <Compile Include="UI\WpfUtilities\DispatcherExtension.cs" />
+    <Compile Include="UI\WpfUtilities\GlassWindow.cs" />
+    <Compile Include="UI\WpfUtilities\NativeMethods.cs" />
+    <Compile Include="UI\WpfUtilities\TypeVisualiserControllerBase.cs" />
+    <Compile Include="UI\WpfUtilities\VisualStateHelper.cs" />
+    <Compile Include="UI\WpfUtilities\WindowNotLoadedException.cs" />
+    <Compile Include="UI\WpfUtilities\ZoomAndPanControl_IScrollInfo.cs" />
+    <Page Include="UI\Assets\AbstractSymbol.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\Assets\ArrowTail.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\Assets\AssociationHead.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\Assets\InheritanceHead.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\Assets\SealedSymbol.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\Assets\StaticSymbol.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Page Include="UI\Style\ButtonStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Style\Colors.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Style\AssociationLines.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\Style\Icons.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Style\ScrollViewerStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Style\ShellStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Style\ScrollbarStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Style\SliderStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Style\TextStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Style\ZoomAndPanStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Views\Annotation.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Views\GlassDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\Views\AnnotationInputBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Views\ShellTabControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Style\ViewportStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Views\ChooseType.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\Views\UsageDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\Views\MainMenu.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\Views\Shell.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\Views\VisualisedTypeControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <None Include="app.config" />
+    <None Include="ClassDiagram.cd" />
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <AppDesigner Include="Properties\" />
+    <None Include="Rees.Biz.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="UI\Assets\Internal.png" />
+    <Resource Include="UI\Assets\Protected.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="UI\Assets\PublicEnum.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="UI\Assets\InternalClass.png" />
+    <Resource Include="UI\Assets\InternalEnum.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="UI\Assets\PublicClass.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="UI\Assets\InternalDelegate.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="UI\Assets\InternalInterface.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="UI\Assets\PublicDelegate.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="UI\Assets\PublicInterface.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="UI\Assets\Event.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="UI\Assets\Property.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="UI\Assets\Method.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="UI\Assets\Constructor.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="UI\Assets\Field.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="UI\Assets\MainIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="UI\Assets\MainIcon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="UI\Assets\NonTrivialDependencies.png" />
+    <Resource Include="UI\Assets\TrivialDependencies.png" />
+    <CodeAnalysisDictionary Include="CodeAnalysisDictionary.xml" />
+    <Resource Include="UI\Assets\Background.png" />
+    <None Include="Model\Persistence\V102\Readme.txt" />
+    <Resource Include="Model\Persistence\V103\Readme.txt" />
+    <Resource Include="Model\Persistence\V104\Readme.txt" />
+    <Content Include="TrivialExcludeList.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TypeVisualiserDemoTypes\TypeVisualiserDemoTypes.csproj">
+      <Project>{6712B601-9567-4CBA-9452-0C0F3FFAFF78}</Project>
+      <Name>TypeVisualiserDemoTypes</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,642 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualisableTypeDiagramFile xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                             AssemblyFileName="C:\Development\Brees_Unfuddle\TypeVisualiser\TypeVisualiser\bin\Debug\TypeVisualiser.exe"
+                             AssemblyFullName="TypeVisualiser, Version=1.0.1.0, Culture=neutral, PublicKeyToken=null"
+                             HideParents="false"
+                             HideTrivialTypes="true"
+                             xmlns="http://typevisualiser.rees.biz/v1_1">
+    <ViewPortSaveData>
+        <CanvasLayout>
+            <Subject Id="cbff1c38-1531-4c26-ba0c-eb6aa7b2f255"
+                     Visible="true"
+                     FullName="TypeVisualiser.TestClasses.Car">
+                <TopLeft>
+                    <X>1923.5</X>
+                    <Y>1900.8344170472094</Y>
+                </TopLeft>
+            </Subject>
+            <Types>
+                <TypeLayoutData Id="48c22f9b-2700-462e-acdc-634416bc5ea2"
+                                Visible="true"
+                                FullName="TypeVisualiser.TestClasses.Vehicle">
+                    <TopLeft>
+                        <X>1923.5</X>
+                        <Y>1646.0088340944187</Y>
+                    </TopLeft>
+                </TypeLayoutData>
+                <TypeLayoutData Id="6895aaf2-904c-4e86-a522-8cdae933bf6f"
+                                Visible="true"
+                                FullName="TypeVisualiser.TestClasses.ITransportProvider">
+                    <TopLeft>
+                        <X>1738.94</X>
+                        <Y>1668.011625570814</Y>
+                    </TopLeft>
+                </TypeLayoutData>
+                <TypeLayoutData Id="cd6d0add-3608-44a3-a090-e0a192c72dbf"
+                                Visible="true"
+                                FullName="TypeVisualiser.TestClasses.IWearAndTear">
+                    <TopLeft>
+                        <X>2099.5</X>
+                        <Y>1668.011625570814</Y>
+                    </TopLeft>
+                </TypeLayoutData>
+                <TypeLayoutData Id="a385ee4a-2061-42c7-bd31-c63dead9b1d0"
+                                Visible="true"
+                                FullName="System.ICloneable">
+                    <TopLeft>
+                        <X>1571.5</X>
+                        <Y>1690.0144170472095</Y>
+                    </TopLeft>
+                </TypeLayoutData>
+                <TypeLayoutData Id="49dd50d1-4089-45d0-aa27-f1b25502f995"
+                                Visible="true"
+                                FullName="System.Data.SqlClient.SqlCommand">
+                    <TopLeft>
+                        <X>2218.9423259036625</X>
+                        <Y>1848.7399637471303</Y>
+                    </TopLeft>
+                </TypeLayoutData>
+                <TypeLayoutData Id="b59e80df-c14e-4019-8acb-b79cca73c79e"
+                                Visible="true"
+                                FullName="System.Data.IDbConnection">
+                    <TopLeft>
+                        <X>2377.4851383558621</X>
+                        <Y>2055.4835554599867</Y>
+                    </TopLeft>
+                </TypeLayoutData>
+                <TypeLayoutData Id="b147bf12-9c84-405f-8245-1e731ac2c678"
+                                Visible="true"
+                                FullName="System.Windows.Media.Color">
+                    <TopLeft>
+                        <X>2153.3133329356933</X>
+                        <Y>2115.6734914295666</Y>
+                    </TopLeft>
+                </TypeLayoutData>
+                <TypeLayoutData Id="2c0fece9-f0d8-4ea8-a3f6-bd2aea774965"
+                                Visible="true"
+                                FullName="System.Double">
+                    <TopLeft>
+                        <X>2092.5473046962798</X>
+                        <Y>2296.3617190764626</Y>
+                    </TopLeft>
+                </TypeLayoutData>
+                <TypeLayoutData Id="4b43cdda-9c2e-41e0-9ea5-a9883cc51b13"
+                                Visible="true"
+                                FullName="System.Data.SqlClient.SqlConnection">
+                    <TopLeft>
+                        <X>1923.5</X>
+                        <Y>2200.8344170472092</Y>
+                    </TopLeft>
+                </TypeLayoutData>
+                <TypeLayoutData Id="e23b4818-4dc0-472b-bbfc-d4621b332428"
+                                Visible="true"
+                                FullName="System.NotImplementedException">
+                    <TopLeft>
+                        <X>1698.7567822166852</X>
+                        <Y>2351.7021084282947</Y>
+                    </TopLeft>
+                </TypeLayoutData>
+                <TypeLayoutData Id="f107dfc4-f605-495b-8be3-3150c5af8db9"
+                                Visible="true"
+                                FullName="TypeVisualiser.TestClasses.CombustionEngine">
+                    <TopLeft>
+                        <X>1689.54500039764</X>
+                        <Y>2136.6998871677642</Y>
+                    </TopLeft>
+                </TypeLayoutData>
+                <TypeLayoutData Id="5ba07975-a4a7-4bdc-9d95-5eb4730d4cfc"
+                                Visible="true"
+                                FullName="TypeVisualiser.TestClasses.StaticTestClass">
+                    <TopLeft>
+                        <X>1536.2413361510394</X>
+                        <Y>2026.3648265646129</Y>
+                    </TopLeft>
+                </TypeLayoutData>
+            </Types>
+        </CanvasLayout>
+        <Subject AssemblyFullName="TypeVisualiser, Version=1.0.1.0, Culture=neutral, PublicKeyToken=null"
+                 AssemblyName="TypeVisualiser"
+                 ConstructorCount="1"
+                 EnumMemberCount="0"
+                 EventCount="1"
+                 FieldCount="1"
+                 FullName="TypeVisualiser.TestClasses.Car"
+                 Id="cbff1c38-1531-4c26-ba0c-eb6aa7b2f255"
+                 IsClass="true"
+                 IsEnum="false"
+                 LinesOfCode="168"
+                 MethodCount="4"
+                 Namespace="TypeVisualiser.TestClasses"
+                 PropertyCount="5"
+                 Show="true"
+                 SubjectOrAssociate="Subject"
+                 ToolTipName="Internal Class: Car">
+            <Modifiers Abstract="false"
+                       Interface="false"
+                       Internal="true"
+                       Private="false"
+                       Sealed="false"
+                       ShowConstructors="true"
+                       Static="false"
+                       ValueType="false" />
+            <Associations>
+                <AssociationData Show="true"
+                                 Name="Field: command x2">
+                    <AssociatedTo AssemblyFullName="System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"
+                                  AssemblyName="System.Data"
+                                  ConstructorCount="4"
+                                  EnumMemberCount="0"
+                                  EventCount="1"
+                                  FieldCount="36"
+                                  FullName="System.Data.SqlClient.SqlCommand"
+                                  Id="49dd50d1-4089-45d0-aa27-f1b25502f995"
+                                  IsClass="true"
+                                  IsEnum="false"
+                                  LinesOfCode="6027"
+                                  MethodCount="21"
+                                  Namespace="System.Data.SqlClient"
+                                  PropertyCount="10"
+                                  Show="true"
+                                  SubjectOrAssociate="Associate"
+                                  ToolTipName="Public Class: SqlCommand">
+                        <Modifiers Abstract="false"
+                                   Interface="false"
+                                   Internal="false"
+                                   Private="false"
+                                   Sealed="true"
+                                   ShowConstructors="true"
+                                   Static="false"
+                                   ValueType="false" />
+                    </AssociatedTo>
+                </AssociationData>
+                <AssociationData Show="true"
+                                 Name="Field: ComponentWornOut x2">
+                    <AssociatedTo AssemblyFullName="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"
+                                  AssemblyName="mscorlib"
+                                  ConstructorCount="1"
+                                  EnumMemberCount="0"
+                                  EventCount="0"
+                                  FieldCount="0"
+                                  FullName="System.EventHandler"
+                                  Id="2bd4a68c-a985-4ac9-a5f5-fe1c71797500"
+                                  IsClass="true"
+                                  IsEnum="false"
+                                  LinesOfCode="0"
+                                  MethodCount="3"
+                                  Namespace="System"
+                                  PropertyCount="0"
+                                  Show="true"
+                                  SubjectOrAssociate="Associate"
+                                  ToolTipName="Public Class: EventHandler">
+                        <Modifiers Abstract="false"
+                                   Interface="false"
+                                   Internal="false"
+                                   Private="false"
+                                   Sealed="true"
+                                   ShowConstructors="true"
+                                   Static="false"
+                                   ValueType="false" />
+                    </AssociatedTo>
+                </AssociationData>
+                <AssociationData Show="true"
+                                 Name="Field: Connection x1">
+                    <AssociatedTo AssemblyFullName="System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"
+                                  AssemblyName="System.Data"
+                                  ConstructorCount="0"
+                                  EnumMemberCount="0"
+                                  EventCount="0"
+                                  FieldCount="0"
+                                  FullName="System.Data.IDbConnection"
+                                  Id="b59e80df-c14e-4019-8acb-b79cca73c79e"
+                                  IsClass="false"
+                                  IsEnum="false"
+                                  LinesOfCode="0"
+                                  MethodCount="6"
+                                  Namespace="System.Data"
+                                  PropertyCount="4"
+                                  Show="true"
+                                  SubjectOrAssociate="Associate"
+                                  ToolTipName="Public Interface: IDbConnection">
+                        <Modifiers Abstract="false"
+                                   Interface="true"
+                                   Internal="false"
+                                   Private="false"
+                                   Sealed="false"
+                                   ShowConstructors="false"
+                                   Static="false"
+                                   ValueType="false" />
+                    </AssociatedTo>
+                </AssociationData>
+                <AssociationData Show="true"
+                                 Name="Field: Age x2">
+                    <AssociatedTo AssemblyFullName="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"
+                                  AssemblyName="mscorlib"
+                                  ConstructorCount="0"
+                                  EnumMemberCount="0"
+                                  EventCount="0"
+                                  FieldCount="3"
+                                  FullName="System.Int32"
+                                  Id="9fee94d3-561b-405d-b47b-fef65c8ffe24"
+                                  IsClass="false"
+                                  IsEnum="false"
+                                  LinesOfCode="204"
+                                  MethodCount="9"
+                                  Namespace="System"
+                                  PropertyCount="0"
+                                  Show="true"
+                                  SubjectOrAssociate="Associate"
+                                  ToolTipName="Public ValueType: Int32">
+                        <Modifiers Abstract="false"
+                                   Interface="false"
+                                   Internal="false"
+                                   Private="false"
+                                   Sealed="false"
+                                   ShowConstructors="false"
+                                   Static="false"
+                                   ValueType="true" />
+                    </AssociatedTo>
+                </AssociationData>
+                <AssociationData Show="true"
+                                 Name="Field: Color x1">
+                    <AssociatedTo AssemblyFullName="PresentationCore, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35"
+                                  AssemblyName="PresentationCore"
+                                  ConstructorCount="0"
+                                  EnumMemberCount="0"
+                                  EventCount="0"
+                                  FieldCount="6"
+                                  FullName="System.Windows.Media.Color"
+                                  Id="b147bf12-9c84-405f-8245-1e731ac2c678"
+                                  IsClass="false"
+                                  IsEnum="false"
+                                  LinesOfCode="2141"
+                                  MethodCount="11"
+                                  Namespace="System.Windows.Media"
+                                  PropertyCount="9"
+                                  Show="true"
+                                  SubjectOrAssociate="Associate"
+                                  ToolTipName="Public ValueType: Color">
+                        <Modifiers Abstract="false"
+                                   Interface="false"
+                                   Internal="false"
+                                   Private="false"
+                                   Sealed="false"
+                                   ShowConstructors="false"
+                                   Static="false"
+                                   ValueType="true" />
+                    </AssociatedTo>
+                </AssociationData>
+                <AssociationData Show="true"
+                                 Name="Field: Diameter x1">
+                    <AssociatedTo AssemblyFullName="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"
+                                  AssemblyName="mscorlib"
+                                  ConstructorCount="0"
+                                  EnumMemberCount="0"
+                                  EventCount="0"
+                                  FieldCount="8"
+                                  FullName="System.Double"
+                                  Id="2c0fece9-f0d8-4ea8-a3f6-bd2aea774965"
+                                  IsClass="false"
+                                  IsEnum="false"
+                                  LinesOfCode="414"
+                                  MethodCount="13"
+                                  Namespace="System"
+                                  PropertyCount="0"
+                                  Show="true"
+                                  SubjectOrAssociate="Associate"
+                                  ToolTipName="Public ValueType: Double">
+                        <Modifiers Abstract="false"
+                                   Interface="false"
+                                   Internal="false"
+                                   Private="false"
+                                   Sealed="false"
+                                   ShowConstructors="false"
+                                   Static="false"
+                                   ValueType="true" />
+                    </AssociatedTo>
+                </AssociationData>
+                <AssociationData Show="true"
+                                 Name="Field: IsOperational x1">
+                    <AssociatedTo AssemblyFullName="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"
+                                  AssemblyName="mscorlib"
+                                  ConstructorCount="0"
+                                  EnumMemberCount="0"
+                                  EventCount="0"
+                                  FieldCount="7"
+                                  FullName="System.Boolean"
+                                  Id="da39a586-3c1e-4538-a5d6-c22c7d04a36c"
+                                  IsClass="false"
+                                  IsEnum="false"
+                                  LinesOfCode="292"
+                                  MethodCount="5"
+                                  Namespace="System"
+                                  PropertyCount="0"
+                                  Show="true"
+                                  SubjectOrAssociate="Associate"
+                                  ToolTipName="Public ValueType: Boolean">
+                        <Modifiers Abstract="false"
+                                   Interface="false"
+                                   Internal="false"
+                                   Private="false"
+                                   Sealed="false"
+                                   ShowConstructors="false"
+                                   Static="false"
+                                   ValueType="true" />
+                    </AssociatedTo>
+                </AssociationData>
+                <AssociationData Show="true"
+                                 Name="Subject consumes SqlConnection x1">
+                    <AssociatedTo AssemblyFullName="System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"
+                                  AssemblyName="System.Data"
+                                  ConstructorCount="2"
+                                  EnumMemberCount="0"
+                                  EventCount="1"
+                                  FieldCount="14"
+                                  FullName="System.Data.SqlClient.SqlConnection"
+                                  Id="4b43cdda-9c2e-41e0-9ea5-a9883cc51b13"
+                                  IsClass="true"
+                                  IsEnum="false"
+                                  LinesOfCode="1785"
+                                  MethodCount="18"
+                                  Namespace="System.Data.SqlClient"
+                                  PropertyCount="10"
+                                  Show="true"
+                                  SubjectOrAssociate="Associate"
+                                  ToolTipName="Public Class: SqlConnection">
+                        <Modifiers Abstract="false"
+                                   Interface="false"
+                                   Internal="false"
+                                   Private="false"
+                                   Sealed="true"
+                                   ShowConstructors="true"
+                                   Static="false"
+                                   ValueType="false" />
+                    </AssociatedTo>
+                </AssociationData>
+                <AssociationData Show="true"
+                                 Name="Subject consumes NotImplementedException x1">
+                    <AssociatedTo AssemblyFullName="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"
+                                  AssemblyName="mscorlib"
+                                  ConstructorCount="3"
+                                  EnumMemberCount="0"
+                                  EventCount="0"
+                                  FieldCount="0"
+                                  FullName="System.NotImplementedException"
+                                  Id="e23b4818-4dc0-472b-bbfc-d4621b332428"
+                                  IsClass="true"
+                                  IsEnum="false"
+                                  LinesOfCode="28"
+                                  MethodCount="0"
+                                  Namespace="System"
+                                  PropertyCount="0"
+                                  Show="true"
+                                  SubjectOrAssociate="Associate"
+                                  ToolTipName="Public Class: NotImplementedException">
+                        <Modifiers Abstract="false"
+                                   Interface="false"
+                                   Internal="false"
+                                   Private="false"
+                                   Sealed="false"
+                                   ShowConstructors="true"
+                                   Static="false"
+                                   ValueType="false" />
+                    </AssociatedTo>
+                </AssociationData>
+                <AssociationData Show="true"
+                                 Name="Subject consumes CombustionEngine x1">
+                    <AssociatedTo AssemblyFullName="TypeVisualiser, Version=1.0.1.0, Culture=neutral, PublicKeyToken=null"
+                                  AssemblyName="TypeVisualiser"
+                                  ConstructorCount="1"
+                                  EnumMemberCount="0"
+                                  EventCount="0"
+                                  FieldCount="0"
+                                  FullName="TypeVisualiser.TestClasses.CombustionEngine"
+                                  Id="f107dfc4-f605-495b-8be3-3150c5af8db9"
+                                  IsClass="true"
+                                  IsEnum="false"
+                                  LinesOfCode="3"
+                                  MethodCount="0"
+                                  Namespace="TypeVisualiser.TestClasses"
+                                  PropertyCount="0"
+                                  Show="true"
+                                  SubjectOrAssociate="Associate"
+                                  ToolTipName="Public Class: CombustionEngine">
+                        <Modifiers Abstract="false"
+                                   Interface="false"
+                                   Internal="false"
+                                   Private="false"
+                                   Sealed="false"
+                                   ShowConstructors="true"
+                                   Static="false"
+                                   ValueType="false" />
+                    </AssociatedTo>
+                </AssociationData>
+                <AssociationData Show="true"
+                                 Name="Static Association to Delegate x2">
+                    <AssociatedTo AssemblyFullName="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"
+                                  AssemblyName="mscorlib"
+                                  ConstructorCount="0"
+                                  EnumMemberCount="0"
+                                  EventCount="0"
+                                  FieldCount="4"
+                                  FullName="System.Delegate"
+                                  Id="4d0c094d-fb54-4f7e-abc1-80e11006fcdf"
+                                  IsClass="true"
+                                  IsEnum="false"
+                                  LinesOfCode="914"
+                                  MethodCount="18"
+                                  Namespace="System"
+                                  PropertyCount="2"
+                                  Show="true"
+                                  SubjectOrAssociate="Associate"
+                                  ToolTipName="Public Class: Delegate">
+                        <Modifiers Abstract="true"
+                                   Interface="false"
+                                   Internal="false"
+                                   Private="false"
+                                   Sealed="false"
+                                   ShowConstructors="true"
+                                   Static="false"
+                                   ValueType="false" />
+                    </AssociatedTo>
+                </AssociationData>
+                <AssociationData Show="true"
+                                 Name="Static Association to Interlocked x2">
+                    <AssociatedTo AssemblyFullName="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"
+                                  AssemblyName="mscorlib"
+                                  ConstructorCount="0"
+                                  EnumMemberCount="0"
+                                  EventCount="0"
+                                  FieldCount="0"
+                                  FullName="System.Threading.Interlocked"
+                                  Id="bb5cb31f-d19a-4378-9aec-4b80d16c8caf"
+                                  IsClass="true"
+                                  IsEnum="false"
+                                  LinesOfCode="53"
+                                  MethodCount="21"
+                                  Namespace="System.Threading"
+                                  PropertyCount="0"
+                                  Show="true"
+                                  SubjectOrAssociate="Associate"
+                                  ToolTipName="Public Class: Interlocked">
+                        <Modifiers Abstract="false"
+                                   Interface="false"
+                                   Internal="false"
+                                   Private="false"
+                                   Sealed="false"
+                                   ShowConstructors="true"
+                                   Static="true"
+                                   ValueType="false" />
+                    </AssociatedTo>
+                </AssociationData>
+                <AssociationData Show="true"
+                                 Name="Static Association to StaticTestClass x1">
+                    <AssociatedTo AssemblyFullName="TypeVisualiser, Version=1.0.1.0, Culture=neutral, PublicKeyToken=null"
+                                  AssemblyName="TypeVisualiser"
+                                  ConstructorCount="0"
+                                  EnumMemberCount="0"
+                                  EventCount="0"
+                                  FieldCount="0"
+                                  FullName="TypeVisualiser.TestClasses.StaticTestClass"
+                                  Id="5ba07975-a4a7-4bdc-9d95-5eb4730d4cfc"
+                                  IsClass="true"
+                                  IsEnum="false"
+                                  LinesOfCode="10"
+                                  MethodCount="1"
+                                  Namespace="TypeVisualiser.TestClasses"
+                                  PropertyCount="1"
+                                  Show="true"
+                                  SubjectOrAssociate="Associate"
+                                  ToolTipName="Internal Class: StaticTestClass">
+                        <Modifiers Abstract="false"
+                                   Interface="false"
+                                   Internal="true"
+                                   Private="false"
+                                   Sealed="false"
+                                   ShowConstructors="true"
+                                   Static="true"
+                                   ValueType="false" />
+                    </AssociatedTo>
+                </AssociationData>
+            </Associations>
+            <Implements>
+                <ParentAssociationData Show="true"
+                                       Name="Implements: ITransportProvider">
+                    <AssociatedTo AssemblyFullName="TypeVisualiser, Version=1.0.1.0, Culture=neutral, PublicKeyToken=null"
+                                  AssemblyName="TypeVisualiser"
+                                  ConstructorCount="0"
+                                  EnumMemberCount="0"
+                                  EventCount="0"
+                                  FieldCount="0"
+                                  FullName="TypeVisualiser.TestClasses.ITransportProvider"
+                                  Id="6895aaf2-904c-4e86-a522-8cdae933bf6f"
+                                  IsClass="false"
+                                  IsEnum="false"
+                                  LinesOfCode="0"
+                                  MethodCount="1"
+                                  Namespace="TypeVisualiser.TestClasses"
+                                  PropertyCount="2"
+                                  Show="true"
+                                  SubjectOrAssociate="Associate"
+                                  ToolTipName="Public Interface: ITransportProvider">
+                        <Modifiers Abstract="false"
+                                   Interface="true"
+                                   Internal="false"
+                                   Private="false"
+                                   Sealed="false"
+                                   ShowConstructors="false"
+                                   Static="false"
+                                   ValueType="false" />
+                    </AssociatedTo>
+                </ParentAssociationData>
+                <ParentAssociationData Show="true"
+                                       Name="Implements: IWearAndTear">
+                    <AssociatedTo AssemblyFullName="TypeVisualiser, Version=1.0.1.0, Culture=neutral, PublicKeyToken=null"
+                                  AssemblyName="TypeVisualiser"
+                                  ConstructorCount="0"
+                                  EnumMemberCount="0"
+                                  EventCount="1"
+                                  FieldCount="0"
+                                  FullName="TypeVisualiser.TestClasses.IWearAndTear"
+                                  Id="cd6d0add-3608-44a3-a090-e0a192c72dbf"
+                                  IsClass="false"
+                                  IsEnum="false"
+                                  LinesOfCode="0"
+                                  MethodCount="1"
+                                  Namespace="TypeVisualiser.TestClasses"
+                                  PropertyCount="0"
+                                  Show="true"
+                                  SubjectOrAssociate="Associate"
+                                  ToolTipName="Public Interface: IWearAndTear">
+                        <Modifiers Abstract="false"
+                                   Interface="true"
+                                   Internal="false"
+                                   Private="false"
+                                   Sealed="false"
+                                   ShowConstructors="false"
+                                   Static="false"
+                                   ValueType="false" />
+                    </AssociatedTo>
+                </ParentAssociationData>
+                <ParentAssociationData Show="true"
+                                       Name="Implements: ICloneable">
+                    <AssociatedTo AssemblyFullName="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"
+                                  AssemblyName="mscorlib"
+                                  ConstructorCount="0"
+                                  EnumMemberCount="0"
+                                  EventCount="0"
+                                  FieldCount="0"
+                                  FullName="System.ICloneable"
+                                  Id="a385ee4a-2061-42c7-bd31-c63dead9b1d0"
+                                  IsClass="false"
+                                  IsEnum="false"
+                                  LinesOfCode="0"
+                                  MethodCount="1"
+                                  Namespace="System"
+                                  PropertyCount="0"
+                                  Show="true"
+                                  SubjectOrAssociate="Associate"
+                                  ToolTipName="Public Interface: ICloneable">
+                        <Modifiers Abstract="false"
+                                   Interface="true"
+                                   Internal="false"
+                                   Private="false"
+                                   Sealed="false"
+                                   ShowConstructors="false"
+                                   Static="false"
+                                   ValueType="false" />
+                    </AssociatedTo>
+                </ParentAssociationData>
+            </Implements>
+            <Parent Show="true"
+                    Name="Inherits: Vehicle">
+                <AssociatedTo AssemblyFullName="TypeVisualiser, Version=1.0.1.0, Culture=neutral, PublicKeyToken=null"
+                              AssemblyName="TypeVisualiser"
+                              ConstructorCount="0"
+                              EnumMemberCount="0"
+                              EventCount="0"
+                              FieldCount="0"
+                              FullName="TypeVisualiser.TestClasses.Vehicle"
+                              Id="48c22f9b-2700-462e-acdc-634416bc5ea2"
+                              IsClass="true"
+                              IsEnum="false"
+                              LinesOfCode="23"
+                              MethodCount="1"
+                              Namespace="TypeVisualiser.TestClasses"
+                              PropertyCount="2"
+                              Show="true"
+                              SubjectOrAssociate="Associate"
+                              ToolTipName="Public Class: Vehicle">
+                    <Modifiers Abstract="true"
+                               Interface="false"
+                               Internal="false"
+                               Private="false"
+                               Sealed="false"
+                               ShowConstructors="true"
+                               Static="false"
+                               ValueType="false" />
+                </AssociatedTo>
+            </Parent>
+        </Subject>
+    </ViewPortSaveData>
+</VisualisableTypeDiagramFile>

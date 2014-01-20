@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="TypeVisualiser.Model.VisualisableType">
+    <Position X="1.75" Y="0.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>RgCCBAAAAAwBgKGQoAQBABSCkigBAIAAIAAIBGABQig=</HashCode>
+      <FileName>Model\VisualisableType.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="TypeVisualiser.Model.VisualisableTypeSubject">
+    <Position X="4.75" Y="0.5" Width="2.25" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <AssociationLine Name="AllAssociations" Type="TypeVisualiser.Model.FieldAssociation">
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="0.183" Y="-0.18" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <AssociationLine Name="Consumes" Type="TypeVisualiser.Model.ConsumeAssociation">
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="-0.182" Y="0.404" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <AssociationLine Name="Fields" Type="TypeVisualiser.Model.FieldAssociation">
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="0.331" Y="-0.14" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <AssociationLine Name="FilteredAssociations" Type="TypeVisualiser.Model.FieldAssociation">
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="0.37" Y="0.008" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <AssociationLine Name="Parent" Type="TypeVisualiser.Model.ParentAssociation">
+      <MemberNameLabel ManuallyPlaced="true" ManuallySized="true">
+        <Position X="0.599" Y="0.049" Height="0.182" Width="1.006" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AkABAAAAAAAiASiAAAABQBAgEAAAAAAAIAAAAgABgCA=</HashCode>
+      <FileName>Model\VisualisableTypeSubject.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Parent" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="AllAssociations" />
+      <Property Name="Consumes" />
+      <Property Name="Fields" />
+      <Property Name="FilteredAssociations" />
+    </ShowAsCollectionAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="TypeVisualiser.Model.Association" Collapsed="true">
+    <Position X="9.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQACAAAAAAAAAgAEIAAAAAQAoBgEAIAAJGAAAAAKAAA=</HashCode>
+      <FileName>Model\Association.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="TypeVisualiser.Model.ParentAssociation" Collapsed="true">
+    <Position X="8" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAAAAAAAAAAAAAAAIQAIAAAAAAAACAAAAAAAAA=</HashCode>
+      <FileName>Model\ParentAssociation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TypeVisualiser.Model.FieldAssociation" Collapsed="true">
+    <Position X="10" Y="3.25" Width="1.5" />
+    <AssociationLine Name="UsageDescriptorList" Type="TypeVisualiser.Model.AssociationUsageDescriptor">
+      <MemberNameLabel ManuallyPlaced="true" ManuallySized="true">
+        <Position X="-1.182" Y="-0.69" Height="0.182" Width="1.547" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>IQIAAAAAAAAACBAAgAAAAAYAYAAAAYAAICAAAABAAAA=</HashCode>
+      <FileName>Model\FieldAssociation.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="UsageDescriptorList" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="TypeVisualiser.Model.SubjectAssociation" Collapsed="true">
+    <Position X="11.75" Y="2" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAAAAAAAAAAAAAAAAQAIAAAAAAAACAAAAAAAAA=</HashCode>
+      <FileName>Model\SubjectAssociation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TypeVisualiser.Model.ConsumeAssociation" Collapsed="true">
+    <Position X="7.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAIAAAAAAAIAAAAAAAAAA=</HashCode>
+      <FileName>Model\ConsumeAssociation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TypeVisualiser.Model.AssociationUsageDescriptor" Collapsed="true">
+    <Position X="12" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAABgAAAAgAAAAAAAAAQAAKAAAAAAAAAAAAQ=</HashCode>
+      <FileName>Model\AssociationUsageDescriptor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

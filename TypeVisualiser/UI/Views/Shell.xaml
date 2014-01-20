@@ -1,0 +1,114 @@
+<WpfUtilities:GlassWindow x:Class="TypeVisualiser.UI.Views.Shell"
+                          xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                          xmlns:UI="clr-namespace:TypeVisualiser.UI"
+                          xmlns:Views="clr-namespace:TypeVisualiser.UI.Views"
+                          xmlns:WpfUtilities="clr-namespace:TypeVisualiser.UI.WpfUtilities"
+                          xmlns:Model="clr-namespace:TypeVisualiser.Model"
+                          Icon="../Assets/MainIcon.png"
+                          GlassThickness="4,55,19,45"
+                          Background="Transparent"
+                          Title="{Binding Title}">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="..\Style\ShellStyle.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Window.DataContext>
+        <UI:ShellController />
+    </Window.DataContext>
+    
+    <Window.InputBindings>
+        <KeyBinding Key="D"
+                    Modifiers="Control"
+                    Command="{Binding OnLoadDiagramCommand}" />
+        <KeyBinding Key="E"
+                    Modifiers="Control"
+                    Command="{Binding ShowDemoTypeCommand}" />
+        <KeyBinding Key="F"
+                    Modifiers="Control"
+                    Command="{Binding ZoomToFitCommand}" />
+        <KeyBinding Key="O"
+                    Modifiers="Control"
+                    Command="{Binding ChooseTypeCommand}" />
+        <KeyBinding Key="S"
+                    Modifiers="Control"
+                    Command="{Binding SaveDiagramCommand}" />
+        
+    </Window.InputBindings>
+
+    <DockPanel>
+        <Views:MainMenu Margin="1,0,0,0"
+                        DockPanel.Dock="Top" />
+
+        <Grid>
+            <!-- Standard Ms TabControl implementation. This ony has one instance of content datatemplate and refreshes data binding each time. -->
+            <!-- Doesn't work in this scenario because refreshing the bindings causes large numbers of objects to be redrawn and its very slow. -->
+            <!-- This is a custom implementation of a tab control that does not clear its visual children on tab change. Visual controls are hosted in a listbox. -->
+            <Views:CachedTabControl IsSynchronizedWithCurrentItem="True"
+                                    Background="{StaticResource MenuBackgroundBrush}"
+                                    ItemsSource="{Binding OpenViews}"
+                                    SelectedItem="{Binding CurrentView}">
+                <Views:CachedTabControl.Resources>
+                    <DataTemplate DataType="{x:Type Model:Diagram}">
+                        <Views:ShellTabControl />
+                    </DataTemplate>
+                </Views:CachedTabControl.Resources>
+                <Views:CachedTabControl.Template>
+                    <ControlTemplate TargetType="TabControl">
+                        <DockPanel>
+                            <TabPanel DockPanel.Dock="Top"
+                                      IsItemsHost="True" />
+                            <Grid DockPanel.Dock="Bottom"
+                                  x:Name="PART_ItemsHolder" />
+                        </DockPanel>
+                        <!-- no content presenter -->
+                    </ControlTemplate>
+                </Views:CachedTabControl.Template>
+                <Views:CachedTabControl.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="{Binding Caption}"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Left"
+                                       Foreground="{StaticResource SystemClassBlueBrush}" 
+                                       ToolTip="{Binding FullName}"/>
+                            <Button Grid.Column="1" 
+                                    Margin="0,0,-10,0"
+                                    CommandParameter="{Binding .}"
+                                    Click="OnTabCloseButtonClicked"
+                                    Style="{StaticResource TabCloseButtonStyle}" />
+                        </Grid>
+                    </DataTemplate>
+                </Views:CachedTabControl.ItemTemplate>
+            </Views:CachedTabControl>
+
+            <Grid Background="{StaticResource LoadingBackgroundBrush}"
+                  IsHitTestVisible="False"
+                  Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisConverter}}">
+                <ProgressBar Maximum="25"
+                             Minimum="1"
+                             Value="{Binding LoadingProgress}"
+                             HorizontalAlignment="Center"
+                             Width="200"
+                             Height="30"
+                             VerticalAlignment="Center" />
+                <TextBlock Margin="0,65,0,0"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           Foreground="White"
+                           FontSize="32"
+                           Text="Analysing..." />
+            </Grid>
+        </Grid>
+    </DockPanel>
+
+</WpfUtilities:GlassWindow>

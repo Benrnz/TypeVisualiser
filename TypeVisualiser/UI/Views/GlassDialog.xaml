@@ -1,0 +1,69 @@
+<WpfUtilities:GlassWindow x:Class="TypeVisualiser.UI.Views.GlassDialog"
+                          xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                          mc:Ignorable="d"
+                          xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                          xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                          xmlns:WpfUtilities="clr-namespace:TypeVisualiser.UI.WpfUtilities"
+                          xmlns:Converters1="clr-namespace:TypeVisualiser.UI.Converters"
+                          Background="Transparent"
+                          GlassThickness="200"
+                          Icon="..\Assets\MainIcon.png"
+                          SizeToContent="WidthAndHeight"
+                          MaxHeight="480"
+                          MaxWidth="640"
+                          MinHeight="200"
+                          MinWidth="400"
+                          Title="{Binding DialogTitle}">
+    <WpfUtilities:GlassWindow.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="..\Style\ButtonStyle.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <Converters1:NullToVisibilityConverter x:Key="NullToVisibility" />
+
+        </ResourceDictionary>
+
+    </WpfUtilities:GlassWindow.Resources>
+
+    <DockPanel>
+        <TextBlock DockPanel.Dock="Top"
+                   Text="{Binding HeadingCaption}"
+                   Margin="5"
+                   Style="{StaticResource SubjectName}" />
+        <StackPanel Orientation="Horizontal"
+                    DockPanel.Dock="Bottom"
+                    HorizontalAlignment="Right"
+                    Margin="0,0,15,0">
+            <Button IsDefault="True"
+                    Click="OnDefaultButtonClick"
+                    Style="{StaticResource ButtonStyle}">
+                <TextBlock Style="{StaticResource ButtonText}"
+                           Text="{Binding DefaultButtonCaption}" />
+            </Button>
+
+        </StackPanel>
+        <Image DockPanel.Dock="Left"
+               Margin="5"
+               HorizontalAlignment="Center"
+               VerticalAlignment="Center"
+               Stretch="None"
+               Width="64"
+               Height="64"
+               Source="{Binding ImageSource}" />
+        <Border CornerRadius="5"
+                Margin="0,0,25,0"
+                Background="WhiteSmoke">
+            <Grid>
+                <ScrollViewer>
+                    <StackPanel>
+                        <TextBlock Text="{Binding Message}"
+                                   TextWrapping="Wrap"
+                                   Visibility="{Binding Message, Converter={StaticResource NullToVisibility}}" />
+                    </StackPanel>
+                </ScrollViewer>
+            </Grid>
+        </Border>
+    </DockPanel>
+</WpfUtilities:GlassWindow>
