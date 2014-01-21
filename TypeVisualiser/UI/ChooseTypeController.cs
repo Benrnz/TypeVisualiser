@@ -148,7 +148,8 @@ namespace TypeVisualiser.UI
 
             foreach (Type type in types)
             {
-                string name = type.Name.Contains("`") ? new TypeDescriptorHelper(type).GenerateName() : type.Name;
+                string name;
+                name = type.Name.Contains("`") ? new TypeDescriptorHelper(type).GenerateName() : type.Name;
 
                 Type type1 = type;
                 string imagePath = GetImagePath(type);

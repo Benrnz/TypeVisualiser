@@ -12,18 +12,39 @@ namespace TypeVisualiser
     public class TrivialFilter : ITrivialFilter
     {
         public const string TrivialListXmlFileName = "TrivialExcludeList.xml";
+        private static readonly object SyncRoot = new object();
         private readonly Func<List<TrivialType>> deserialiseXmlIntoCollection;
         private readonly Action<string> editTrivialList;
+        private static volatile ITrivialFilter current;
         private string applicationFolder;
         private bool hasLoadedTypes;
         private bool hideTrivialTypes;
         private List<TrivialType> trivialTypes = new List<TrivialType>();
 
-        public TrivialFilter()
+        internal TrivialFilter()
         {
             this.deserialiseXmlIntoCollection = LoadTrivialExcludeXml;
             this.editTrivialList = filename => Process.Start("notepad.exe", filename);
             HideSecondaryAssociations = true;
+        }
+
+        public static ITrivialFilter Current
+        {
+            get
+            {
+                if (current == null)
+                {
+                    lock (SyncRoot)
+                    {
+                        if (current == null)
+                        {
+                            current = new TrivialFilter();
+                        }
+                    }
+                }
+
+                return current;
+            }
         }
 
         public bool HideSecondaryAssociations { get; set; }

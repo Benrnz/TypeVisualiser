@@ -1,33 +1,30 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+using System.Linq;
+using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
+using TypeVisualiser.ILAnalyser;
+using TypeVisualiser.Model.Persistence;
+using TypeVisualiser.Properties;
+using TypeVisualiser.Startup;
+using IContainer = StructureMap.IContainer;
+
 namespace TypeVisualiser.Model
 {
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Globalization;
-    using System.Linq;
-    using System.Reflection;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    using TypeVisualiser.ILAnalyser;
-    using TypeVisualiser.Model.Persistence;
-    using TypeVisualiser.Properties;
-    using TypeVisualiser.Startup;
-
-    using IContainer = StructureMap.IContainer;
-
     [DebuggerDisplay("VisualisableType {AssemblyQualifiedName}")]
     public class VisualisableType : INotifyPropertyChanged, IVisualisableType
     {
         private static readonly TaskScheduler BackgroundLimitedScheduler = new LimitedConcurrencyLevelTaskScheduler(3);
+        //private static readonly TaskScheduler BackgroundLimitedScheduler = null;
 
-        // private static readonly TaskScheduler BackgroundLimitedScheduler = null;
         private IContainer doNotUseFactory;
 
-        public VisualisableType(Type type)
-            : this(type, new VisualisableTypeData(), SubjectOrAssociate.Associate)
+        public VisualisableType(Type type) : this(type, new VisualisableTypeData(), SubjectOrAssociate.Associate)
         {
         }
 
@@ -40,26 +37,26 @@ namespace TypeVisualiser.Model
             }
 
             this.doNotUseFactory = factory;
-            this.NetType = type;
-            this.PersistentDataField = data;
-            this.SubjectOrAssociate = subjectOrAssociate;
-            this.PersistentDataField.Modifiers = new ModifiersData(type);
-            this.AssemblyName = type.Assembly.GetName().Name;
-            this.AssemblyFullName = type.Assembly.FullName;
-            this.AssemblyFileName = type.Assembly.Location;
+            NetType = type;
+            PersistentDataField = data;
+            SubjectOrAssociate = subjectOrAssociate;
+            PersistentDataField.Modifiers = new ModifiersData(type);
+            AssemblyName = type.Assembly.GetName().Name;
+            AssemblyFullName = type.Assembly.FullName;
+            AssemblyFileName = type.Assembly.Location;
             var genericNameHelper = new TypeDescriptorHelper(type);
-            this.Id = genericNameHelper.GenerateId(); // It is not reliable to use type.GUID different generic parameters do not yeild different guids.
-            this.Name = genericNameHelper.IsGeneric ? genericNameHelper.GenerateName() : type.Name;
-            this.AssemblyQualifiedName = type.AssemblyQualifiedName ?? string.Format(CultureInfo.InvariantCulture, "{0}, {1}", type.Name, this.AssemblyFullName);
-            this.ThisTypeNamespace = type.Namespace;
+            Id = genericNameHelper.GenerateId(); // It is not reliable to use type.GUID different generic parameters do not yeild different guids.
+            Name = genericNameHelper.IsGeneric ? genericNameHelper.GenerateName() : type.Name;
+            AssemblyQualifiedName = type.AssemblyQualifiedName ?? string.Format(CultureInfo.InvariantCulture, "{0}, {1}", type.Name, AssemblyFullName);
+            ThisTypeNamespace = type.Namespace;
             if (type.IsEnum)
             {
-                this.EnumMemberCount = Enum.GetNames(type).Length;
+                EnumMemberCount = Enum.GetNames(type).Length;
             }
 
-            this.SetToolTip(type);
-            this.SetAssociations(type);
-            this.SetLinesOfCodeAndStaticAssociations(type);
+            SetToolTip(type);
+            SetAssociations(type);
+            SetLinesOfCodeAndStaticAssociations(type);
         }
 
         protected VisualisableType(Type type, VisualisableTypeData data, SubjectOrAssociate subjectOrAssociate)
@@ -71,127 +68,70 @@ namespace TypeVisualiser.Model
 
         public string AssemblyFileName
         {
-            get
-            {
-                return this.PersistentDataField.AssemblyFileName;
-            }
+            get { return PersistentDataField.AssemblyFileName; }
 
-            private set
-            {
-                this.PersistentDataField.AssemblyFileName = value;
-            }
+            private set { PersistentDataField.AssemblyFileName = value; }
         }
 
         public string AssemblyFullName
         {
-            get
-            {
-                return this.PersistentDataField.AssemblyFullName;
-            }
+            get { return PersistentDataField.AssemblyFullName; }
 
-            private set
-            {
-                this.PersistentDataField.AssemblyFullName = value;
-            }
+            private set { PersistentDataField.AssemblyFullName = value; }
         }
 
         public string AssemblyName
         {
-            get
-            {
-                return this.PersistentDataField.AssemblyName;
-            }
+            get { return PersistentDataField.AssemblyName; }
 
-            private set
-            {
-                this.PersistentDataField.AssemblyName = value;
-            }
+            private set { PersistentDataField.AssemblyName = value; }
         }
 
         public string AssemblyQualifiedName
         {
-            get
-            {
-                return this.PersistentDataField.FullName;
-            }
+            get { return PersistentDataField.FullName; }
 
-            private set
-            {
-                this.PersistentDataField.FullName = value;
-            }
+            private set { PersistentDataField.FullName = value; }
         }
 
         public int ConstructorCount
         {
-            get
-            {
-                return this.PersistentDataField.ConstructorCount;
-            }
+            get { return PersistentDataField.ConstructorCount; }
 
-            private set
-            {
-                this.PersistentDataField.ConstructorCount = value;
-            }
+            private set { PersistentDataField.ConstructorCount = value; }
         }
 
         public int EnumMemberCount
         {
-            get
-            {
-                return this.PersistentDataField.EnumMemberCount;
-            }
+            get { return PersistentDataField.EnumMemberCount; }
 
-            private set
-            {
-                this.PersistentDataField.EnumMemberCount = value;
-            }
+            private set { PersistentDataField.EnumMemberCount = value; }
         }
 
         public int EventCount
         {
-            get
-            {
-                return this.PersistentDataField.EventCount;
-            }
+            get { return PersistentDataField.EventCount; }
 
-            private set
-            {
-                this.PersistentDataField.EventCount = value;
-            }
+            private set { PersistentDataField.EventCount = value; }
         }
 
         public int FieldCount
         {
-            get
-            {
-                return this.PersistentDataField.FieldCount;
-            }
+            get { return PersistentDataField.FieldCount; }
 
-            private set
-            {
-                this.PersistentDataField.FieldCount = value;
-            }
+            private set { PersistentDataField.FieldCount = value; }
         }
 
         public string Id
         {
-            get
-            {
-                return this.PersistentDataField.Id;
-            }
+            get { return PersistentDataField.Id; }
 
-            private set
-            {
-                this.PersistentDataField.Id = value;
-            }
+            private set { PersistentDataField.Id = value; }
         }
 
         public bool IsSubject
         {
-            get
-            {
-                return this.SubjectOrAssociate == SubjectOrAssociate.Subject;
-            }
+            get { return SubjectOrAssociate == SubjectOrAssociate.Subject; }
         }
 
         /// <summary>
@@ -200,126 +140,75 @@ namespace TypeVisualiser.Model
         /// <value>The LinesOfCode.</value>
         public int LinesOfCode
         {
-            get
-            {
-                return this.PersistentDataField.LinesOfCode;
-            }
+            get { return PersistentDataField.LinesOfCode; }
 
             set
             {
-                this.PersistentDataField.LinesOfCode = value;
-                this.RaisePropertyChangedEvent("LinesOfCode");
+                PersistentDataField.LinesOfCode = value;
+                RaisePropertyChangedEvent("LinesOfCode");
             }
         }
 
         public string LinesOfCodeToolTip
         {
-            get
-            {
-                return this.PersistentDataField.LinesOfCodeToolTip ?? this.LinesOfCode.ToString("F0", CultureInfo.CurrentCulture);
-            }
+            get { return PersistentDataField.LinesOfCodeToolTip ?? LinesOfCode.ToString("F0", CultureInfo.CurrentCulture); }
         }
 
         public int MethodCount
         {
-            get
-            {
-                return this.PersistentDataField.MethodCount;
-            }
+            get { return PersistentDataField.MethodCount; }
 
-            private set
-            {
-                this.PersistentDataField.MethodCount = value;
-            }
+            private set { PersistentDataField.MethodCount = value; }
         }
 
         public ModifiersData Modifiers
         {
-            get
-            {
-                return this.PersistentDataField.Modifiers;
-            }
+            get { return PersistentDataField.Modifiers; }
         }
 
         public string Name
         {
-            get
-            {
-                return this.PersistentDataField.Name;
-            }
+            get { return PersistentDataField.Name; }
 
-            private set
-            {
-                this.PersistentDataField.Name = value;
-            }
+            private set { PersistentDataField.Name = value; }
         }
 
         public string NamespaceQualifiedName
         {
-            get
-            {
-                return string.Format(CultureInfo.CurrentCulture, "{0}.{1}", this.ThisTypeNamespace, this.Name);
-            }
+            get { return string.Format(CultureInfo.CurrentCulture, "{0}.{1}", ThisTypeNamespace, Name); }
         }
 
         public int PropertyCount
         {
-            get
-            {
-                return this.PersistentDataField.PropertyCount;
-            }
+            get { return PersistentDataField.PropertyCount; }
 
-            private set
-            {
-                this.PersistentDataField.PropertyCount = value;
-            }
+            private set { PersistentDataField.PropertyCount = value; }
         }
 
         public SubjectOrAssociate SubjectOrAssociate
         {
-            get
-            {
-                return this.PersistentDataField.SubjectOrAssociate;
-            }
+            get { return PersistentDataField.SubjectOrAssociate; }
 
-            protected set
-            {
-                this.PersistentDataField.SubjectOrAssociate = value;
-            }
+            protected set { PersistentDataField.SubjectOrAssociate = value; }
         }
 
         public string ThisTypeNamespace
         {
-            get
-            {
-                return this.PersistentDataField.Namespace;
-            }
+            get { return PersistentDataField.Namespace; }
 
-            private set
-            {
-                this.PersistentDataField.Namespace = value;
-            }
+            private set { PersistentDataField.Namespace = value; }
         }
 
         public string TypeToolTip
         {
-            get
-            {
-                return this.PersistentDataField.ToolTipName;
-            }
+            get { return PersistentDataField.ToolTipName; }
 
-            private set
-            {
-                this.PersistentDataField.ToolTipName = value;
-            }
+            private set { PersistentDataField.ToolTipName = value; }
         }
 
         protected IContainer Factory
         {
-            get
-            {
-                return this.doNotUseFactory ?? (this.doNotUseFactory = IoC.Default);
-            }
+            get { return this.doNotUseFactory ?? (this.doNotUseFactory = IoC.Default); }
         }
 
         protected Task LinesOfCodeTask { get; private set; }
@@ -327,7 +216,7 @@ namespace TypeVisualiser.Model
         protected Type NetType { get; private set; }
 
         /// <summary>
-        /// Gets the persistent data. This method is not public because I do not want WPF binding to consume it directly. It doesn't implement INotifyPropertyChanged.
+        /// Gets the persistent data. This method is not public because I do not want WPF binding to consume it directly. It doesnt impl INotifyPropertyChanged.
         /// </summary>
         /// <value>The persistent data.</value>
         protected VisualisableTypeData PersistentDataField { get; private set; }
@@ -356,6 +245,18 @@ namespace TypeVisualiser.Model
             return !(operand1 == operand2);
         }
 
+        /// <summary>
+        /// Gets the persistent data. This method is separate to the protected property because I do not want WPF binding to consume it directly. 
+        /// It doesnt impl INotifyPropertyChanged.       
+        /// This method needs to be called to get the persistent data object for saving to disk. This gives the objects a change to ensure all
+        /// data is up to date and stored in the persistent objects correctly.
+        /// </summary>
+        /// <returns></returns>
+        public virtual VisualisableTypeData ExtractPersistentData()
+        {
+            return PersistentDataField;
+        }
+
         public override bool Equals(object obj)
         {
             var otherType = obj as VisualisableType;
@@ -364,69 +265,51 @@ namespace TypeVisualiser.Model
                 return false;
             }
 
-            return this.AssemblyQualifiedName.Equals(otherType.AssemblyQualifiedName);
-        }
-
-        /// <summary>
-        /// Gets the persistent data. This method is separate to the protected property because I do not want WPF binding to consume it directly. 
-        /// It doesn't implement INotifyPropertyChanged.       
-        /// This method needs to be called to get the persistent data object for saving to disk. This gives the objects a change to ensure all
-        /// data is up to date and stored in the persistent objects correctly.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="VisualisableTypeData"/>.
-        /// </returns>
-        public virtual VisualisableTypeData ExtractPersistentData()
-        {
-            return this.PersistentDataField;
+            return AssemblyQualifiedName.Equals(otherType.AssemblyQualifiedName);
         }
 
         public override int GetHashCode()
         {
-            return this.Id.GetHashCode();
-        }
-
-        protected void NotifyPropertyChanged(string propertyName)
-        {
-            PropertyChangedEventHandler handler = this.PropertyChanged;
-            if (handler != null)
-            {
-                handler(this, new PropertyChangedEventArgs(propertyName));
-            }
+            return Id.GetHashCode();
         }
 
         /// <summary>
         /// Sets the consumes collection. Intended to be used by <see cref="VisualisableTypeWithAssociations"/>. Must be on this base class to be polymorphic.
         /// </summary>
-        /// <param name="method">
-        /// The method.
-        /// </param>
-        /// <param name="reader">
-        /// The il reader.
-        /// </param>
-        protected virtual void SetConsumes(MethodBase method, IMethodBodyReader reader)
+        /// <param name="method">The method.</param>
+        /// <param name="ilReader">The il reader.</param>
+        protected virtual void SetConsumes(MethodBase method, IMethodBodyReader ilReader)
         {
             if (method == null)
             {
                 throw new ArgumentNullResourceException("method", Resources.General_Given_Parameter_Cannot_Be_Null);
             }
 
-            if (reader == null)
+            if (ilReader == null)
             {
-                throw new ArgumentNullResourceException("reader", Resources.General_Given_Parameter_Cannot_Be_Null);
+                throw new ArgumentNullResourceException("ilReader", Resources.General_Given_Parameter_Cannot_Be_Null);
             }
         }
 
-        protected virtual void SetStaticAssociations(MethodBase consumedStatics, IMethodBodyReader reader)
+        protected virtual void SetStaticAssociations(MethodBase consumedStatics, IMethodBodyReader ilReader)
         {
             if (consumedStatics == null)
             {
                 throw new ArgumentNullResourceException("consumedStatics", Resources.General_Given_Parameter_Cannot_Be_Null);
             }
 
-            if (reader == null)
+            if (ilReader == null)
             {
-                throw new ArgumentNullResourceException("reader", Resources.General_Given_Parameter_Cannot_Be_Null);
+                throw new ArgumentNullResourceException("ilReader", Resources.General_Given_Parameter_Cannot_Be_Null);
+            }
+        }
+
+        protected void NotifyPropertyChanged(string propertyName)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null)
+            {
+                handler(this, new PropertyChangedEventArgs(propertyName));
             }
         }
 
@@ -452,10 +335,10 @@ namespace TypeVisualiser.Model
             Stopwatch stopWatch = Stopwatch.StartNew();
             foreach (MethodBase method in methods)
             {
-                IMethodBodyReader methodBodyReader = this.CreateMethodBodyReader(method);
-                this.SetConsumes(method, methodBodyReader);
-                this.SetStaticAssociations(method, methodBodyReader);
-                locCalc += methodBodyReader.Instructions.Count();
+                IMethodBodyReader ilReader = CreateMethodBodyReader(method);
+                SetConsumes(method, ilReader);
+                SetStaticAssociations(method, ilReader);
+                locCalc += ilReader.Instructions.Count();
             }
 
             Logger.Instance.WriteEntry("{0} Finished Calculate LOC {1}", DateTime.Now, stopWatch.ElapsedMilliseconds);
@@ -467,20 +350,24 @@ namespace TypeVisualiser.Model
             MethodInfo[] methods = type.GetMethods(BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly);
 
             Logger.Instance.WriteEntry("{0} SetLinesOfCodeAndStaticAssociations(type) - invoking CalculateLoc(methods)", DateTime.Now);
-            int locCalc = this.CalculateLoc(methods);
+            int locCalc = CalculateLoc(methods);
             if (locCalc != -1)
             {
                 ConstructorInfo[] constructors = type.GetConstructors(BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly);
                 Logger.Instance.WriteEntry("{0} SetLinesOfCodeAndStaticAssociations(type) - invoking CalculateLoc(constructors)", DateTime.Now);
-                locCalc += this.CalculateLoc(constructors);
+                locCalc += CalculateLoc(constructors);
             }
 
-            this.LinesOfCode = locCalc;
+            LinesOfCode = locCalc;
         }
 
         private IMethodBodyReader CreateMethodBodyReader(MethodBase method)
         {
-            IMethodBodyReader reader = this.Factory.TryGetInstance<IMethodBodyReader>() ?? new MethodBodyReader();
+            var reader = Factory.TryGetInstance<IMethodBodyReader>();
+            if (reader == null)
+            {
+                reader = new MethodBodyReader();
+            }
 
             reader.Read(method);
             return reader;
@@ -488,7 +375,7 @@ namespace TypeVisualiser.Model
 
         private void RaisePropertyChangedEvent(string propertyName)
         {
-            PropertyChangedEventHandler handler = this.PropertyChanged;
+            PropertyChangedEventHandler handler = PropertyChanged;
             if (handler != null)
             {
                 handler(this, new PropertyChangedEventArgs(propertyName));
@@ -497,49 +384,46 @@ namespace TypeVisualiser.Model
 
         private void SetAssociations(Type type)
         {
-            this.PropertyCount = (from p in type.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static | BindingFlags.DeclaredOnly) select p).Count();
+            PropertyCount = (from p in type.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static | BindingFlags.DeclaredOnly) select p).Count();
 
             var excludeMethodList = new[] { "ToString", "GetHashCode", "GetType", "Equals", "get_", "set_" };
             if (type.IsClass || type.IsInterface || type.IsValueType)
             {
-                this.MethodCount =
+                MethodCount =
                     (from m in type.GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static | BindingFlags.DeclaredOnly)
                      where !excludeMethodList.Contains(m.Name) && !m.IsSpecialName
                      select m).Count();
-            }
-            else
+            } else
             {
-                this.MethodCount = 0;
+                MethodCount = 0;
             }
 
-            this.ConstructorCount = (from m in type.GetConstructors(BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static | BindingFlags.DeclaredOnly) select m).Count();
+            ConstructorCount = (from m in type.GetConstructors(BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static | BindingFlags.DeclaredOnly) select m).Count();
 
-            this.EventCount = (from e in type.GetEvents(BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static | BindingFlags.DeclaredOnly) select e).Count();
+            EventCount = (from e in type.GetEvents(BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static | BindingFlags.DeclaredOnly) select e).Count();
 
-            IEnumerable<FieldInfo> fields = from f in type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static | BindingFlags.DeclaredOnly)
-                                             where !(f.Name.Contains("__BackingField") || typeof(EventHandler).IsAssignableFrom(f.FieldType))
-                                             select f;
-            this.FieldCount = fields.Count();
+            IEnumerable<FieldInfo> fields = (from f in type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static | BindingFlags.DeclaredOnly)
+                                             where !(f.Name.Contains("__BackingField") || typeof (EventHandler).IsAssignableFrom(f.FieldType))
+                                             select f);
+            FieldCount = fields.Count();
         }
 
         private void SetLinesOfCodeAndStaticAssociations(Type type)
         {
-            if (this.IsSubject)
+            if (IsSubject)
             {
                 // Subject needs to know about consume and static associations up front so they can be drawn into the diagram.
-                this.CalculateLocAndConsumptionAssociations(type);
+                CalculateLocAndConsumptionAssociations(type);
                 return;
             }
 
             // Non-subject types on diagram (Associations of the subject) only calculate LOC on a background thread, but check the cache first.
             if (BackgroundLimitedScheduler != null)
             {
-                this.LinesOfCodeTask = Task.Factory.StartNew(
-                    () => this.CalculateLocAndConsumptionAssociations(type), CancellationToken.None, TaskCreationOptions.LongRunning, BackgroundLimitedScheduler);
-            }
-            else
+                LinesOfCodeTask = Task.Factory.StartNew(() => CalculateLocAndConsumptionAssociations(type), CancellationToken.None, TaskCreationOptions.LongRunning, BackgroundLimitedScheduler);
+            } else
             {
-                this.LinesOfCodeTask = Task.Factory.StartNew(() => this.CalculateLocAndConsumptionAssociations(type), TaskCreationOptions.LongRunning);
+                LinesOfCodeTask = Task.Factory.StartNew(() => CalculateLocAndConsumptionAssociations(type), TaskCreationOptions.LongRunning);
             }
         }
 
@@ -547,25 +431,25 @@ namespace TypeVisualiser.Model
         {
             if (type.IsClass)
             {
-                this.TypeToolTip = string.Format(CultureInfo.CurrentCulture, "{0} Class: {1}", GetAccessor(type), this.Name);
+                TypeToolTip = string.Format(CultureInfo.CurrentCulture, "{0} Class: {1}", GetAccessor(type), Name);
                 return;
             }
 
             if (type.IsEnum)
             {
-                this.TypeToolTip = string.Format(CultureInfo.CurrentCulture, "{0} Enumeration: {1}", GetAccessor(type), this.Name);
+                TypeToolTip = string.Format(CultureInfo.CurrentCulture, "{0} Enumeration: {1}", GetAccessor(type), Name);
                 return;
             }
 
             if (type.IsValueType)
             {
-                this.TypeToolTip = string.Format(CultureInfo.CurrentCulture, "{0} ValueType: {1}", GetAccessor(type), this.Name);
+                TypeToolTip = string.Format(CultureInfo.CurrentCulture, "{0} ValueType: {1}", GetAccessor(type), Name);
                 return;
             }
 
             if (type.IsInterface)
             {
-                this.TypeToolTip = string.Format(CultureInfo.CurrentCulture, "{0} Interface: {1}", GetAccessor(type), this.Name);
+                TypeToolTip = string.Format(CultureInfo.CurrentCulture, "{0} Interface: {1}", GetAccessor(type), Name);
             }
         }
     }

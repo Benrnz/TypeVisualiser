@@ -1,18 +1,16 @@
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using System.Reflection;
+using TypeVisualiser.ILAnalyser;
+using TypeVisualiser.Model.Persistence;
+using TypeVisualiser.Properties;
+
 namespace TypeVisualiser.Model
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Data;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Linq;
-    using System.Reflection;
-
-    using StructureMap;
-
-    using TypeVisualiser.ILAnalyser;
-    using TypeVisualiser.Model.Persistence;
-    using TypeVisualiser.Properties;
-
     public class VisualisableTypeWithAssociations : VisualisableType, IVisualisableTypeWithAssociations
     {
         private const int DepthLimit = 2;
@@ -31,6 +29,8 @@ namespace TypeVisualiser.Model
 
         private readonly object associationsSyncRoot = new object();
 
+        private readonly Func<ITrivialFilter> getTrivialFilter = () => TrivialFilter.Current;
+
         private List<FieldAssociation> associations = new List<FieldAssociation>();
 
         /// <summary>
@@ -38,27 +38,29 @@ namespace TypeVisualiser.Model
         /// </summary>
         private int depth;
 
-        private Func<ITrivialFilter> getTrivialFilter;
-
         private AssociationLoadStatus loadStatus = AssociationLoadStatus.ConstructedOnly;
 
-        public VisualisableTypeWithAssociations(Type type)
-            : this(type, 0)
+        public VisualisableTypeWithAssociations(Type type) : this(type, 0)
         {
         }
 
-        [SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors", Justification = "Reviewed, ok here")]
-        public VisualisableTypeWithAssociations(Type type, int depth)
-            : base(type, new VisualisableTypeSubjectData(), depth == 0 ? SubjectOrAssociate.Subject : SubjectOrAssociate.Associate)
+        public VisualisableTypeWithAssociations(Type type, int depth) : base(type, new VisualisableTypeSubjectData(), depth == 0 ? SubjectOrAssociate.Subject : SubjectOrAssociate.Associate)
         {
-            this.ConstructorSharedLogic(type, depth);
-        }
-
-        [SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors", Justification = "Reviewed, ok here")]
-        public VisualisableTypeWithAssociations(Type type, int depth, IContainer factory)
-            : base(factory, type, new VisualisableTypeSubjectData(), depth == 0 ? SubjectOrAssociate.Subject : SubjectOrAssociate.Associate)
-        {
-            this.ConstructorSharedLogic(type, depth);
+            this.depth = depth;
+            ThisTypeImplements = new List<ParentAssociation>();
+            if (LinesOfCodeTask != null)
+            {
+                if (LinesOfCodeTask.IsCompleted)
+                {
+                    Initialise(type);
+                } else
+                {
+                    LinesOfCodeTask.ContinueWith(t => Initialise(type));
+                }
+            } else
+            {
+                Initialise(type);
+            }
         }
 
         /// <summary>
@@ -68,10 +70,7 @@ namespace TypeVisualiser.Model
         /// <value>All associations.</value>
         public IEnumerable<FieldAssociation> AllAssociations
         {
-            get
-            {
-                return this.associations;
-            }
+            get { return this.associations; }
         }
 
         /// <summary>
@@ -108,10 +107,10 @@ namespace TypeVisualiser.Model
                 ITrivialFilter trivialFilter = this.getTrivialFilter();
                 if (trivialFilter.HideTrivialTypes)
                 {
-                    return this.associations.Where(x => x.GetType() == typeof(FieldAssociation) && !trivialFilter.IsTrivialType(x.AssociatedTo.NamespaceQualifiedName));
+                    return this.associations.Where(x => x.GetType() == typeof (FieldAssociation) && !trivialFilter.IsTrivialType(x.AssociatedTo.NamespaceQualifiedName));
                 }
 
-                return this.associations.Where(x => x.GetType() == typeof(FieldAssociation));
+                return this.associations.Where(x => x.GetType() == typeof (FieldAssociation));
             }
         }
 
@@ -138,16 +137,12 @@ namespace TypeVisualiser.Model
         /// <summary>
         /// Gets the number of nontrivial dependencies. This is the number of associations that are
         /// classified as non-trivial by the <see cref="TrivialFilter"/> and associates that are interfaces
-        /// enumerations or value types.
+        /// enums or value types.
         /// </summary>
         /// <value>The nontrivial dependencies.</value>
         public int NontrivialDependencies
         {
-            get
-            {
-                IEnumerable<FieldAssociation> nontrivialDependencies = this.associations.Where(x => !x.IsTrivialAssociation());
-                return nontrivialDependencies.Count() + (this.Parent == null ? 0 : this.Parent.IsTrivialAssociation() ? 0 : 1);
-            }
+            get { return this.associations.Count(x => !x.IsTrivialAssociation(this.getTrivialFilter())) + (Parent == null ? 0 : Parent.IsTrivialAssociation(this.getTrivialFilter()) ? 0 : 1); }
         }
 
         /// <summary>
@@ -166,7 +161,7 @@ namespace TypeVisualiser.Model
         /// <summary>
         /// Gets the number of nontrivial dependencies. This is the number of associations that are
         /// classified as trivial by the <see cref="TrivialFilter"/> and associates that are interfaces
-        /// enumerations or value types.
+        /// enums or value types.
         /// </summary>
         /// <value>The nontrivial dependencies.</value>
         public int TrivialDependencies
@@ -174,20 +169,40 @@ namespace TypeVisualiser.Model
             get
             {
                 IEnumerable<FieldAssociation> result = this.associations.Where(x => x.IsTrivialAssociation());
-                return result.Count() + this.ThisTypeImplements.Count() + (this.Parent == null ? 0 : this.Parent.IsTrivialAssociation() ? 1 : 0);
+                return result.Count() + ThisTypeImplements.Count() + (Parent == null ? 0 : Parent.IsTrivialAssociation() ? 1 : 0);
             }
+        }
+
+        public override VisualisableTypeData ExtractPersistentData()
+        {
+            // pull data in from association objects.
+            var subjectData = PersistentDataField as VisualisableTypeSubjectData;
+            if (subjectData == null)
+            {
+                throw new InvalidCastException(Resources.VisualisableTypeSubject_GetPersistentData_The_underlying_data_object_for_this_subject_is_not_of_Visualisable_Type_Subject_Data_class);
+            }
+
+            subjectData.Associations = (from x in AllAssociations select FieldAssociationData.Convert(x)).ToArray();
+
+            subjectData.Implements = (from x in ThisTypeImplements select ParentAssociationData.Convert(x)).ToArray();
+
+            if (Parent != null)
+            {
+                subjectData.Parent = ParentAssociationData.Convert(Parent);
+            }
+
+            return subjectData;
         }
 
         /// <summary>
         /// Discovers the relationships between associations. This is an interim step to find only associations that are not already modeled.
         /// This should only be called on the main subject of the diagram. Call this for multiple types will result in unnecessary duplicated processing.
-        /// For example: Subject will be excluded and its associations also.
+        /// Ie: Subject will be excluced and its associations also.
         /// </summary>
         public void DiscoverSecondaryAssociationsInModel()
         {
             // Now examine all assoications and see if any of them relate to each other. (Up to this point only relationships back to this subject have been created).
-            List<IVisualisableType> allAssociations =
-                this.associations.Cast<Association>().Union(this.ThisTypeImplements).Union(new[] { this.Parent }).Where(x => x != null).Select(x => x.AssociatedTo).ToList();
+            List<IVisualisableType> allAssociations = this.associations.Cast<Association>().Union(ThisTypeImplements).Union(new[] { Parent }).Where(x => x != null).Select(x => x.AssociatedTo).ToList();
 
             foreach (IVisualisableType visualisableType in allAssociations.ToList())
             {
@@ -198,31 +213,25 @@ namespace TypeVisualiser.Model
                 }
 
                 // Discover relationships from current loop variable to others fields
-                IEnumerable<FieldInfo> fields = this.GetAllFieldsInThisType(fullyExpandedTypeModel.NetType);
-
-                // Resulting list should exclude the main subject, its associations have already been drawn.
+                IEnumerable<FieldInfo> fields = GetAllFieldsInThisType(fullyExpandedTypeModel.NetType); // Resulting list should exclude the main subject, its associations have already been drawn.
                 IVisualisableType copyOfVisualisableType = visualisableType;
-
                 // Not equal to current loop variable
-                IEnumerable<FieldInfo> includeTheseFields = fields.Where(f => new TypeDescriptorHelper(f.FieldType).GenerateId() != copyOfVisualisableType.Id).Join(
-                    allAssociations, fieldInfo => new TypeDescriptorHelper(fieldInfo.FieldType).GenerateId(), association => association.Id, (fieldInfo, association) => fieldInfo);
+                IEnumerable<FieldInfo> includeTheseFields = fields.Where(f => new TypeDescriptorHelper(f.FieldType).GenerateId() != copyOfVisualisableType.Id).Join(allAssociations,
+                                                                                                                                                                    fieldInfo =>
+                                                                                                                                                                    new TypeDescriptorHelper(
+                                                                                                                                                                        fieldInfo.FieldType).GenerateId(),
+                                                                                                                                                                    association => association.Id,
+                                                                                                                                                                    (fieldInfo, association) =>
+                                                                                                                                                                    fieldInfo);
 
                 // Do I have the associated field on my diagram already? If so include otherwise omit.
-                fullyExpandedTypeModel.AddToAssociationsCollection(this.InitialiseFieldAssociations(includeTheseFields));
+                fullyExpandedTypeModel.AddToAssociationsCollection(InitialiseFieldAssociations(includeTheseFields));
             }
-        }
-
-        public override VisualisableTypeData ExtractPersistentData()
-        {
-            return new VisualisableTypeWithAssociationsDataAdaptor(this.AllAssociations, this.ThisTypeImplements, this.Parent, this.PersistentDataField).Adapt();
         }
 
         /// <summary>
         /// This method is called when an instance is reused from the cache. 
         /// </summary>
-        /// <param name="newDepth">
-        /// The new Depth.
-        /// </param>
         public void InitialiseForReuseFromCache(int newDepth)
         {
             if (newDepth > 0)
@@ -236,34 +245,15 @@ namespace TypeVisualiser.Model
                 return;
             }
 
-            this.Initialise(this.NetType);
-        }
-
-        /// <summary>
-        /// This virtual is to allow isolation of the parent relationship.
-        /// </summary>
-        /// <param name="mainSubjectType">
-        /// The main Subject Type.
-        /// </param>
-        protected virtual void InitialiseParentTypeRelationship(Type mainSubjectType)
-        {
-            if (mainSubjectType == null)
-            {
-                throw new ArgumentNullResourceException(Resources.General_Given_Parameter_Cannot_Be_Null, "mainSubjectType");
-            }
-
-            if (mainSubjectType.BaseType != null && mainSubjectType.BaseType != typeof(object))
-            {
-                this.Parent = this.Factory.GetInstance<ParentAssociation>().Initialise(mainSubjectType.BaseType, this);
-            }
+            Initialise(NetType);
         }
 
         [SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated in base")]
         [SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated in base")]
-        protected override void SetConsumes(MethodBase method, IMethodBodyReader reader)
+        protected override void SetConsumes(MethodBase method, IMethodBodyReader ilReader)
         {
-            base.SetConsumes(method, reader);
-            foreach (ILInstruction instruction in reader.Instructions.Where(i => i.Operand != null))
+            base.SetConsumes(method, ilReader);
+            foreach (ILInstruction instruction in ilReader.Instructions.Where(i => i.Operand != null))
             {
                 var externalMethodCall = instruction.Operand as MethodBase;
                 if (externalMethodCall != null)
@@ -284,7 +274,7 @@ namespace TypeVisualiser.Model
                         }
                     }
 
-                    if (declaringType == null || TypeDescriptorHelper.AreEqual(declaringType, this.Id))
+                    if (declaringType == null || TypeDescriptorHelper.AreEqual(declaringType, Id))
                     {
                         // Don't bother counting "self-consumption" calls.
                         continue;
@@ -296,10 +286,10 @@ namespace TypeVisualiser.Model
         }
 
         [SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated in base")]
-        protected override void SetStaticAssociations(MethodBase consumedStatics, IMethodBodyReader reader)
+        protected override void SetStaticAssociations(MethodBase consumedStatics, IMethodBodyReader ilReader)
         {
-            base.SetStaticAssociations(consumedStatics, reader);
-            IQueryable<Tuple<string, Type>> statics = from staticMethod in reader.Instructions.Select(instruction => instruction.Operand).OfType<MethodInfo>()
+            base.SetStaticAssociations(consumedStatics, ilReader);
+            IQueryable<Tuple<string, Type>> statics = from staticMethod in ilReader.Instructions.Select(instruction => instruction.Operand).OfType<MethodInfo>()
                                                       where (staticMethod.Attributes & MethodAttributes.Static) == MethodAttributes.Static
                                                       select new Tuple<string, Type>(consumedStatics.Name, staticMethod.DeclaringType);
             this.allStaticUsage.AddRange(statics);
@@ -315,6 +305,8 @@ namespace TypeVisualiser.Model
             IEnumerable<string> duplicates = existingAssociations.GroupBy(i => i.AssociatedTo.AssemblyQualifiedName).Where(g => g.Count() > 1).Select(g => g.Key);
             if (duplicates.Any())
             {
+                // TODO this happens with Demo type Car. Something is working earlier on. Check adding to associations collection.
+                Debugger.Break();
                 throw new DuplicateNameException("Code bug: Association list contains duplicates.");
             }
 
@@ -337,20 +329,19 @@ namespace TypeVisualiser.Model
         /// Adding to the associations collection must be done using this method. There are two sources to add to the associations, <see cref="Initialise"/>
         /// and <see cref="DiscoverSecondaryAssociationsInModel"/>.
         /// </summary>
-        /// <param name="fields">
-        /// The fields to be added to the <see cref="associations"/> collection.
-        /// </param>
+        /// <param name="fields"></param>
         private void AddToAssociationsCollection(IEnumerable<FieldAssociation> fields)
         {
             lock (this.associationsSyncRoot)
             {
-                IEnumerable<FieldAssociation> duplicateFiltered = this.DuplicateCheck(fields.ToList());
+                IEnumerable<FieldAssociation> duplicateFiltered = DuplicateCheck(fields.ToList());
                 this.associations.AddRange(duplicateFiltered);
             }
         }
 
-        private void AggregateRawConsumeCollection(
-            IList<ConsumeAssociation> rawConsumeList, Func<Type, int, IEnumerable<AssociationUsageDescriptor>, ConsumeAssociation> ctor, IList<Tuple<string, Type>> allUsageList)
+        private void AggregateRawConsumeCollection(IList<ConsumeAssociation> rawConsumeList,
+                                                   Func<Type, int, IEnumerable<AssociationUsageDescriptor>, ConsumeAssociation> ctor,
+                                                   IEnumerable<Tuple<string, Type>> allUsageList)
         {
             var usageGroup = new Tuple<string, Type>(null, null);
             var callerMethodList = new List<AssociationUsageDescriptor>();
@@ -360,12 +351,12 @@ namespace TypeVisualiser.Model
                 // todo sometimes getting null ref here on x.Item2 == null
                 // I suspect these might be win32 C++ types that do not have a correspnding type. These need to be specially dealt with.
                 // Debugger.Break();
-                allUsageList = allUsageList.Where(x => x.Item2 != null).ToList();
+                allUsageList = allUsageList.Where(x => x.Item2 != null);
             }
 
             foreach (var usage in allUsageList.OrderBy(x => x.Item2.FullName))
             {
-                if (new TypeDescriptorHelper(usage.Item2).GenerateId() == this.Id)
+                if (new TypeDescriptorHelper(usage.Item2).GenerateId() == Id)
                 {
                     // filter out associations to itself.
                     continue;
@@ -393,28 +384,6 @@ namespace TypeVisualiser.Model
             }
         }
 
-        private void ConstructorSharedLogic(Type type, int depthFromSubject)
-        {
-            this.getTrivialFilter = this.GetTrivialFilterImplementation;
-            this.depth = depthFromSubject;
-            this.ThisTypeImplements = new List<ParentAssociation>();
-            if (this.LinesOfCodeTask != null)
-            {
-                if (this.LinesOfCodeTask.IsCompleted)
-                {
-                    this.Initialise(type);
-                }
-                else
-                {
-                    this.LinesOfCodeTask.ContinueWith(t => this.Initialise(type));
-                }
-            }
-            else
-            {
-                this.Initialise(type);
-            }
-        }
-
         private IEnumerable<FieldAssociation> DuplicateCheck(IList<FieldAssociation> addRange)
         {
             if (!addRange.Any() || !this.associations.Any())
@@ -434,16 +403,11 @@ namespace TypeVisualiser.Model
             }
 
             IOrderedEnumerable<FieldInfo> allFields = from field in type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static)
-                                                      where !TypeDescriptorHelper.AreEqual(field.FieldType, this.Id)
+                                                      where !TypeDescriptorHelper.AreEqual(field.FieldType, Id)
                                                       // Do not want to include "this" type in list
                                                       orderby field.FieldType.FullName
                                                       select field;
             return allFields;
-        }
-
-        private ITrivialFilter GetTrivialFilterImplementation()
-        {
-            return this.Factory.TryGetInstance<ITrivialFilter>();
         }
 
         private void Initialise(Type type)
@@ -461,23 +425,26 @@ namespace TypeVisualiser.Model
 
             this.loadStatus = AssociationLoadStatus.FullyLoaded;
 
-            this.InitialiseParentTypeRelationship(type);
+            if (type.BaseType != null && type.BaseType != typeof (object))
+            {
+                Parent = new ParentAssociation(Factory.GetInstance<IModelBuilder>(), type.BaseType, this);
+            }
 
-            IEnumerable<FieldAssociation> fields = this.InitialiseFieldAssociations(this.GetAllFieldsInThisType(type));
-            this.AddToAssociationsCollection(fields);
+            IEnumerable<FieldAssociation> fields = InitialiseFieldAssociations(GetAllFieldsInThisType(type));
+            AddToAssociationsCollection(fields);
 
             // Consumes
-            this.InitialiseConsumesCollection();
+            InitialiseConsumesCollection();
 
             // Implements
             List<Type> allInterfaces = type.GetInterfaces().ToList();
-            if (type.BaseType != null && type.BaseType != typeof(object))
+            if (type.BaseType != null && type.BaseType != typeof (object))
             {
                 allInterfaces.Add(type.BaseType);
             }
 
             IEnumerable<Type> interfaces = allInterfaces.Except(allInterfaces.SelectMany(t => t.GetInterfaces())).Where(t => t.IsInterface);
-            this.ThisTypeImplements = interfaces.Select(i => this.Factory.GetInstance<ParentAssociation>().Initialise(i, this));
+            ThisTypeImplements = interfaces.Select(i => new ParentAssociation(Factory.GetInstance<IModelBuilder>(), i, this));
 
             // Put all associations excluding parents into a list.
             this.associations = this.associations.OrderBy(x => x.AssociatedTo.Name).ToList();
@@ -487,14 +454,14 @@ namespace TypeVisualiser.Model
         {
             // Field Consumes
             var rawConsumeList = new List<ConsumeAssociation>();
-            var ctor = new Func<Type, int, IEnumerable<AssociationUsageDescriptor>, ConsumeAssociation>((t, i, l) => this.Factory.GetInstance<ConsumeAssociation>().Initialise(t, i, l, this.depth + 1));
-            this.AggregateRawConsumeCollection(rawConsumeList, ctor, this.allConsumptionUsage);
+            var ctor = new Func<Type, int, IEnumerable<AssociationUsageDescriptor>, ConsumeAssociation>((t, i, l) => new ConsumeAssociation(t, i, l, this.depth + 1));
+            AggregateRawConsumeCollection(rawConsumeList, ctor, this.allConsumptionUsage);
             MergeConsumeCollectionIntoAssociations(this.associations, rawConsumeList);
 
             // Static Consumes
             rawConsumeList.Clear();
-            ctor = (t, i, l) => this.Factory.GetInstance<StaticAssociation>().Initialise(t, i, l, this.depth + 1);
-            this.AggregateRawConsumeCollection(rawConsumeList, ctor, this.allStaticUsage);
+            ctor = (t, i, l) => new StaticAssociation(t, i, l, this.depth + 1);
+            AggregateRawConsumeCollection(rawConsumeList, ctor, this.allStaticUsage);
             MergeConsumeCollectionIntoAssociations(this.associations, rawConsumeList);
         }
 
@@ -510,12 +477,11 @@ namespace TypeVisualiser.Model
                 {
                     fieldUsageCount++;
                     fieldNameList.Add(AssociationUsageDescriptor.CreateFieldUsage(field.Name));
-                }
-                else
+                } else
                 {
                     if (fieldUsageCount > 0)
                     {
-                        fieldAssociations.Add(this.Factory.GetInstance<FieldAssociation>().Initialise(groupType, fieldUsageCount, fieldNameList, this.depth + 1));
+                        fieldAssociations.Add(new FieldAssociation(groupType, fieldUsageCount, fieldNameList, this.depth + 1));
                     }
 
                     fieldUsageCount = 1;
@@ -526,7 +492,7 @@ namespace TypeVisualiser.Model
 
             if (fieldUsageCount > 0)
             {
-                fieldAssociations.Add(this.Factory.GetInstance<FieldAssociation>().Initialise(groupType, fieldUsageCount, fieldNameList, this.depth + 1));
+                fieldAssociations.Add(new FieldAssociation(groupType, fieldUsageCount, fieldNameList, this.depth + 1));
             }
 
             return fieldAssociations;

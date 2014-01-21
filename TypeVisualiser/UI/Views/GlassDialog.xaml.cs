@@ -26,7 +26,7 @@ namespace TypeVisualiser.UI.Views
         public void ShowDialog(string title, string headingCaption, string message)
         {
             DialogTitle = title;
-            Message = RationaliseMessage(message);
+            Message = message;
             DefaultButtonCaption = "Close";
             ImageSource = "../Assets/MainIcon.png";
             HeadingCaption = headingCaption;
@@ -36,16 +36,6 @@ namespace TypeVisualiser.UI.Views
         private void OnDefaultButtonClick(object sender, RoutedEventArgs e)
         {
             Close();
-        }
-
-        private static string RationaliseMessage(string message)
-        {
-            if (message.Length > 1024)
-            {
-                return message.Substring(0, 1024) + "\n---TRUNCATED---";
-            }
-
-            return message;
         }
     }
 }

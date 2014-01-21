@@ -6,7 +6,7 @@
     [Serializable]
     public class VisualisableTypeSubjectData : VisualisableTypeData
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Arrays work better for xml serialisation. This class is only used for serialisation.")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification="Arrays work better for xml serialisation. This class is only used for serialisation.")]
         [XmlArrayItem(typeof(FieldAssociationData))]
         [XmlArrayItem(typeof(StaticAssociationData))]
         [XmlArrayItem(typeof(ConsumeAssociationData))]

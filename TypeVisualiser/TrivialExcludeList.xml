@@ -35,17 +35,4 @@
                  FullTypeName="System.Threading.Interlocked" />
     <TrivialType xsi:type="ExactMatch"
                  FullTypeName="System.Delegate" />
-    <TrivialType xsi:type="ExactMatch"
-                 FullTypeName="System.Linq.Enumerable" />
-    <TrivialType xsi:type="RegexMatch"
-                 RegexString="\.\&lt;\&gt;" />
-    <TrivialType xsi:type="ExactMatch"
-                 FullTypeName="System.Linq.Expressions.Expression" />
-    <TrivialType xsi:type="ExactMatch"
-                 FullTypeName="System.Threading.Monitor" />
-    <TrivialType xsi:type="ExactMatch"
-                 FullTypeName="System.Linq.Queryable" />
-    <TrivialType xsi:type="ExactMatch"
-                 FullTypeName="System.Threading.Tasks.Task" />
-
 </ArrayOfTrivialType>

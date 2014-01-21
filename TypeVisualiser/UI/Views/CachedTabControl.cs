@@ -16,7 +16,7 @@
         public CachedTabControl()
         {
             // this is necessary so that we get the initial databound selected item
-            this.ItemContainerGenerator.StatusChanged += this.ItemContainerGeneratorStatusChanged;
+            ItemContainerGenerator.StatusChanged += ItemContainerGeneratorStatusChanged;
         }
 
         /// <summary>
@@ -25,33 +25,14 @@
         public override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
-            this.itemsHolder = this.GetTemplateChild("PART_ItemsHolder") as Panel;
-            this.UpdateSelectedItem();
-        }
-
-        /// <summary>
-        /// copied from TabControl; wish it were protected in that class instead of private
-        /// </summary>
-        /// <returns>
-        /// The <see cref="TabItem"/>.
-        /// </returns>
-        protected TabItem FindSelectedTabItem()
-        {
-            object selectedItem = this.SelectedItem;
-            if (selectedItem == null)
-            {
-                return null;
-            }
-
-            TabItem item = selectedItem as TabItem ?? this.ItemContainerGenerator.ContainerFromIndex(this.SelectedIndex) as TabItem;
-            return item;
+            this.itemsHolder = GetTemplateChild("PART_ItemsHolder") as Panel;
+            UpdateSelectedItem();
         }
 
         /// <summary>
         /// when the items change we remove any generated panel children and add any new ones as necessary
         /// </summary>
-        /// <param name="e">
-        /// </param>
+        /// <param name="e"></param>
         protected override void OnItemsChanged(NotifyCollectionChangedEventArgs e)
         {
             if (e == null)
@@ -78,7 +59,7 @@
                     {
                         foreach (object item in e.OldItems)
                         {
-                            ContentPresenter cp = this.FindChildContentPresenter(item);
+                            ContentPresenter cp = FindChildContentPresenter(item);
                             if (cp != null)
                             {
                                 this.itemsHolder.Children.Remove(cp);
@@ -88,7 +69,8 @@
 
                     // don't do anything with new items because we don't want to
                     // create visuals that aren't being shown
-                    this.UpdateSelectedItem();
+
+                    UpdateSelectedItem();
                     break;
 
                 case NotifyCollectionChangedAction.Replace:
@@ -99,18 +81,37 @@
         /// <summary>
         /// update the visible child in the ItemsHolder
         /// </summary>
-        /// <param name="e">
-        /// </param>
+        /// <param name="e"></param>
         protected override void OnSelectionChanged(SelectionChangedEventArgs e)
         {
             base.OnSelectionChanged(e);
-            this.UpdateSelectedItem();
+            UpdateSelectedItem();
+        }
+
+        /// <summary>
+        /// copied from TabControl; wish it were protected in that class instead of private
+        /// </summary>
+        /// <returns></returns>
+        protected TabItem FindSelectedTabItem()
+        {
+            object selectedItem = SelectedItem;
+            if (selectedItem == null)
+            {
+                return null;
+            }
+            var item = selectedItem as TabItem;
+            if (item == null)
+            {
+                item = ItemContainerGenerator.ContainerFromIndex(SelectedIndex) as TabItem;
+            }
+            return item;
         }
 
         /// <summary>
         /// create the child ContentPresenter for the given item (could be data or a TabItem)
         /// </summary>
-        /// <param name="item">The item to place into a content presenter. </param>
+        /// <param name="item"></param>
+        /// <returns></returns>
         private void CreateChildContentPresenter(object item)
         {
             if (item == null)
@@ -118,7 +119,7 @@
                 return;
             }
 
-            ContentPresenter cp = this.FindChildContentPresenter(item);
+            ContentPresenter cp = FindChildContentPresenter(item);
 
             if (cp != null)
             {
@@ -129,22 +130,19 @@
             cp = new ContentPresenter();
             var tabItem = item as TabItem;
             cp.Content = tabItem != null ? tabItem.Content : item;
-            cp.ContentTemplate = this.SelectedContentTemplate;
-            cp.ContentTemplateSelector = this.SelectedContentTemplateSelector;
-            cp.ContentStringFormat = this.SelectedContentStringFormat;
+            cp.ContentTemplate = SelectedContentTemplate;
+            cp.ContentTemplateSelector = SelectedContentTemplateSelector;
+            cp.ContentStringFormat = SelectedContentStringFormat;
             cp.Visibility = Visibility.Collapsed;
-            cp.Tag = tabItem ?? this.ItemContainerGenerator.ContainerFromItem(item);
+            cp.Tag = tabItem ?? (ItemContainerGenerator.ContainerFromItem(item));
             this.itemsHolder.Children.Add(cp);
         }
 
         /// <summary>
         /// Find the CP for the given object.  data could be a TabItem or a piece of data
         /// </summary>
-        /// <param name="data">
-        /// </param>
-        /// <returns>
-        /// The <see cref="ContentPresenter"/>.
-        /// </returns>
+        /// <param name="data"></param>
+        /// <returns></returns>
         private ContentPresenter FindChildContentPresenter(object data)
         {
             var tabItem = data as TabItem;
@@ -169,16 +167,14 @@
         /// <summary>
         /// if containers are done, generate the selected item
         /// </summary>
-        /// <param name="sender">
-        /// </param>
-        /// <param name="e">
-        /// </param>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ItemContainerGeneratorStatusChanged(object sender, EventArgs e)
         {
-            if (this.ItemContainerGenerator.Status == GeneratorStatus.ContainersGenerated)
+            if (ItemContainerGenerator.Status == GeneratorStatus.ContainersGenerated)
             {
-                this.ItemContainerGenerator.StatusChanged -= this.ItemContainerGeneratorStatusChanged;
-                this.UpdateSelectedItem();
+                ItemContainerGenerator.StatusChanged -= ItemContainerGeneratorStatusChanged;
+                UpdateSelectedItem();
             }
         }
 
@@ -193,17 +189,17 @@
             }
 
             // generate a ContentPresenter if necessary
-            TabItem item = this.FindSelectedTabItem();
+            TabItem item = FindSelectedTabItem();
             if (item != null)
             {
-                this.CreateChildContentPresenter(item);
+                CreateChildContentPresenter(item);
             }
 
             // show the right child
             foreach (ContentPresenter child in this.itemsHolder.Children)
             {
                 var tabItem = child.Tag as TabItem;
-                child.Visibility = tabItem != null && tabItem.IsSelected ? Visibility.Visible : Visibility.Collapsed;
+                child.Visibility = tabItem != null && (tabItem.IsSelected) ? Visibility.Visible : Visibility.Collapsed;
             }
         }
     }

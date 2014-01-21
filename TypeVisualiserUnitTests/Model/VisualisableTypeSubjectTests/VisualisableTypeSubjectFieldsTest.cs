@@ -1,3 +1,5 @@
+using TypeVisualiser.Startup;
+
 namespace TypeVisualiserUnitTests.Model.VisualisableTypeSubjectTests
 {
     using System;
@@ -5,35 +7,27 @@ namespace TypeVisualiserUnitTests.Model.VisualisableTypeSubjectTests
     using System.Diagnostics;
     using System.Linq;
     using System.Threading;
-
     using FluentAssertions;
-
     using Microsoft.VisualStudio.TestTools.UnitTesting;
-
     using Rhino.Mocks;
-
-    using StructureMap;
-
     using TypeVisualiser;
     using TypeVisualiser.DemoTypes;
     using TypeVisualiser.ILAnalyser;
     using TypeVisualiser.Model;
-    using TypeVisualiser.Startup;
 
     [TestClass]
     public class VisualisableTypeSubjectFieldsTest
     {
-        private static IVisualisableTypeWithAssociations subjectCar;
-
-        private static IVisualisableTypeWithAssociations subjectFleet;
+        private static VisualisableTypeWithAssociations subjectCar;
+        private static VisualisableTypeWithAssociations subjectFleet;
+        private ITrivialFilter mockTrivialFilter;
 
         [ClassInitialize]
         public static void ClassInitialise(TestContext context)
         {
             IoC.MapHardcodedRegistrations();
-            var modelContainer = new Container();
-            subjectCar = VisualisableTypeTestData.FullModel<Car>(modelContainer);
-            subjectFleet = VisualisableTypeTestData.FullModel<Fleet>(modelContainer);
+            subjectCar = new VisualisableTypeWithAssociations(typeof(Car));
+            subjectFleet = new VisualisableTypeWithAssociations(typeof(Fleet));
             GlobalIntermediateLanguageConstants.LoadOpCodes();
         }
 
@@ -96,26 +90,26 @@ namespace TypeVisualiserUnitTests.Model.VisualisableTypeSubjectTests
         [TestMethod]
         public void ShouldHaveCorrectCountForFilteredAssociationsFilterOff()
         {
-            //FieldAssociation: Boolean
-            //FieldAssociation: Color
-            //StaticAssociation: Colors
-            //ConsumeAssociation: CombustionEngine
-            //StaticAssociation: Delegate
-            //FieldAssociation: Double
-            //FieldAssociation: EventHandler
-            //FieldAssociation: IDbConnection
-            //FieldAssociation: Int32
-            //StaticAssociation: Interlocked
-            //FieldAssociation: KeyValuePair<String,IWearAndTear>
-            //ConsumeAssociation: NotImplementedException
-            //ConsumeAssociation: PropertyChangedEventArgs
-            //FieldAssociation: PropertyChangedEventHandler
-            //FieldAssociation: SqlCommand
-            //ConsumeAssociation: SqlConnection
-            //StaticAssociation: StaticTestClass
-            //ConsumeAssociation: String
+//FieldAssociation: Boolean
+//FieldAssociation: Color
+//StaticAssociation: Colors
+//ConsumeAssociation: CombustionEngine
+//StaticAssociation: Delegate
+//FieldAssociation: Double
+//FieldAssociation: EventHandler
+//FieldAssociation: IDbConnection
+//FieldAssociation: Int32
+//StaticAssociation: Interlocked
+//FieldAssociation: KeyValuePair<String,IWearAndTear>
+//ConsumeAssociation: NotImplementedException
+//ConsumeAssociation: PropertyChangedEventArgs
+//FieldAssociation: PropertyChangedEventHandler
+//FieldAssociation: SqlCommand
+//ConsumeAssociation: SqlConnection
+//StaticAssociation: StaticTestClass
+//ConsumeAssociation: String
 
-            this.SetupTrivialFilter(false);
+            SetupTrivialFilter(false);
             List<FieldAssociation> result = subjectCar.FilteredAssociations.ToList();
             result.ForEach(x => Debug.WriteLine(x.ToString()));
 
@@ -125,23 +119,24 @@ namespace TypeVisualiserUnitTests.Model.VisualisableTypeSubjectTests
         [TestMethod]
         public void ShouldHaveCorrectCountForFilteredAssociationsFilterOn()
         {
-            //FieldAssociation: Color
-            //StaticAssociation: Colors
-            //ConsumeAssociation: CombustionEngine
-            //FieldAssociation: Double
-            //FieldAssociation: EventHandler
-            //FieldAssociation: IDbConnection
-            //FieldAssociation: Int32
-            //FieldAssociation: KeyValuePair<String,IWearAndTear>
-            //ConsumeAssociation: NotImplementedException
-            //ConsumeAssociation: PropertyChangedEventArgs
-            //FieldAssociation: PropertyChangedEventHandler
-            //FieldAssociation: SqlCommand
-            //ConsumeAssociation: SqlConnection
-            //StaticAssociation: StaticTestClass
-            //ConsumeAssociation: String
+//FieldAssociation: Color
+//StaticAssociation: Colors
+//ConsumeAssociation: CombustionEngine
+//FieldAssociation: Double
+//FieldAssociation: EventHandler
+//FieldAssociation: IDbConnection
+//FieldAssociation: Int32
+//FieldAssociation: KeyValuePair<String,IWearAndTear>
+//ConsumeAssociation: NotImplementedException
+//ConsumeAssociation: PropertyChangedEventArgs
+//FieldAssociation: PropertyChangedEventHandler
+//FieldAssociation: SqlCommand
+//ConsumeAssociation: SqlConnection
+//StaticAssociation: StaticTestClass
+//ConsumeAssociation: String
 
-            this.SetupTrivialFilter(true);
+
+            SetupTrivialFilter(true);
             List<FieldAssociation> result = subjectCar.FilteredAssociations.ToList();
             result.ForEach(x => Debug.WriteLine(x.ToString()));
 
@@ -151,7 +146,7 @@ namespace TypeVisualiserUnitTests.Model.VisualisableTypeSubjectTests
         [TestMethod]
         public void ShouldNotCountSelfFields()
         {
-            this.SetupTrivialFilter(false);
+            SetupTrivialFilter(false);
             subjectFleet.Fields.Should().NotContain(x => x.AssociatedTo.Id == subjectFleet.Id);
         }
 
@@ -161,9 +156,19 @@ namespace TypeVisualiserUnitTests.Model.VisualisableTypeSubjectTests
             subjectCar.Fields.Any(x => x.AssociatedTo.AssemblyQualifiedName.StartsWith("System.Data.SqlClient.SqlConnection")).Should().BeFalse();
         }
 
+        [TestCleanup]
+        public void TestCleanUp()
+        {
+            this.mockTrivialFilter = null;
+        }
+
         [TestInitialize]
         public void TestInitialise()
         {
+            this.mockTrivialFilter = MockRepository.GenerateStub<ITrivialFilter>();
+            var getter = new Func<ITrivialFilter>(() => this.mockTrivialFilter);
+            PrivateAccessor.SetField(subjectCar, "getTrivialFilter", getter);
+            PrivateAccessor.SetField(subjectFleet, "getTrivialFilter", getter);
         }
 
         private ITrivialFilter SetupTrivialFilter(bool filterActive)
@@ -177,7 +182,7 @@ namespace TypeVisualiserUnitTests.Model.VisualisableTypeSubjectTests
                 mockTrivialFilter2.Expect(m => m.IsTrivialType(typeof(Interlocked).FullName)).Return(true).Repeat.Any();
             }
 
-            PrivateAccessor.SetField(subjectCar as VisualisableTypeWithAssociations, "getTrivialFilter", new Func<ITrivialFilter>(() => mockTrivialFilter2));
+            PrivateAccessor.SetField(subjectCar, "getTrivialFilter", new Func<ITrivialFilter>(() => mockTrivialFilter2));
             return mockTrivialFilter2;
         }
     }

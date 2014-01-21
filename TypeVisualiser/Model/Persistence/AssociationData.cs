@@ -1,8 +1,9 @@
 ﻿namespace TypeVisualiser.Model.Persistence
 {
     using System;
-    using System.Globalization;
     using System.Xml.Serialization;
+    using Model;
+    using Properties;
 
     [Serializable]
     public class AssociationData
@@ -14,10 +15,5 @@
 
         [XmlAttribute]
         public bool Show { get; set; }
-    
-        public override string ToString()
-        {
-            return string.Format(CultureInfo.CurrentCulture, "{0}: {1} {2}", this.GetType().Name, this.Name, this.AssociatedTo.Name);
-        }
     }
 }

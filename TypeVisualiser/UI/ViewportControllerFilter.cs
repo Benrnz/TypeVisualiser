@@ -1,46 +1,47 @@
-﻿namespace TypeVisualiser.UI
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Threading;
+using TypeVisualiser.Model;
+using TypeVisualiser.UI.WpfUtilities;
+
+namespace TypeVisualiser.UI
 {
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
-    using System.Windows.Threading;
-
-    using TypeVisualiser.Model;
-    using TypeVisualiser.UI.WpfUtilities;
-
     internal class ViewportControllerFilter
     {
-        private readonly ITrivialFilter trivialFilter;
+        private readonly Func<ITrivialFilter> getTrivialFilter = () => TrivialFilter.Current;
 
         private Dispatcher dispatcher;
 
-        public ViewportControllerFilter(ITrivialFilter trivialFilter)
+        public ViewportControllerFilter()
         {
-            this.SecondaryAssociationElements = new Dictionary<string, DiagramElement>();
-            this.trivialFilter = trivialFilter;
+            SecondaryAssociationElements = new Dictionary<string, DiagramElement>(); 
         }
-
-        internal IEnumerable<DiagramElement> DiagramElements { get; set; }
 
         internal Dispatcher Dispatcher
         {
-            get
-            {
-                return this.dispatcher ?? (this.dispatcher = Dispatcher.CurrentDispatcher);
-            }
-
-            set
-            {
-                this.dispatcher = value;
-            }
+            get { return dispatcher ?? (this.dispatcher = Dispatcher.CurrentDispatcher); }
+            set { this.dispatcher = value; }
         }
 
         internal IDictionary<string, DiagramElement> SecondaryAssociationElements { get; set; }
 
-        public void Clear()
+        internal IEnumerable<DiagramElement> DiagramElements { get; set; }
+
+        internal bool ShouldThisSecondaryElementBeVisible(DiagramElement element, bool showSuggestion)
         {
-            this.SecondaryAssociationElements.Clear();
-            this.DiagramElements = null;
+            if (!showSuggestion)
+            {
+                return false;
+            }
+
+            if (SecondaryAssociationElements.ContainsKey(element.DiagramContent.Id))
+            {
+                return !this.getTrivialFilter().HideSecondaryAssociations;
+            }
+
+            return true;
         }
 
         internal void ApplyTypeFilter(IVisualisableTypeWithAssociations currentSubject)
@@ -50,40 +51,31 @@
                 return;
             }
 
-            Task.Factory.StartNew(
-                () =>
+            Task.Factory.StartNew(() =>
+                {
+                    var filter = this.getTrivialFilter();
+                    foreach (DiagramElement element in DiagramElements.ToList())
                     {
-                        foreach (DiagramElement element in this.DiagramElements.ToList())
-                        {
-                            bool show = this.trivialFilter.IsVisible(element, !this.SecondaryAssociationElements.ContainsKey(element.DiagramContent.Id));
-                            DiagramElement copyOfElement = element;
-                            this.dispatcher.BeginInvoke(() => copyOfElement.Show = show, DispatcherPriority.Normal);
-                        }
+                        bool show = filter.IsVisible(element, !SecondaryAssociationElements.ContainsKey(element.DiagramContent.Id));
+                        DiagramElement copyOfElement = element;
+                        dispatcher.BeginInvoke(() => copyOfElement.Show = show, DispatcherPriority.Normal);
+                    }
 
-                        // This needs to happen because the filter only knows how to show/hide associations and secondary lines. The filter
-                        // does not understand the dependency relationships between elements.
-                        // The primary lines are shown/hidden based on events raised by the associations. Without doing the below refresh
-                        // primary lines are not hidden sometimes.
-                        foreach (DiagramElement element in this.DiagramElements.Where(e => e.DiagramContent is Association).ToList())
-                        {
-                            this.dispatcher.BeginInvoke(element.RefreshPosition, DispatcherPriority.Normal);
-                        }
-                    });
+                    // This needs to happen because the filter only knows how to show/hide associations and secondary lines. The filter
+                    // does not understand the dependency relationships between elements.
+                    // The primary lines are shown/hidden based on events raised by the associations. Without doing the below refresh
+                    // primary lines are not hidden sometimes.
+                    foreach (DiagramElement element in DiagramElements.Where(e => e.DiagramContent is Association).ToList())
+                    {
+                        dispatcher.BeginInvoke(element.RefreshPosition, DispatcherPriority.Normal);
+                    }
+                });
         }
 
-        internal bool ShouldThisSecondaryElementBeVisible(DiagramElement element, bool showSuggestion)
+        public void Clear()
         {
-            if (!showSuggestion)
-            {
-                return false;
-            }
-
-            if (this.SecondaryAssociationElements.ContainsKey(element.DiagramContent.Id))
-            {
-                return !this.trivialFilter.HideSecondaryAssociations;
-            }
-
-            return true;
+            SecondaryAssociationElements.Clear();
+            DiagramElements = null;
         }
     }
 }

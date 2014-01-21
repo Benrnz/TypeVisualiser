@@ -110,8 +110,7 @@ namespace TypeVisualiser.UI
                 RaisePropertyChanged("ConnectorTypeDirect");
                 if (value)
                 {
-                    var connectorBuilder = this.factory.TryGetInstance<IConnectorBuilder>(ConnectorType.Direct.ToString());
-                    ConnectionLine.ConnectorBuilder = connectorBuilder ?? new DirectLineConnectorBuilder();
+                    ConnectionLine.ConnectorBuilder = this.factory.GetInstance<IConnectorBuilder>(ConnectorType.Direct.ToString());
                     ConnectorTypeSnap = false;
                     if (CurrentView != null)
                     {
@@ -207,14 +206,11 @@ namespace TypeVisualiser.UI
 
         public bool HideSecondaryAssociations
         {
-            get
-            {
-                return this.factory.GetInstance<ITrivialFilter>().HideSecondaryAssociations;
-            }
+            get { return TrivialFilter.Current.HideSecondaryAssociations; }
 
             set
             {
-                this.factory.GetInstance<ITrivialFilter>().HideSecondaryAssociations = value;
+                TrivialFilter.Current.HideSecondaryAssociations = value;
                 VerifyPropertyName("HideSecondaryAssociations");
                 RaisePropertyChanged("HideSecondaryAssociations");
             }
@@ -228,11 +224,11 @@ namespace TypeVisualiser.UI
         [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = "Reqd by WPF binding")]
         public bool HideSystemTypes
         {
-            get { return this.factory.GetInstance<ITrivialFilter>().HideSystemTypes; }
+            get { return TrivialFilter.Current.HideSystemTypes; }
 
             set
             {
-                this.factory.GetInstance<ITrivialFilter>().HideSystemTypes = value;
+                TrivialFilter.Current.HideSystemTypes = value;
                 VerifyPropertyName("HideSystemTypes");
                 RaisePropertyChanged("HideSystemTypes");
             }
@@ -251,11 +247,11 @@ namespace TypeVisualiser.UI
         [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = "Reqd by WPF binding")]
         public bool HideTrivialTypes
         {
-            get { return this.factory.GetInstance<ITrivialFilter>().HideTrivialTypes; }
+            get { return TrivialFilter.Current.HideTrivialTypes; }
 
             set
             {
-                this.factory.GetInstance<ITrivialFilter>().HideTrivialTypes = value;
+                TrivialFilter.Current.HideTrivialTypes = value;
                 VerifyPropertyName("HideTrivialTypes");
                 RaisePropertyChanged("HideTrivialTypes");
             }
@@ -461,7 +457,7 @@ namespace TypeVisualiser.UI
 
         private void OnEditTrivialExcludeListExecute()
         {
-            this.factory.GetInstance<ITrivialFilter>().EditTrivialList();
+            TrivialFilter.Current.EditTrivialList();
         }
 
         private void OnHelpAboutExecute()

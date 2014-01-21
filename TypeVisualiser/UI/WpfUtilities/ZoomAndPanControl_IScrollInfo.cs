@@ -33,7 +33,7 @@ namespace TypeVisualiser.UI.WpfUtilities
         /// </summary>
         public double ExtentHeight
         {
-            get { return this.unscaledExtent.Height*ContentScale; }
+            get { return this.unScaledExtent.Height*ContentScale; }
         }
 
         /// <summary>
@@ -41,7 +41,7 @@ namespace TypeVisualiser.UI.WpfUtilities
         /// </summary>
         public double ExtentWidth
         {
-            get { return this.unscaledExtent.Width*ContentScale; }
+            get { return this.unScaledExtent.Width*ContentScale; }
         }
 
         /// <summary>

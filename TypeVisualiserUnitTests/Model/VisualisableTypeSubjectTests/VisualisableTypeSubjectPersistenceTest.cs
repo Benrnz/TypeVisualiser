@@ -1,48 +1,38 @@
-﻿namespace TypeVisualiserUnitTests.Model.VisualisableTypeSubjectTests
+﻿using System.Linq;
+using System.Threading.Tasks;
+using FluentAssertions;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using TypeVisualiser.DemoTypes;
+using TypeVisualiser.ILAnalyser;
+using TypeVisualiser.Model;
+using TypeVisualiser.Model.Persistence;
+using TypeVisualiser.Startup;
+
+namespace TypeVisualiserUnitTests.Model.VisualisableTypeSubjectTests
 {
-    using System.Collections;
-    using System.Linq;
-    using System.Threading.Tasks;
-
-    using FluentAssertions;
-
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-
-    using StructureMap;
-
-    using TypeVisualiser.DemoTypes;
-    using TypeVisualiser.ILAnalyser;
-    using TypeVisualiser.Model;
-    using TypeVisualiser.Model.Persistence;
-    using TypeVisualiser.Startup;
-
     [TestClass]
     public class VisualisableTypeSubjectPersistenceTest
     {
         private static VisualisableTypeSubjectData subject;
-
-        private static IVisualisableTypeWithAssociations visualisableType;
+        private static VisualisableTypeWithAssociations visualisableType;
 
         [ClassInitialize]
         public static void ClassInitialise(TestContext context)
         {
             IoC.MapHardcodedRegistrations();
             GlobalIntermediateLanguageConstants.LoadOpCodes();
-            visualisableType = VisualisableTypeTestData.FullModel<Car>(new Container());
-            subject = VisualisableTypeWithAssociationsDataAdaptor.ExtractPersistentData(visualisableType);
+            visualisableType = new VisualisableTypeWithAssociations(typeof (Car));
+            subject = visualisableType.ExtractPersistentData() as VisualisableTypeSubjectData;
         }
 
         [TestMethod]
         public void ExtractPersistentDataShouldNotCreateParentIfNoParentExists()
         {
-            var target = new VisualisableTypeWithAssociations(typeof(string), 0);
+            var target = new VisualisableTypeWithAssociations(typeof (string), 0);
             var initTask = PrivateAccessor.GetProperty(target, "LinesOfCodeTask") as Task;
-            if (initTask != null)
-            {
-                initTask.Wait();
-            }
-
-            var result = (VisualisableTypeSubjectData)target.ExtractPersistentData();
+            initTask.Wait();
+            // todo fix and support circular field references. this test causes stack overflow currently. 
+            var result = (VisualisableTypeSubjectData) target.ExtractPersistentData();
 
             result.Parent.Should().BeNull();
         }

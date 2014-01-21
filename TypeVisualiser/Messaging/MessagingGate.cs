@@ -17,7 +17,7 @@
 
         public static void Unregister<T>(object recipient) where T : MessageBase
         {
-            lock (SyncRoot)
+            lock(SyncRoot)
             {
                 Messenger.Default.Unregister<T>(recipient);
             }
@@ -27,7 +27,7 @@
         /// Sends the specified message.
         /// Use this when you are concerned about concurrency. Sending messages at the same time as registering new listeners on many threads will cause issues.
         /// </summary>
-        /// <typeparam name="T">The message to send</typeparam>
+        /// <typeparam name="T"></typeparam>
         /// <param name="message">The message.</param>
         public static void Send<T>(T message)
         {

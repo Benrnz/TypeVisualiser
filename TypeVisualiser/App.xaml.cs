@@ -1,28 +1,26 @@
-﻿namespace TypeVisualiser
+﻿using System;
+using System.Windows;
+using System.Windows.Threading;
+using GalaSoft.MvvmLight.Messaging;
+using TypeVisualiser.Messaging;
+using TypeVisualiser.Model;
+using TypeVisualiser.Startup;
+
+namespace TypeVisualiser
 {
-    using System;
-    using System.Windows;
-    using System.Windows.Threading;
-
-    using GalaSoft.MvvmLight.Messaging;
-
-    using TypeVisualiser.Messaging;
-    using TypeVisualiser.Model;
-    using TypeVisualiser.Startup;
-
     /// <summary>
-    /// Interaction logic for the main Application class.
+    /// Interaction logic for App.xaml
     /// </summary>
     public partial class App
     {
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-            this.DispatcherUnhandledException += this.OnDispatcherUnhandledException;
-            AppDomain.CurrentDomain.UnhandledException += this.OnCurrentDomainUnhandledException;
+            DispatcherUnhandledException += OnDispatcherUnhandledException;
+            AppDomain.CurrentDomain.UnhandledException += OnCurrentDomainUnhandledException;
             AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve += ModelBuilder.OnAssemblyResolve;
 
-            Current.Exit += this.OnApplicationExit;
+            Current.Exit += OnApplicationExit;
             IoC.MapHardcodedRegistrations();
         }
 
@@ -34,14 +32,18 @@
             Logger.Instance.WriteEntry("Unhandled exception was thrown from orgin: " + origin);
             string message = ex.ToString();
             Logger.Instance.WriteEntry(message);
+            if (message.Length > 1024)
+            {
+                message = message.Substring(0, 1024);
+            }
 
-            new WindowsMessageBox().Show(TypeVisualiser.Properties.Resources.Application_An_Unhandled_Exception_Occurred, (object)message);
+            MessageBox.Show("An unhandled exception occured:\n" + message);
             Current.Shutdown();
         }
 
         private void OnApplicationExit(object sender, ExitEventArgs e)
         {
-            Current.Exit -= this.OnApplicationExit;
+            Current.Exit -= OnApplicationExit;
             AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve -= ModelBuilder.OnAssemblyResolve;
             Messenger.Default.Send(new ShutdownMessage());
         }

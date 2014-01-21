@@ -10,18 +10,10 @@ using TypeVisualiser.Model.Persistence;
 
 namespace TypeVisualiserUnitTests.Model.Persistence
 {
-    using StructureMap;
-
     [TestClass]
     public class ModelSerialiserTest
     {
-        private static IVisualisableTypeWithAssociations carData; // = new VisualisableTypeWithAssociations(typeof(Car), 0);
-
-        [ClassInitialize]
-        public static void ClassInitialise(TestContext context)
-        {
-            carData = VisualisableTypeTestData.FullModel<Car>(new Container());
-        }
+        private static VisualisableTypeWithAssociations carData = new VisualisableTypeWithAssociations(typeof(Car), 0);
 
         [TestMethod]
         public void CanSerialise()

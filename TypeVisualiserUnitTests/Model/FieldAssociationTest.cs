@@ -2,13 +2,13 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Shapes;
     using FluentAssertions;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using Rhino.Mocks;
-
-    using StructureMap;
-
     using TypeVisualiser;
     using TypeVisualiser.DemoTypes;
     using TypeVisualiser.Geometry;
@@ -19,8 +19,8 @@
     [TestClass]
     public class FieldAssociationTest
     {
-        private IContainer factory;
         private IDiagramDimensions mockDimensions;
+        private IApplicationResources mockResources;
 
         [ClassInitialize]
         public static void ClassInitialise(TestContext context)
@@ -31,7 +31,7 @@
         [TestMethod]
         public void ConstructorShouldHandleUnresolvedGenericTypes()
         {
-            FieldAssociation target = AssociationTestData.FieldAssociationFullModel(this.factory, typeof(Transmission<>).GetProperty("Engine").PropertyType, new[] { " hello " }, 1);
+            FieldAssociation target = CreateTarget(typeof(Transmission<>).GetProperty("Engine").PropertyType, new[] { " hello " }, 1);
 
             target.AssociatedTo.AssemblyQualifiedName.Should().NotBeNull();
         }
@@ -39,21 +39,21 @@
         [TestMethod]
         public void ConstructorShouldSetAssociatedTo()
         {
-            FieldAssociation target = AssociationTestData.FieldAssociationFullModel(this.factory, typeof(string), new[] { "name" }, 0);
+            FieldAssociation target = CreateTarget(typeof(string), new[] { "name" }, 0);
             Assert.IsNotNull(target.AssociatedTo);
         }
 
         [TestMethod]
         public void ConstructorShouldSetName()
         {
-            FieldAssociation target = AssociationTestData.FieldAssociationFullModel(this.factory, typeof(string), new[] { "name" }, 3);
+            FieldAssociation target = CreateTarget(typeof(string), new[] { "name" }, 3);
             Assert.IsTrue(target.Name.Length > "name".Length);
         }
 
         [TestMethod]
         public void ConstructorShouldSetNumberOfUsageCount()
         {
-            FieldAssociation target = AssociationTestData.FieldAssociationFullModel(this.factory, typeof(string), new[] { "name" }, 3);
+            FieldAssociation target = CreateTarget(typeof(string), new[] { "name" }, 3);
             Assert.AreEqual(3, target.UsageCount);
         }
 
@@ -61,20 +61,20 @@
         [ExpectedException(typeof(ArgumentNullException))]
         public void ConstructorShouldThrowWhenGivenNull1()
         {
-            AssociationTestData.FieldAssociationFullModel(this.factory, null, null, 0);
+            CreateTarget(null, null, 0);
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
         public void ConstructorShouldThrowWhenGivenNull2()
         {
-            AssociationTestData.FieldAssociationFullModel(this.factory, typeof(string), null, 0);
+            CreateTarget(typeof(string), null, 0);
         }
 
         [TestMethod]
         public void CreateLineHeadMustNotBeNull()
         {
-            FieldAssociation target = AssociationTestData.FieldAssociationFullModel(this.factory, typeof(string), new[] { "name" }, 3);
+            FieldAssociation target = CreateTarget(typeof(string), new[] { "name" }, 3);
             var result = target.CreateLineHead(); 
             Assert.IsNotNull(result);
         }
@@ -82,22 +82,22 @@
         [TestMethod]
         public void FieldAssociationShouldBeEqual()
         {
-            FieldAssociation target1 = AssociationTestData.FieldAssociationFullModel(this.factory, typeof(string), new[] { "name" }, 3);
-            FieldAssociation target2 = AssociationTestData.FieldAssociationFullModel(this.factory, typeof(string), new[] { "Moose" }, 7);
+            FieldAssociation target1 = CreateTarget(typeof(string), new[] { "name" }, 3);
+            FieldAssociation target2 = CreateTarget(typeof(string), new[] { "Moose" }, 7);
             Assert.IsTrue(target1.Equals(target2));
         }
 
         [TestMethod]
         public void FieldAssociationShouldNotBeEqualToNull()
         {
-            FieldAssociation target = AssociationTestData.FieldAssociationFullModel(this.factory, typeof(string), new[] { "name" }, 3);
+            FieldAssociation target = CreateTarget(typeof(string), new[] { "name" }, 3);
             Assert.IsFalse(target.Equals(null));
         }
 
         [TestMethod]
         public void PersistenceTypeShouldNotBeNull()
         {
-            FieldAssociation target = AssociationTestData.FieldAssociationFullModel(this.factory, typeof(string), new[] { "name" }, 3);
+            FieldAssociation target = CreateTarget(typeof(string), new[] { "name" }, 3);
             Type result = target.PersistenceType;
             Assert.IsNotNull(target.PersistenceType);
             Assert.IsTrue(typeof(FieldAssociationData).IsAssignableFrom(result));
@@ -108,10 +108,12 @@
         {
             this.mockDimensions.Expect(m => m.CalculateNextAvailableAngle()).Return(33.33);
 
-            FieldAssociation target = AssociationTestData.FieldAssociationFullModel(this.factory, typeof(string), new[] { "name" }, 3, this.mockDimensions);
+            FieldAssociation target = CreateTarget(typeof(string), new[] { "name" }, 3);
             var subjectArea = new Area(new Point(23, 45), new Point(67, 94));
             Func<Area, ProximityTestResult> overlapsWithOthers = area => new ProximityTestResult(Proximity.NotOverlapping);
 
+            PrivateAccessor.SetField(target, "doNotUseDimensions", this.mockDimensions);
+            PrivateAccessor.SetField<Association>(target, "doNotUseResources", this.mockResources);
 
             Area result = target.ProposePosition(
                 123.44,
@@ -126,7 +128,9 @@
         [ExpectedException(typeof(ArgumentNullResourceException))]
         public void ProposePositionForAssociateShouldThrowGivenNullArea()
         {
-            FieldAssociation target = AssociationTestData.FieldAssociationFullModel(this.factory, typeof(string), new[] { "name" }, 3);
+            FieldAssociation target = CreateTarget(typeof(string), new[] { "name" }, 3);
+            PrivateAccessor.SetField(target, "doNotUseDimensions", this.mockDimensions);
+            PrivateAccessor.SetField<Association>(target, "doNotUseResources", this.mockResources);
             target.ProposePosition(
                 123.44,
                 553.11,
@@ -137,7 +141,8 @@
         [TestMethod]
         public void StyleLineShouldSetThickness()
         {
-            FieldAssociation target = AssociationTestData.FieldAssociationFullModel(this.factory, typeof(string), new List<string> { "one", "two" }, 5);
+            FieldAssociation target = CreateTarget(typeof(string), new List<string> { "one", "two" }, 5);
+            PrivateAccessor.SetField<Association>(target, "doNotUseResources", this.mockResources);
             var line = new ConnectionLine();
             target.StyleLine(line);
 
@@ -147,7 +152,8 @@
         [TestMethod]
         public void StyleLineShouldSetThicknessTo16WhenUsageIsHigh()
         {
-            FieldAssociation target = AssociationTestData.FieldAssociationFullModel(this.factory, typeof(string), new List<string> { "one", "two" }, 20);
+            FieldAssociation target = CreateTarget(typeof(string), new List<string> { "one", "two" }, 20);
+            PrivateAccessor.SetField<Association>(target, "doNotUseResources", this.mockResources);
             var line = new ConnectionLine();
             target.StyleLine(line);
 
@@ -158,15 +164,28 @@
         [ExpectedException(typeof(ArgumentNullResourceException))]
         public void StyleLineShouldThrowWhenGivenNull()
         {
-            FieldAssociation target = AssociationTestData.FieldAssociationFullModel(this.factory, typeof(string), new List<string>(), 1);
+            FieldAssociation target = CreateTarget(typeof(string), new List<string>(), 1);
+            PrivateAccessor.SetField<Association>(target, "doNotUseResources", this.mockResources);
             target.StyleLine(null);
+        }
+
+        [TestCleanup]
+        public void TestCleanUp()
+        {
+            this.mockResources = null;
+            this.mockDimensions = null;
         }
 
         [TestInitialize]
         public void TestInitialise()
         {
+            this.mockResources = MockRepository.GenerateStub<IApplicationResources>();
             this.mockDimensions = MockRepository.GenerateMock<IDiagramDimensions>();
-            this.factory = new Container();
+        }
+
+        private FieldAssociation CreateTarget(Type type, IEnumerable<string> usages, int usageCount)
+        {
+            return new FieldAssociation(type, usageCount, usages.Select(x => new AssociationUsageDescriptor { Description = x, Kind = MemberKind.Field }), 0);
         }
     }
 }

@@ -4,17 +4,13 @@ namespace TypeVisualiser.ILAnalyser
     using System.Collections.Generic;
     using System.Reflection;
     using System.Reflection.Emit;
-
-    using TypeVisualiser.Properties;
+    using Properties;
 
     internal static class GlobalIntermediateLanguageConstants
     {
         private static readonly object SyncRoot = new object();
-
         private static bool isInitialised;
-
         private static ReadOnlyDictionary<int, OpCode> multiByteOpCodes = new ReadOnlyDictionary<int, OpCode>();
-
         private static ReadOnlyDictionary<int, OpCode> singleByteOpCodes = new ReadOnlyDictionary<int, OpCode>();
 
         public static ReadOnlyDictionary<int, OpCode> MultiByteOpCodes
@@ -51,8 +47,9 @@ namespace TypeVisualiser.ILAnalyser
                 var singleByteOps = new Dictionary<int, OpCode>();
                 isInitialised = true;
                 FieldInfo[] infoArray1 = typeof(OpCodes).GetFields();
-                foreach (FieldInfo info1 in infoArray1)
+                for (int num1 = 0; num1 < infoArray1.Length; num1++)
                 {
+                    FieldInfo info1 = infoArray1[num1];
                     if (info1.FieldType == typeof(OpCode))
                     {
                         var code1 = (OpCode)info1.GetValue(null);
@@ -60,8 +57,7 @@ namespace TypeVisualiser.ILAnalyser
                         if (num2 < 0x100)
                         {
                             singleByteOps[num2] = code1;
-                        }
-                        else
+                        } else
                         {
                             if ((num2 & 0xff00) != 0xfe00)
                             {
@@ -88,27 +84,27 @@ namespace TypeVisualiser.ILAnalyser
         ///// <returns>
         ///// The simplified name of the type (i.e. "int" instead f System.Int32)
         ///// </returns>
-        // internal static string ProcessSpecialTypes(string typeName)
-        // {
-        // string result = typeName;
-        // switch (typeName)
-        // {
-        // case "System.string":
-        // case "System.String":
-        // case "String":
-        // result = "string";
-        // break;
-        // case "System.Int32":
-        // case "Int":
-        // case "Int32":
-        // result = "int";
-        // break;
-        // case "System.Int64":
-        // case "long":
-        // result = "long";
-        // break;
-        // }
-        // return result;
-        // }
+        //internal static string ProcessSpecialTypes(string typeName)
+        //{
+        //    string result = typeName;
+        //    switch (typeName)
+        //    {
+        //        case "System.string":
+        //        case "System.String":
+        //        case "String":
+        //            result = "string";
+        //            break;
+        //        case "System.Int32":
+        //        case "Int":
+        //        case "Int32":
+        //            result = "int";
+        //            break;
+        //        case "System.Int64":
+        //        case "long":
+        //            result = "long";
+        //            break;
+        //    }
+        //    return result;
+        //}
     }
 }

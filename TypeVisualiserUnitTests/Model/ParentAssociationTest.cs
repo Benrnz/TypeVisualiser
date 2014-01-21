@@ -3,6 +3,7 @@ using System.Windows;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Rhino.Mocks;
+using StructureMap;
 using TypeVisualiser;
 using TypeVisualiser.Geometry;
 using TypeVisualiser.Model;
@@ -14,21 +15,19 @@ namespace TypeVisualiserUnitTests.Model
     public class ParentAssociationTest
     {
         private IApplicationResources mockResources;
-        private IVisualisableTypeWithAssociations mockType;
-
-        private IModelBuilder mockModelBuilder;
+        private IVisualisableType mockType;
 
         [TestMethod]
         public void ConstructorShouldSetAssociatedTo()
         {
-            ParentAssociation target = AssociationTestData.ParentAssociationIsolated(this.mockModelBuilder, this.mockType);
+            ParentAssociation target = CreateTarget(this.mockType);
             target.AssociatedTo.Should().NotBeNull();
         }
 
         [TestMethod]
         public void ConstructorShouldSetName()
         {
-            ParentAssociation target = AssociationTestData.ParentAssociationIsolated(this.mockModelBuilder, this.mockType);
+            ParentAssociation target = CreateTarget(this.mockType);
             target.Name.Length.Should().BeGreaterThan(10);
         }
 
@@ -36,13 +35,13 @@ namespace TypeVisualiserUnitTests.Model
         [ExpectedException(typeof (ArgumentNullResourceException))]
         public void ConstructorShouldThrowWhenGivenNull1()
         {
-            new ParentAssociation(null, null, null).Initialise(null, null);
+            new ParentAssociation(MockRepository.GenerateStub<IModelBuilder>(), null, null);
         }
 
         [TestMethod]
         public void CreateLineHeadMustNotBeNull()
         {
-            ParentAssociation target = AssociationTestData.ParentAssociationIsolated(this.mockModelBuilder, this.mockType);
+            ParentAssociation target = CreateTarget(this.mockType);
             ArrowHead result = target.CreateLineHead();
             result.Should().NotBeNull();
         }
@@ -50,7 +49,7 @@ namespace TypeVisualiserUnitTests.Model
         [TestMethod]
         public void ProposePositionForAssociateShouldProposeAPositionNotOverlappingWithCentre()
         {
-            ParentAssociation target = AssociationTestData.ParentAssociationIsolated(this.mockModelBuilder, this.mockType);
+            ParentAssociation target = CreateTarget(this.mockType);
             var subjectArea = new Area(new Point(23, 45), new Point(67, 94));
             Func<Area, ProximityTestResult> overlapsWithOthers = area => new ProximityTestResult(Proximity.NotOverlapping);
 
@@ -62,14 +61,15 @@ namespace TypeVisualiserUnitTests.Model
         [TestMethod]
         public void ProposePositionForAssociateShouldThrowGivenNullArea()
         {
-            ParentAssociation target = AssociationTestData.ParentAssociationIsolated(this.mockModelBuilder, this.mockType);
+            ParentAssociation target = CreateTarget(this.mockType);
             target.Invoking(x => x.ProposePosition(123.44, 553.11, null, null)).ShouldThrow<ArgumentNullException>();
         }
 
         [TestMethod]
         public void StyleLineShouldSetThickness()
         {
-            ParentAssociation target = AssociationTestData.ParentAssociationIsolated(this.mockModelBuilder, this.mockType);
+            ParentAssociation target = CreateTarget(this.mockType);
+            PrivateAccessor.SetField<Association>(target, "doNotUseResources", this.mockResources);
             var line = new ConnectionLine();
             target.StyleLine(line);
             line.Thickness.Should().BeGreaterThan(0);
@@ -78,7 +78,7 @@ namespace TypeVisualiserUnitTests.Model
         [TestMethod]
         public void StyleLineShouldThrowWhenGivenNull()
         {
-            ParentAssociation target = AssociationTestData.ParentAssociationIsolated(this.mockModelBuilder, this.mockType);
+            ParentAssociation target = CreateTarget(this.mockType);
             target.Invoking(x => x.StyleLine(null)).ShouldThrow<ArgumentNullException>();
         }
 
@@ -92,11 +92,15 @@ namespace TypeVisualiserUnitTests.Model
         [TestInitialize]
         public void TestInitialise()
         {
-            this.mockType = MockRepository.GenerateStub<IVisualisableTypeWithAssociations>();
-            this.mockModelBuilder = MockRepository.GenerateMock<IModelBuilder>();
+            this.mockType = MockRepository.GenerateStub<IVisualisableType>();
             this.mockResources = MockRepository.GenerateStub<IApplicationResources>();
             this.mockType.Expect(m => m.Name).Return("1234567890");
             this.mockType.Expect(m => m.Modifiers).Return(new ModifiersData(typeof (string)));
+        }
+
+        private ParentAssociation CreateTarget(IVisualisableType type)
+        {
+            return PrivateAccessor.PrivateConstructor<ParentAssociation>(type);
         }
     }
 }

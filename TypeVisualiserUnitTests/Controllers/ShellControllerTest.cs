@@ -12,16 +12,15 @@
     public class ShellControllerTest
     {
         private IContainer factory;
+        private IDiagramDimensions mockDimensions;
         private IFileManager mockFileManager;
         private Diagram fakeDiagram;
         private IDiagramController mockController;
         private ShellController target;
-        private static IVisualisableTypeWithAssociations demoType;
-
-        private static IApplicationResources resources;
+        private VisualisableTypeWithAssociations demoType = new VisualisableTypeWithAssociations(typeof(Car), 0);
+        private ITrivialFilter mockTrivialFilter;
 
         [TestMethod]
-        [Description("This test is to prevent a bug from reoccuring. Refreshing a loaded visualisable type crashed.")]
         public void RefreshExecuteShouldReloadTypeWithNoParent()
         {
             this.mockController.Expect(m => m.Refresh(this.mockFileManager));
@@ -32,31 +31,33 @@
             this.mockController.VerifyAllExpectations();
         }
 
-        [ClassInitialize]
-        public static void ClassInitialise(TestContext context)
-        {
-            demoType = VisualisableTypeTestData.FullModel<Car>(new Container());
-        }
-
         [TestInitialize]
         public void TestInitialise()
         {
-            this.factory = new Container();
             this.mockFileManager = MockRepository.GenerateMock<IFileManager>();
-            
+            this.mockDimensions = MockRepository.GenerateStub<IDiagramDimensions>();
             this.mockController = MockRepository.GenerateMock<IDiagramController>();
+            this.mockTrivialFilter = MockRepository.GenerateStub<ITrivialFilter>();
             this.fakeDiagram = new Diagram(this.mockController);
 
-            factory.Configure(config => config.For<IFileManager>().Use(this.mockFileManager));
+            this.factory = new Container(
+                config =>
+                {
+                    config.For<IDiagramDimensions>().Use(this.mockDimensions);
+                    config.For<IVisualisableTypeWithAssociations>().Use<VisualisableTypeWithAssociations>();
+                    config.For<IFileManager>().Use(this.mockFileManager);
+                });
 
             this.mockFileManager.Expect(m => m.LoadDemoType()).IgnoreArguments().Return(demoType);
 
-            var harness = new ShellControllerTestHarness(factory)
+            var harness = new ShellControllerTestHarness(this.factory)
                               {
-                                  CreateController = () => this.mockController,
+                                  CreateController = () => this.mockController, 
                                   CurrentView = this.fakeDiagram,
                               };
             this.target = harness;
+
+            PrivateAccessor.SetStaticField(typeof(TrivialFilter), "current", this.mockTrivialFilter);
         }
     }
 }

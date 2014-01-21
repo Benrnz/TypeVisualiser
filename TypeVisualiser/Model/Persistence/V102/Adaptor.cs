@@ -1,11 +1,10 @@
-﻿namespace TypeVisualiser.Model.Persistence.V102
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
+using TypeVisualiser.Properties;
+
+namespace TypeVisualiser.Model.Persistence.V102
 {
-    using System.Collections.Generic;
-    using System.Collections.ObjectModel;
-    using System.Diagnostics.CodeAnalysis;
-
-    using TypeVisualiser.Properties;
-
     /// <summary>
     /// Adapts v102 to v104 
     /// </summary>
@@ -71,37 +70,33 @@
             var implementsList = new List<V104.ParentAssociationData>();
             foreach (dynamic implements in oldSubject.Implements)
             {
-                var implements104 = new V104.ParentAssociationData
-                    {
-                        Name = implements.Name, 
-                        Show = implements.Show, 
-                        AssociatedTo = AdaptVisualisedType(implements.AssociatedTo)
-                    };
+                var implements104 = new V104.ParentAssociationData { Name = implements.Name, Show = implements.Show };
+                implements104.AssociatedTo = AdaptVisualisedType(implements.AssociatedTo);
                 implementsList.Add(implements104);
             }
-
             return implementsList;
         }
 
         private static void AdaptModifiers(dynamic oldType, V104.VisualisableTypeData destination)
         {
             var modifiers104 = new V104.ModifiersData
-                {
-                    Abstract = oldType.Modifiers.Abstract, 
-                    Internal = oldType.Modifiers.Internal, 
-                    Kind = oldType.Modifiers.Kind, 
-                    Private = oldType.Modifiers.Private, 
-                    Sealed = oldType.Modifiers.Sealed, 
-                    ShowConstructors = oldType.Modifiers.ShowConstructors, 
-                    Static = oldType.Modifiers.Static, 
-                };
+                                   {
+                                       Abstract = oldType.Modifiers.Abstract,
+                                       Internal = oldType.Modifiers.Internal,
+                                       Kind = oldType.Modifiers.Kind,
+                                       Private = oldType.Modifiers.Private,
+                                       Sealed = oldType.Modifiers.Sealed,
+                                       ShowConstructors = oldType.Modifiers.ShowConstructors,
+                                       Static = oldType.Modifiers.Static,
+                                   };
             destination.Modifiers = modifiers104;
         }
 
         private static V104.VisualisableTypeSubjectData AdaptVisualisedSubject(dynamic oldSubject)
         {
             // subjust should be of type VisualisableTypeSubjectData (either v101 or v102)
-            var subject104 = new V104.VisualisableTypeSubjectData { SubjectOrAssociate = SubjectOrAssociate.Subject };
+            var subject104 = new V104.VisualisableTypeSubjectData();
+            subject104.SubjectOrAssociate = SubjectOrAssociate.Subject;
             CopyBaseVisualisedType(oldSubject, subject104);
 
             // Associations
@@ -115,7 +110,8 @@
             // Parent
             if (oldSubject.Parent != null)
             {
-                var parent104 = new V104.ParentAssociationData { Name = oldSubject.Parent.Name, Show = oldSubject.Parent.Show, AssociatedTo = AdaptVisualisedType(oldSubject.Parent.AssociatedTo) };
+                var parent104 = new V104.ParentAssociationData { Name = oldSubject.Parent.Name, Show = oldSubject.Parent.Show };
+                parent104.AssociatedTo = AdaptVisualisedType(oldSubject.Parent.AssociatedTo);
                 subject104.Parent = parent104;
             }
 
@@ -125,7 +121,8 @@
         private static V104.VisualisableTypeData AdaptVisualisedType(dynamic oldType)
         {
             // oldType should be VisualisableTypeData either v101 or v102
-            var type104 = new V104.VisualisableTypeData { SubjectOrAssociate = SubjectOrAssociate.Subject };
+            var type104 = new V104.VisualisableTypeData();
+            type104.SubjectOrAssociate = SubjectOrAssociate.Subject;
             CopyBaseVisualisedType(oldType, type104);
             return type104;
         }
@@ -159,15 +156,13 @@
         private static V104.FieldAssociationData CreateAssociation(dynamic association)
         {
             V104.FieldAssociationData association104 = null;
-            if (association.GetType().Name == typeof(FieldAssociationData).Name)
+            if (association.GetType().Name == typeof (FieldAssociationData).Name)
             {
                 association104 = new V104.FieldAssociationData { Name = association.Name, Show = association.Show, UsageCount = association.UsageCount };
-            }
-            else if (association.GetType().Name == typeof(StaticAssociationData).Name)
+            } else if (association.GetType().Name == typeof (StaticAssociationData).Name)
             {
                 association104 = new V104.StaticAssociationData { Name = association.Name, Show = association.Show, UsageCount = association.UsageCount };
-            }
-            else if (association.GetType().Name == typeof(ConsumeAssociationData).Name)
+            } else if (association.GetType().Name == typeof (ConsumeAssociationData).Name)
             {
                 association104 = new V104.ConsumeAssociationData { Name = association.Name, Show = association.Show, UsageCount = association.UsageCount };
             }
@@ -177,14 +172,12 @@
 
         private static V104.TypeVisualiserLayoutFile CreateDiagram(dynamic oldDiagram)
         {
-            var diagram104 = new V104.TypeVisualiserLayoutFile
-                {
-                    AssemblyFileName = oldDiagram.AssemblyFileName,
-                    AssemblyFullName = oldDiagram.AssemblyFullName,
-                    FileVersion = oldDiagram.FileVersion,
-                    HideParents = oldDiagram.HideParents,
-                    HideTrivialTypes = oldDiagram.HideTrivialTypes
-                };
+            var diagram104 = new V104.TypeVisualiserLayoutFile();
+            diagram104.AssemblyFileName = oldDiagram.AssemblyFileName;
+            diagram104.AssemblyFullName = oldDiagram.AssemblyFullName;
+            diagram104.FileVersion = oldDiagram.FileVersion;
+            diagram104.HideParents = oldDiagram.HideParents;
+            diagram104.HideTrivialTypes = oldDiagram.HideTrivialTypes;
             return diagram104;
         }
 
@@ -194,13 +187,11 @@
             diagram104.ViewportSaveData = viewportSaveData104;
             var canvasLayout104 = new V104.CanvasLayoutData();
             diagram104.ViewportSaveData.CanvasLayout = canvasLayout104;
-            canvasLayout104.Subject = new V104.TypeLayoutData
-                {
-                    FullName = oldDiagram.ViewportSaveData.CanvasLayout.Subject.FullName,
-                    Id = oldDiagram.ViewportSaveData.CanvasLayout.Subject.Id,
-                    TopLeft = oldDiagram.ViewportSaveData.CanvasLayout.Subject.TopLeft,
-                    Visible = true
-                };
+            canvasLayout104.Subject = new V104.TypeLayoutData();
+            canvasLayout104.Subject.FullName = oldDiagram.ViewportSaveData.CanvasLayout.Subject.FullName;
+            canvasLayout104.Subject.Id = oldDiagram.ViewportSaveData.CanvasLayout.Subject.Id;
+            canvasLayout104.Subject.TopLeft = oldDiagram.ViewportSaveData.CanvasLayout.Subject.TopLeft;
+            canvasLayout104.Subject.Visible = true;
             canvasLayout104.Types = new Collection<V104.TypeLayoutData>();
             return canvasLayout104;
         }

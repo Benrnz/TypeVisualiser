@@ -2,13 +2,13 @@ namespace TypeVisualiser.Model
 {
     using System;
     using System.Collections.Generic;
-
-    using TypeVisualiser.Model.Persistence;
+    using Persistence;
 
     public class StaticAssociation : ConsumeAssociation
     {
-        public StaticAssociation(IApplicationResources resources, ITrivialFilter trivialFilter, IModelBuilder modelBuilder, IDiagramDimensions diagramDimensions)
-            : base(resources, trivialFilter, modelBuilder, diagramDimensions)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification="validated in base class")]
+        public StaticAssociation(Type type, int numberOfUsages, IEnumerable<AssociationUsageDescriptor> usageDescriptors, int depth)
+            : base(type, numberOfUsages, usageDescriptors, depth)
         {
         }
 
@@ -18,11 +18,6 @@ namespace TypeVisualiser.Model
             {
                 return typeof(StaticAssociationData);
             }
-        }
-
-        public new StaticAssociation Initialise(Type associatedTo, int numberOfUsages, IEnumerable<AssociationUsageDescriptor> usageDescriptors, int depth)
-        {
-            return base.Initialise(associatedTo, numberOfUsages, usageDescriptors, depth) as StaticAssociation;
         }
     }
 }

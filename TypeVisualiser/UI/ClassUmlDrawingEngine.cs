@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using StructureMap;
 using TypeVisualiser.Geometry;
 using TypeVisualiser.Model;
-using TypeVisualiser.Startup;
 
 namespace TypeVisualiser.UI
 {
@@ -14,7 +12,6 @@ namespace TypeVisualiser.UI
     /// </summary>
     internal class ClassUmlDrawingEngine
     {
-        private IContainer doNotUseFactory;
         private ICollection<DiagramElement> allElements;
 
         /// <summary>
@@ -25,17 +22,11 @@ namespace TypeVisualiser.UI
 
         private Func<DiagramElement, bool, bool> shouldSecondaryElementBeVisible;
 
-        protected IContainer Factory
-        {
-            get { return this.doNotUseFactory ?? (this.doNotUseFactory = IoC.Default); }
-        }
-
         public ClassUmlDrawingEngine(Guid diagramId, IVisualisableTypeWithAssociations mainSubject)
         {
             DiagramId = diagramId;
             MainSubject = mainSubject;
-            var subjectAssociation = Factory.GetInstance<SubjectAssociation>().Initialise(mainSubject);
-            MainDrawingSubject = new DiagramElement(DiagramId, subjectAssociation);
+            MainDrawingSubject = new DiagramElement(DiagramId, new SubjectAssociation(mainSubject));
         }
 
         public Guid DiagramId { get; private set; }

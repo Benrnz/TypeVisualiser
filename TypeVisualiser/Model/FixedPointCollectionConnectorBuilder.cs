@@ -64,11 +64,12 @@ namespace TypeVisualiser.Model
             int leaveSpaceForArrowHead = isHead ? ArrowHead.ArrowWidth : 0;
             int index = 0;
             var connectors = new Dictionary<int, Point>(8);
+            Point tempPoint;
             double oneThirdOfHeight = rectangle.Height / 3;
             double oneThirdOfWidth = rectangle.Width / 3;
 
             // Lower Left
-            Point tempPoint = rectangle.TopLeft.Clone();
+            tempPoint = rectangle.TopLeft.Clone();
             tempPoint.Offset(-leaveSpaceForArrowHead, oneThirdOfHeight * 2);
             connectors[index++] = tempPoint;
 

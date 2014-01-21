@@ -5,9 +5,6 @@ namespace TypeVisualiserUnitTests.Model.VisualisableTypeSubjectTests
     using System;
     using FluentAssertions;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
-
-    using StructureMap;
-
     using TypeVisualiser.DemoTypes;
     using TypeVisualiser.ILAnalyser;
     using TypeVisualiser.Model;
@@ -15,13 +12,13 @@ namespace TypeVisualiserUnitTests.Model.VisualisableTypeSubjectTests
     [TestClass]
     public class VisualisableTypeSubjectGenericsTest
     {
-        private static IVisualisableTypeWithAssociations target;
+        private static VisualisableTypeWithAssociations target;
 
         [ClassInitialize]
         public static void ClassInitialise(TestContext context)
         {
             IoC.MapHardcodedRegistrations();
-            target = VisualisableTypeTestData.FullModel(typeof(TiptronicTransmission<>), new Container());
+            target = new VisualisableTypeWithAssociations(typeof(TiptronicTransmission<>));
         }
 
         [TestInitialize]

@@ -2,6 +2,8 @@
 {
     using System;
     using System.Xml.Serialization;
+    using Model;
+    using Properties;
 
     [Serializable]
     public class AssociationData

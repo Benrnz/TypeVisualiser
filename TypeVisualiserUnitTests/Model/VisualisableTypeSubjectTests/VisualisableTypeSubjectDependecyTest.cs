@@ -1,81 +1,86 @@
+using FluentAssertions;
+using TypeVisualiser.Startup;
+
 namespace TypeVisualiserUnitTests.Model.VisualisableTypeSubjectTests
 {
-    using System;
     using System.Linq;
-
-    using FluentAssertions;
-
     using Microsoft.VisualStudio.TestTools.UnitTesting;
-
     using Rhino.Mocks;
-
-    using StructureMap;
-
     using TypeVisualiser;
     using TypeVisualiser.DemoTypes;
     using TypeVisualiser.Model;
-    using TypeVisualiser.Startup;
 
     [TestClass]
     public class VisualisableTypeSubjectDependencyTest
     {
-        private static IVisualisableTypeWithAssociations subject;
-
-        private static ITrivialFilter mockFilter;
+        private static VisualisableTypeWithAssociations subject;
+        private MockRepository mockery = new MockRepository();
+        private ITrivialFilter mockFilter;
 
         [ClassInitialize]
         public static void ClassInitialise(TestContext context)
         {
             IoC.MapHardcodedRegistrations();
-
-            mockFilter = MockRepository.GenerateMock<ITrivialFilter>();
-            var modelContainer = new Container();
-
-            mockFilter.Expect(m => m.HideTrivialTypes).Return(true).Repeat.Any();
-            mockFilter.Expect(m => m.IsTrivialType(typeof(String).FullName)).Return(true).Repeat.Any();
-            mockFilter.Expect(m => m.IsTrivialType(typeof(Delegate).FullName)).Return(true).Repeat.Any();
-
-            subject = VisualisableTypeTestData.FullModel<Car>(modelContainer, mockFilter);
+            subject = new VisualisableTypeWithAssociations(typeof(Car));
         }
 
-        [TestMethod]
-        public void DependenciesCountConsistencyWithAssoications()
+        [TestInitialize]
+        public void TestInitialise()
         {
-            // +1 for the parent type
-            Assert.AreEqual(subject.AllAssociations.Count() + 1 + subject.ThisTypeImplements.Count(), subject.TrivialDependencies + subject.NontrivialDependencies);
+            this.mockFilter = this.mockery.DynamicMock<ITrivialFilter>();
+            PrivateAccessor.SetStaticField(typeof(TrivialFilter), "current", this.mockFilter);
+            using (this.mockery.Record())
+            {
+                this.mockFilter.Expect(m => m.HideTrivialTypes).Return(true).Repeat.Any();
+                this.mockFilter.Expect(m => m.IsTrivialType(typeof(System.String).FullName)).Return(true).Repeat.Any();
+                this.mockFilter.Expect(m => m.IsTrivialType(typeof(System.Delegate).FullName)).Return(true).Repeat.Any();
+            }
+        }
+
+        [TestCleanup]
+        public void CleanUp()
+        {
+            this.mockery = new MockRepository();
         }
 
         [TestMethod]
         public void NonTrivialDependenciesCount()
         {
-            /*
-            {StaticAssociation: Colors}	
-            {ConsumeAssociation: CombustionEngine}
-            {FieldAssociation: EventHandler}
-            {StaticAssociation: Interlocked}
-            {ConsumeAssociation: NotImplementedException}	
-            {ConsumeAssociation: PropertyChangedEventArgs}	
-            {FieldAssociation: PropertyChangedEventHandler}	
-            {FieldAssociation: SqlCommand}	
-            {ConsumeAssociation: SqlConnection}	
-            {StaticAssociation: StaticTestClass}	
-            {Vehicle} - PARENT
-             */
-            subject.NontrivialDependencies.Should().Be(11);
+            using (this.mockery.Playback())
+            {
+                subject.NontrivialDependencies.Should().Be(11);
+            }
+        }
+
+        [TestMethod]
+        public void TrivialDependenciesCount()
+        {
+            using (this.mockery.Playback())
+            {
+                Assert.AreEqual(11, subject.TrivialDependencies);
+            }
+        }
+
+        [TestMethod]
+        public void DependenciesCountConsistencyWithAssoications()
+        {
+            using (this.mockery.Playback())
+            {
+                Assert.AreEqual(
+                    subject.AllAssociations.Count() + 1 + subject.ThisTypeImplements.Count(),
+                    subject.TrivialDependencies + subject.NontrivialDependencies);
+            }
         }
 
         [TestMethod]
         public void ParentIsNullTest()
         {
             PrivateAccessor.SetProperty(subject, "Parent", null);
-            subject.TrivialDependencies.Should().Be(11);
-            subject.NontrivialDependencies.Should().Be(10);
-        }
-
-        [TestMethod]
-        public void TrivialDependenciesCount()
-        {
-            Assert.AreEqual(11, subject.TrivialDependencies);
+            using (this.mockery.Playback())
+            {
+                subject.TrivialDependencies.Should().Be(11);
+                subject.NontrivialDependencies.Should().Be(10);
+            }
         }
     }
 }

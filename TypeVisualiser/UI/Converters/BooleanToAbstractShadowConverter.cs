@@ -17,7 +17,7 @@ namespace TypeVisualiser.UI.Converters
             var isAbstract = (bool)values[0];
             if (values.Length > 1)
             {
-                 var isStatic = (bool)values[1];
+                 bool isStatic = (bool)values[1];
                  if (isAbstract && !isStatic)
                  {
                      return 0.0;

@@ -9,9 +9,6 @@ namespace TypeVisualiserUnitTests.Model.VisualisableTypeSubjectTests
     using System.Linq;
     using FluentAssertions;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
-
-    using StructureMap;
-
     using TypeVisualiser.DemoTypes;
     using TypeVisualiser.ILAnalyser;
     using TypeVisualiser.Model;
@@ -19,7 +16,7 @@ namespace TypeVisualiserUnitTests.Model.VisualisableTypeSubjectTests
     [TestClass]
     public class VisualisableTypeSubjectImplementsTest
     {
-        private static IVisualisableTypeWithAssociations subject;
+        private static VisualisableTypeWithAssociations subject;
 
         [ClassInitialize]
         public static void ClassInitialise(TestContext context)
@@ -28,7 +25,7 @@ namespace TypeVisualiserUnitTests.Model.VisualisableTypeSubjectTests
             cache.Clear();
             IoC.MapHardcodedRegistrations();
             GlobalIntermediateLanguageConstants.LoadOpCodes();
-            subject = VisualisableTypeTestData.FullModel<Car>(new Container());
+            subject = new VisualisableTypeWithAssociations(typeof(Car));
         }
 
         [TestMethod]

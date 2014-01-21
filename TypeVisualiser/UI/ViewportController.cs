@@ -204,7 +204,7 @@ namespace TypeVisualiser.UI
                 throw new ArgumentNullResourceException("association", Resources.General_Given_Parameter_Cannot_Be_Null);
             }
 
-            this.Factory.GetInstance<ITrivialFilter>().AddToTrivialTypeList(association.AssociatedTo);
+            TrivialFilter.Current.AddToTrivialTypeList(association.AssociatedTo);
             this.filter.ApplyTypeFilter(this.currentSubject);
         }
 
@@ -245,7 +245,7 @@ namespace TypeVisualiser.UI
 
         public DiagramElement DeleteAnnotation(AnnotationData annotation)
         {
-            DiagramElement found = DiagramElements.FirstOrDefault(x => x.DiagramContent is AnnotationData && ((AnnotationData)x.DiagramContent).Id == annotation.Id);
+            DiagramElement found = DiagramElements.FirstOrDefault(x => x.DiagramContent is AnnotationData && ((AnnotationData) x.DiagramContent).Id == annotation.Id);
 
             if (found != null)
             {
@@ -275,17 +275,16 @@ namespace TypeVisualiser.UI
             var canvasLayoutData = new CanvasLayoutData();
             foreach (DiagramElement element in DiagramElements)
             {
-                if (Attribute.GetCustomAttribute(element.DiagramContent.GetType(), typeof(PersistentAttribute)) == null)
+                if (Attribute.GetCustomAttribute(element.DiagramContent.GetType(), typeof (PersistentAttribute)) == null)
                 {
                     // Only Diagram Content that is decorated with Persistent will get saved into the Layout collection.
                     continue;
                 }
 
                 var layoutData = new TypeLayoutData { ContentType = element.DiagramContent.GetType().FullName, TopLeft = element.TopLeft, Id = element.DiagramContent.Id, Visible = element.Show, };
-                var diagramContent = element.DiagramContent as AnnotationData;
-                if (diagramContent != null)
+                if (element.DiagramContent is AnnotationData)
                 {
-                    layoutData.Data = diagramContent.Text;
+                    layoutData.Data = ((AnnotationData) element.DiagramContent).Text;
                 }
 
                 canvasLayoutData.Types.Add(layoutData);
@@ -294,7 +293,7 @@ namespace TypeVisualiser.UI
             var saveData = new TypeVisualiserLayoutFile
                 {
                     CanvasLayout = canvasLayoutData,
-                    Subject = (VisualisableTypeSubjectData)Subject.ExtractPersistentData(),
+                    Subject = (VisualisableTypeSubjectData) Subject.ExtractPersistentData(),
                     AssemblyFullName = Subject.AssemblyFullName,
                     AssemblyFileName = Subject.AssemblyFileName,
                     FileVersion = GetType().Assembly.GetName().Version.ToString(),
@@ -337,7 +336,7 @@ namespace TypeVisualiser.UI
             foreach (TypeLayoutData layoutData in data.CanvasLayout.Types)
             {
                 // Deal with annotations first - these have not been loaded by setting the subject.
-                if (layoutData.ContentType == typeof(AnnotationData).FullName)
+                if (layoutData.ContentType == typeof (AnnotationData).FullName)
                 {
                     var annotation = new AnnotationData { Id = layoutData.Id, Text = layoutData.Data, };
                     var annotationElement = new DiagramElement(DiagramId, annotation) { Show = layoutData.Visible, TopLeft = layoutData.TopLeft };
@@ -398,8 +397,7 @@ namespace TypeVisualiser.UI
             this.drawingEngine.PositionAllOtherAssociations(DiagramElements);
 
             // This needs to be queued to allow the expand canvas to fire and reposition all controls in positive space. After that then connect them with lines.
-            this.filter = this.Factory.GetInstance<ViewportControllerFilter>();
-            this.filter.Dispatcher = this.Dispatcher;
+            this.filter = new ViewportControllerFilter { Dispatcher = Dispatcher, };
             Dispatcher.BeginInvoke(() =>
                 {
                     var secondaryElements = DrawConnectingLines(false);
@@ -562,7 +560,7 @@ namespace TypeVisualiser.UI
                         handler(this, EventArgs.Empty);
                     }
                 },
-                DispatcherPriority.ContextIdle);
+                                   DispatcherPriority.ContextIdle);
         }
     }
 }

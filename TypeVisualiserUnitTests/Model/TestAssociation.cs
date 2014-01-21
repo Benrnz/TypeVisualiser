@@ -1,21 +1,12 @@
 ﻿namespace TypeVisualiserUnitTests.Model
 {
     using System;
-
-    using TypeVisualiser;
     using TypeVisualiser.Geometry;
     using TypeVisualiser.Model;
 
     public class TestAssociation : Association
     {
-        public TestAssociation(VisualisableType associatedTo, ITrivialFilter filter)
-            : base(null, filter)
-        {
-            AssociatedTo = associatedTo;
-        }
-
-        public TestAssociation(IApplicationResources stubApplicationResources, ITrivialFilter filter, VisualisableType associatedTo)
-            : base(stubApplicationResources, filter)
+        public TestAssociation(VisualisableType associatedTo)
         {
             AssociatedTo = associatedTo;
         }
@@ -41,12 +32,6 @@
         internal override void StyleLine(ConnectionLine line)
         {
             throw new NotImplementedException();
-        }
-
-        public TestAssociation Initialise()
-        {
-            IsInitialised = true;
-            return this;
         }
     }
 }

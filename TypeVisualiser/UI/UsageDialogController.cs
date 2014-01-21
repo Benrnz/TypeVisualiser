@@ -37,7 +37,7 @@ namespace TypeVisualiser.UI
 
             set
             {
-                if (!this.dataList.Equals(value))
+                if (this.dataList != value)
                 {
                     this.dataList = value;
                     AggregateDuplicates(this.dataList);

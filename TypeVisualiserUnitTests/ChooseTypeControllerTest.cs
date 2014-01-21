@@ -23,7 +23,7 @@
             SomethingElse,
         }
 
-        internal interface ITestInternalInterface
+        internal interface TestInternalInterface
         {
         }
 
@@ -76,7 +76,7 @@
         [TestMethod]
         public void GetImagePathShouldReturnUniqueValuesFor6Scenarios()
         {
-            var testTypes = new[] { typeof(TestInternalClass), typeof(TestEnum), typeof(ITestInternalInterface), typeof(string), typeof(Visibility), typeof(ICloneable) };
+            var testTypes = new[] { typeof(TestInternalClass), typeof(TestEnum), typeof(TestInternalInterface), typeof(string), typeof(Visibility), typeof(ICloneable) };
             var results = testTypes.Select(ChooseTypeController_Accessor.GetImagePath).ToList();
 
             Assert.IsTrue(results.Any());

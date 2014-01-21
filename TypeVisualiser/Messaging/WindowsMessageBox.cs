@@ -7,16 +7,6 @@ namespace TypeVisualiser.Messaging
     
     internal class WindowsMessageBox : MessageBoxBase
     {
-        private static string RationaliseMessage(string message)
-        {
-            if (message.Length > 1024)
-            {
-                message = message.Substring(0, 1024) + "\n---TRUNCATED---";
-            }
-
-            return message;
-        }
-
         public override void Show(string message, string headingCaption = "")
         {
             // Ensure on the UI thread.
@@ -25,7 +15,7 @@ namespace TypeVisualiser.Messaging
                 "{0}{1}{2}",
                 headingCaption,
                 string.IsNullOrWhiteSpace(headingCaption) ? string.Empty : "\n\n",
-                RationaliseMessage(message));
+                message);
             MessageBox.Show(Application.Current.MainWindow, content, Resources.ApplicationName);
         }
 

@@ -6,8 +6,7 @@ namespace TypeVisualiser.ILAnalyser
     using System.Linq;
     using System.Reflection;
     using System.Reflection.Emit;
-
-    using TypeVisualiser.Properties;
+    using Properties;
 
     internal class MethodBodyReader : IMethodBodyReader
     {
@@ -17,9 +16,7 @@ namespace TypeVisualiser.ILAnalyser
         }
 
         private readonly Collection<ILInstruction> instructions = new Collection<ILInstruction>();
-
         private byte[] il;
-
         private MethodBase mi;
 
         /// <summary>
@@ -54,47 +51,48 @@ namespace TypeVisualiser.ILAnalyser
         ///// Gets the IL code of the method
         ///// </summary>
         ///// <returns></returns>
-        // public string GetBodyCode()
-        // {
-        // string result = "";
-        // if (this.Instructions != null)
-        // {
-        // for (int i = 0; i < this.Instructions.Count; i++)
-        // {
-        // result += this.Instructions[i].GetCode() + "\n";
-        // }
-        // }
-        // return result;
-        // }
+        //public string GetBodyCode()
+        //{
+        //    string result = "";
+        //    if (this.Instructions != null)
+        //    {
+        //        for (int i = 0; i < this.Instructions.Count; i++)
+        //        {
+        //            result += this.Instructions[i].GetCode() + "\n";
+        //        }
+        //    }
+        //    return result;
+        //}
 
-        // public object GetRefferencedOperand(Module module, int metadataToken)
-        // {
-        // AssemblyName[] assemblyNames = module.Assembly.GetReferencedAssemblies();
-        // for (int i = 0; i < assemblyNames.Length; i++)
-        // {
-        // Module[] modules = Assembly.Load(assemblyNames[i]).GetModules();
-        // for (int j = 0; j < modules.Length; j++)
-        // {
-        // try
-        // {
-        // Type t = modules[j].ResolveType(metadataToken);
-        // return t;
-        // } catch
-        // {
-        // }
-        // }
-        // }
-        // return null;
-        // //System.Reflection.Assembly.Load(module.Assembly.GetReferencedAssemblies()[3]).GetModules()[0].ResolveType(metadataToken)
-        // }
+        //public object GetRefferencedOperand(Module module, int metadataToken)
+        //{
+        //    AssemblyName[] assemblyNames = module.Assembly.GetReferencedAssemblies();
+        //    for (int i = 0; i < assemblyNames.Length; i++)
+        //    {
+        //        Module[] modules = Assembly.Load(assemblyNames[i]).GetModules();
+        //        for (int j = 0; j < modules.Length; j++)
+        //        {
+        //            try
+        //            {
+        //                Type t = modules[j].ResolveType(metadataToken);
+        //                return t;
+        //            } catch
+        //            {
+        //            }
+        //        }
+        //    }
+        //    return null;
+        //    //System.Reflection.Assembly.Load(module.Assembly.GetReferencedAssemblies()[3]).GetModules()[0].ResolveType(metadataToken)
+        //}
 
         /// <summary>
         /// Constructs the array of ILInstructions according to the IL byte code.
         /// </summary>
-        /// <param name="module">
-        /// </param>
-        [SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity", Justification = "Third party code needs to be as compatible as possible to allow upgrading")]
-        [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "For simple analysis purposes, this is not an app critical function")]
+        /// <param name="module"></param>
+        [SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity",
+            Justification = "Third party code needs to be as compatible as possible to allow upgrading")]
+        [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes",
+            Justification = "For simple analysis purposes, this is not an app critical function")]
         private void ConstructInstructions(Module module)
         {
             byte[] localIlbytes = this.il;
@@ -108,24 +106,20 @@ namespace TypeVisualiser.ILAnalyser
                 ushort value = localIlbytes[position++];
                 if (GlobalIntermediateLanguageConstants.SingleByteOpCodes.Count == 0)
                 {
-                    throw new InvalidOperationException(
-                        "Attempt to use Method Body Reader before Global Intermediate Language Constants has been initialised. Global Intermediate Language Constants. Load Op Codes must be called once.");
+                    throw new InvalidOperationException("Attempt to use Method Body Reader before Global Intermediate Language Constants has been initialised. Global Intermediate Language Constants. Load Op Codes must be called once.");
                 }
 
                 if (value != 0xfe)
                 {
                     code = GlobalIntermediateLanguageConstants.SingleByteOpCodes[value];
-                }
-                else
+                } else
                 {
                     value = localIlbytes[position++];
                     code = GlobalIntermediateLanguageConstants.MultiByteOpCodes[value];
                 }
-
                 instruction.Code = code;
                 instruction.Offset = position - 1;
                 int metadataToken;
-
                 // get the operand of the current operation
                 switch (code.OperandType)
                 {
@@ -135,30 +129,25 @@ namespace TypeVisualiser.ILAnalyser
                         instruction.Operand = metadataToken;
                         break;
                     case OperandType.InlineField:
-
                         // TODO All these try catch blocks need to go
                         try
                         {
                             metadataToken = ReadInt32(ref position);
                             instruction.Operand = module.ResolveField(metadataToken);
-                        }
-                        catch
+                        } catch
                         {
                             instruction.Operand = new object();
                         }
-
                         break;
                     case OperandType.InlineMethod:
                         metadataToken = ReadInt32(ref position);
                         try
                         {
                             instruction.Operand = module.ResolveMethod(metadataToken);
-                        }
-                        catch
+                        } catch
                         {
                             instruction.Operand = new object();
                         }
-
                         break;
                     case OperandType.InlineSig:
                         metadataToken = ReadInt32(ref position);
@@ -169,111 +158,97 @@ namespace TypeVisualiser.ILAnalyser
                         try
                         {
                             instruction.Operand = module.ResolveType(metadataToken);
-                        }
-                        catch
+                        } catch
                         {
                         }
-
-                        // TODO : see what to do here
+                        // SSS : see what to do here
                         break;
                     case OperandType.InlineType:
                         metadataToken = ReadInt32(ref position);
-
                         // now we call the ResolveType always using the generic attributes type in order
                         // to support decompilation of generic methods and classes
+
                         // thanks to the guys from code project who commented on this missing feature
+
                         Type[] declaringTypeGenericArgs = this.mi.DeclaringType.GetGenericArguments();
                         Type[] genericArgs = null;
                         if (this.mi.IsGenericMethod)
                         {
                             genericArgs = this.mi.GetGenericArguments();
                         }
-
-                        instruction.Operand = module.ResolveType(metadataToken, declaringTypeGenericArgs, genericArgs);
+                        instruction.Operand = module.ResolveType(
+                            metadataToken, declaringTypeGenericArgs, genericArgs);
                         break;
                     case OperandType.InlineI:
-                        {
-                            instruction.Operand = ReadInt32(ref position);
-                            break;
-                        }
-
+                    {
+                        instruction.Operand = ReadInt32(ref position);
+                        break;
+                    }
                     case OperandType.InlineI8:
-                        {
-                            instruction.Operand = ReadInt64(ref position);
-                            break;
-                        }
-
+                    {
+                        instruction.Operand = ReadInt64(ref position);
+                        break;
+                    }
                     case OperandType.InlineNone:
-                        {
-                            instruction.Operand = null;
-                            break;
-                        }
-
+                    {
+                        instruction.Operand = null;
+                        break;
+                    }
                     case OperandType.InlineR:
-                        {
-                            instruction.Operand = ReadDouble(ref position);
-                            break;
-                        }
-
+                    {
+                        instruction.Operand = ReadDouble(ref position);
+                        break;
+                    }
                     case OperandType.InlineString:
-                        {
-                            metadataToken = ReadInt32(ref position);
-                            instruction.Operand = module.ResolveString(metadataToken);
-                            break;
-                        }
-
+                    {
+                        metadataToken = ReadInt32(ref position);
+                        instruction.Operand = module.ResolveString(metadataToken);
+                        break;
+                    }
                     case OperandType.InlineSwitch:
+                    {
+                        int count = ReadInt32(ref position);
+                        var casesAddresses = new int[count];
+                        for (int i = 0; i < count; i++)
                         {
-                            int count = ReadInt32(ref position);
-                            var casesAddresses = new int[count];
-                            for (int i = 0; i < count; i++)
-                            {
-                                casesAddresses[i] = ReadInt32(ref position);
-                            }
-
-                            var cases = new int[count];
-                            for (int i = 0; i < count; i++)
-                            {
-                                cases[i] = position + casesAddresses[i];
-                            }
-
-                            break;
+                            casesAddresses[i] = ReadInt32(ref position);
                         }
-
+                        var cases = new int[count];
+                        for (int i = 0; i < count; i++)
+                        {
+                            cases[i] = position + casesAddresses[i];
+                        }
+                        break;
+                    }
                     case OperandType.InlineVar:
-                        {
-                            instruction.Operand = ReadUInt16(ref position);
-                            break;
-                        }
-
+                    {
+                        instruction.Operand = ReadUInt16(ref position);
+                        break;
+                    }
                     case OperandType.ShortInlineBrTarget:
-                        {
-                            instruction.Operand = ReadSByte(ref position) + position;
-                            break;
-                        }
-
+                    {
+                        instruction.Operand = ReadSByte(ref position) + position;
+                        break;
+                    }
                     case OperandType.ShortInlineI:
-                        {
-                            instruction.Operand = ReadSByte(ref position);
-                            break;
-                        }
-
+                    {
+                        instruction.Operand = ReadSByte(ref position);
+                        break;
+                    }
                     case OperandType.ShortInlineR:
-                        {
-                            instruction.Operand = ReadSingle(ref position);
-                            break;
-                        }
-
+                    {
+                        instruction.Operand = ReadSingle(ref position);
+                        break;
+                    }
                     case OperandType.ShortInlineVar:
-                        {
-                            instruction.Operand = ReadByte(ref position);
-                            break;
-                        }
-
+                    {
+                        instruction.Operand = ReadByte(ref position);
+                        break;
+                    }
                     default:
-                        {
-                            throw new NotSupportedException("Unknown operand type.");
-                        }
+                    {
+                        throw new NotSupportedException("Unknown operand type.");
+                    }
                 }
 
                 this.instructions.Add(instruction);
@@ -287,25 +262,26 @@ namespace TypeVisualiser.ILAnalyser
 
         private double ReadDouble(ref int position)
         {
-            return ((this.il[position++] | (this.il[position++] << 8)) | (this.il[position++] << 0x10)) | (this.il[position++] << 0x18) | (this.il[position++] << 0x20) | (this.il[position++] << 0x28)
-                   | (this.il[position++] << 0x30) | (this.il[position++] << 0x38);
+            return (((this.il[position++] | (this.il[position++] << 8)) | (this.il[position++] << 0x10)) | (this.il[position++] << 0x18)
+                    | (this.il[position++] << 0x20) | (this.il[position++] << 0x28) | (this.il[position++] << 0x30) | (this.il[position++] << 0x38));
         }
 
-        //// private int ReadInt16(byte[] _il, ref int position)
-        //// {
-        //// return ((this.il[position++] | (this.il[position++] << 8)));
-        //// }
+        //private int ReadInt16(byte[] _il, ref int position)
+        //{
+        //    return ((this.il[position++] | (this.il[position++] << 8)));
+        //}
+
         private int ReadInt32(ref int position)
         {
-            return ((this.il[position++] | (this.il[position++] << 8)) | (this.il[position++] << 0x10)) | (this.il[position++] << 0x18);
+            return (((this.il[position++] | (this.il[position++] << 8)) | (this.il[position++] << 0x10)) | (this.il[position++] << 0x18));
         }
 
         private ulong ReadInt64(ref int position)
         {
             return
                 (ulong)
-                (((this.il[position++] | (this.il[position++] << 8)) | (this.il[position++] << 0x10)) | (this.il[position++] << 0x18) | (this.il[position++] << 0x20) | (this.il[position++] << 0x28)
-                 | (this.il[position++] << 0x30) | (this.il[position++] << 0x38));
+                (((this.il[position++] | (this.il[position++] << 8)) | (this.il[position++] << 0x10)) | (this.il[position++] << 0x18)
+                 | (this.il[position++] << 0x20) | (this.il[position++] << 0x28) | (this.il[position++] << 0x30) | (this.il[position++] << 0x38));
         }
 
         private sbyte ReadSByte(ref int position)
@@ -313,14 +289,14 @@ namespace TypeVisualiser.ILAnalyser
             return (sbyte)this.il[position++];
         }
 
-        private float ReadSingle(ref int position)
+        private Single ReadSingle(ref int position)
         {
-            return ((this.il[position++] | (this.il[position++] << 8)) | (this.il[position++] << 0x10)) | (this.il[position++] << 0x18);
+            return (((this.il[position++] | (this.il[position++] << 8)) | (this.il[position++] << 0x10)) | (this.il[position++] << 0x18));
         }
 
         private ushort ReadUInt16(ref int position)
         {
-            return (ushort)(this.il[position++] | (this.il[position++] << 8));
+            return (ushort)((this.il[position++] | (this.il[position++] << 8)));
         }
     }
 }
